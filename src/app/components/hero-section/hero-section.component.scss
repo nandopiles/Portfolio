@@ -1,3 +1,66 @@
+/* Flecha CTA más visible */
+.arrow-cta svg {
+  filter: drop-shadow(0 4px 16px oklch(0.68 0.19 25 / 0.25));
+  transition: transform 0.2s cubic-bezier(0.4,0,0.2,1);
+}
+.arrow-cta:hover svg, .arrow-cta:focus svg {
+  transform: scale(1.2);
+  filter: drop-shadow(0 8px 32px oklch(0.68 0.19 25 / 0.35));
+}
+/* Botón Contacto inverso con fondo y hover */
+.hero-contact-inverse {
+  background-color: var(--background);
+  color: var(--primary);
+  border: 2px solid var(--primary);
+  transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+  box-shadow: 0 4px 24px -4px oklch(0.68 0.19 25 / 0.10);
+}
+.hero-contact-inverse:hover, .hero-contact-inverse:focus {
+  background-color: var(--primary-foreground);
+  color: var(--primary);
+  box-shadow: 0 8px 32px -4px oklch(0.68 0.19 25 / 0.20);
+  transform: scale(1.05);
+}
+
+.hero-projects {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  border: 2px solid var(--primary);
+  transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+  box-shadow: 0 4px 24px -4px oklch(0.68 0.19 25 / 0.10);
+}
+.hero-projects:hover, .hero-projects:focus {
+  background-color: var(--background);
+  color: var(--primary);
+  box-shadow: 0 8px 32px -4px oklch(0.68 0.19 25 / 0.20);
+  transform: scale(1.05);
+}
+/* Botón Contacto atractivo y complementario */
+.hero-contact-btn {
+  border: 2px solid var(--primary);
+  color: var(--primary);
+  background: linear-gradient(90deg, var(--background) 60%, var(--primary) 100%);
+  box-shadow: 0 4px 24px -4px oklch(0.68 0.19 25 / 0.15);
+  transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+  font-weight: 600;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-contact-btn:hover, .hero-contact-btn:focus {
+  background: linear-gradient(90deg, var(--primary) 60%, var(--background) 100%);
+  color: var(--primary-foreground);
+  border-color: var(--primary);
+  box-shadow: 0 8px 32px -4px oklch(0.68 0.19 25 / 0.25);
+  transform: scale(1.07);
+}
+
+.hero-contact-btn svg {
+  transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+.hero-contact-btn:hover svg {
+  transform: rotate(-10deg) scale(1.15);
+}
 :host {
   display: block;
 }
@@ -104,7 +167,7 @@
 }
 
 .text-5xl {
-  font-size: 3rem;
+  font-size: 4.5rem;
   line-height: 1;
 }
 
@@ -192,7 +255,7 @@
 
 @media (min-width: 768px) {
   .md\:text-base {
-    font-size: 1rem;
+    font-size: 1.3rem;
     line-height: 1.5rem;
   }
 }

@@ -12,7 +12,7 @@ export class HeroSectionComponent implements OnInit {
   isVisible = signal(false);
 
   ngOnInit() {
-    // Simular el useEffect para la animación
+    // Animación de entrada de texto
     setTimeout(() => {
       this.isVisible.set(true);
     }, 100);
