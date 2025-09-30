@@ -73,13 +73,14 @@
   box-shadow: 0 1px 8px 0 oklch(0.68 0.19 25 / 0.04) inset;
 }
 
+/* Grid siempre en una fila de 3 columnas en desktop/tablet */
 .skills-grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 2rem;
 }
-@media (min-width: 768px) {
+@media (min-width: 600px) {
   .skills-grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(3, 1fr);
   }
 }

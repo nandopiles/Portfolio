@@ -28,7 +28,7 @@ export class SkillsSectionComponent implements OnInit {
     {
       title: "Backend",
       skills: [
-        "Java", ".NET", "Python", "Symfony", "Flask", "MongoDb", "REST APIs", "JWT Auth", "MySQL"
+        "Java", ".NET", "Python", "Symfony", "Flask", "MongoDb", "REST APIs", "MySQL"
       ]
     },
     {
