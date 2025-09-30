@@ -9,53 +9,52 @@
         </h2>
       </div>
 
-      <div class="grid gap-8">
+      <div class="grid md:grid-cols-2 gap-8">
         @for (project of projects; track project.title; let idx = $index) {
-          <div [class]="'group relative rounded-lg overflow-hidden border border-border hover:border-primary-50 transition-all ' + (idx % 2 === 0 ? 'md:grid-cols-2' : 'md:grid-cols-2') + ' md:grid gap-0'">
-            <div [class]="'relative overflow-hidden ' + (idx % 2 === 0 ? 'md:order-1' : 'md:order-2')">
+          <div class="projects-card group">
+            <div class="relative overflow-hidden">
               <img
                 [src]="project.image"
                 [alt]="project.title"
-                class="w-full h-64 md:h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
               />
-              <div class="absolute inset-0 bg-primary bg-opacity-10 group-hover:bg-opacity-20 transition-all"></div>
+              <div class="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
             </div>
-            
-            <div [class]="'p-8 flex flex-col justify-center bg-card ' + (idx % 2 === 0 ? 'md:order-2' : 'md:order-1')">
-              <h3 class="text-2xl font-bold mb-4 text-foreground group-hover:text-primary transition-colors">
+            <div class="p-6">
+              <h3 class="text-xl font-bold mb-2 group-hover:text-primary transition-colors text-balance">
                 {{ project.title }}
               </h3>
-              <p class="text-muted-foreground mb-6 leading-relaxed">
+              <p class="text-muted-foreground mb-4 leading-relaxed text-pretty">
                 {{ project.description }}
               </p>
-              
-              <div class="flex flex-wrap gap-2 mb-6">
+              <div class="flex flex-wrap gap-2 mb-4">
                 @for (tech of project.technologies; track tech) {
-                  <span class="text-xs px-3 py-1 bg-secondary text-secondary-foreground rounded-full">
+                  <span class="project-badge">
                     {{ tech }}
                   </span>
                 }
               </div>
-              
               <div class="flex gap-4">
-                @if (project.liveUrl) {
-                  <a
-                    [href]="project.liveUrl"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="text-primary hover:text-primary-foreground hover:bg-primary px-4 py-2 rounded transition-all"
-                  >
-                    Live Demo
-                  </a>
-                }
                 @if (project.githubUrl) {
                   <a
                     [href]="project.githubUrl"
                     target="_blank"
                     rel="noopener noreferrer"
                     class="text-muted-foreground hover:text-primary transition-colors"
+                    aria-label="View source code"
                   >
-                    GitHub
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.867 8.166 6.839 9.489.5.092.682-.217.682-.483 0-.237-.009-.868-.013-1.703-2.782.604-3.369-1.342-3.369-1.342-.454-1.154-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.004.07 1.532 1.032 1.532 1.032.892 1.529 2.341 1.088 2.91.832.091-.647.35-1.088.636-1.339-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.272.098-2.65 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0 1 12 6.844c.85.004 1.705.115 2.504.337 1.909-1.294 2.748-1.025 2.748-1.025.546 1.378.202 2.397.1 2.65.64.699 1.028 1.592 1.028 2.683 0 3.842-2.337 4.687-4.565 4.936.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.749 0 .268.18.579.688.481C19.135 20.163 22 16.417 22 12c0-5.523-4.477-10-10-10Z"/></svg>
+                  </a>
+                }
+                @if (project.liveUrl) {
+                  <a
+                    [href]="project.liveUrl"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-muted-foreground hover:text-primary transition-colors"
+                    aria-label="View live demo"
+                  >
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 2.25h6.25a.75.75 0 0 1 .75.75v6.25m-7.25 7.25 7-7m0 0v3.5a.75.75 0 0 1-.75.75h-3.5"/></svg>
                   </a>
                 }
               </div>

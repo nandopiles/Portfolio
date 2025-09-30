@@ -1,3 +1,57 @@
+.projects-card {
+  background: oklch(0.2 0.02 250 / 0.7); /* translúcido, navy */
+  border: 1.5px solid oklch(0.3 0.02 250 / 0.5); /* sutil, navy claro */
+  border-radius: 1.25rem;
+  box-shadow: 0 4px 32px -8px oklch(0.68 0.19 25 / 0.10), 0 1.5px 8px -2px oklch(0.68 0.19 25 / 0.08);
+  padding: 0;
+  transition: box-shadow 0.25s cubic-bezier(0.4,0,0.2,1), transform 0.18s cubic-bezier(0.4,0,0.2,1), border-color 0.18s;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 340px;
+}
+.projects-card:hover, .projects-card:focus {
+  box-shadow: 0 8px 40px -4px oklch(0.68 0.19 25 / 0.18), 0 2px 12px -2px oklch(0.68 0.19 25 / 0.12);
+  border-color: var(--primary);
+  transform: translateY(-4px) scale(1.025);
+}
+.projects-card h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: var(--foreground);
+  letter-spacing: 0.01em;
+  transition: color 0.18s;
+}
+.projects-card:hover h3 {
+  color: var(--primary);
+}
+.projects-card .project-badge {
+  background: oklch(0.25 0.02 250 / 0.5);
+  color: var(--foreground);
+  font-size: 0.95rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  cursor: default;
+  transition: background 0.18s, color 0.18s;
+}
+.projects-card .project-badge:hover {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+.projects-card .project-badge:active {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+.projects-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 1.25rem;
+  pointer-events: none;
+  box-shadow: 0 1px 8px 0 oklch(0.68 0.19 25 / 0.04) inset;
+}
 :host {
   display: block;
 }
