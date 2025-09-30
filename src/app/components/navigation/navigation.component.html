@@ -2,9 +2,7 @@
     [class]="'fixed top-0 left-0 right-0 z-50 transition-all duration-300 ' + (isScrolled() ? 'bg-background-blur border-bottom' : 'bg-transparent')">
     <div class="container mx-auto px-6 py-4">
         <div class="flex items-center justify-between">
-            <a href="#"
-                class="text-xl font-bold text-foreground logo-dev"
-                style="text-decoration: none;">
+            <a href="#" class="text-xl font-bold text-foreground logo-dev" style="text-decoration: none;">
                 &lt;Dev /&gt;
             </a>
 
@@ -19,6 +17,7 @@
             </div>
 
             <div class="flex items-center gap-4">
+
                 <a href="https://github.com/nandopiles" target="_blank" rel="noopener noreferrer"
                     class="text-muted-foreground hover:text-primary transition-colors" aria-label="GitHub">
                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -34,7 +33,43 @@
                             d="M16.338 16.338H13.67V12.16c0-.995-.017-2.277-1.387-2.277-1.39 0-1.601 1.086-1.601 2.207v4.248H8.014v-8.59h2.559v1.174h.037c.356-.675 1.227-1.387 2.526-1.387 2.703 0 3.203 1.778 3.203 4.092v4.711zM5.005 6.575a1.548 1.548 0 11-.003-3.096 1.548 1.548 0 01.003 3.096zm-1.337 9.763H6.34v-8.59H3.667v8.59zM17.668 1H2.328C1.595 1 1 1.581 1 2.298v15.403C1 18.418 1.595 19 2.328 19h15.34c.734 0 1.332-.582 1.332-1.299V2.298C19 1.581 18.402 1 17.668 1z" />
                     </svg>
                 </a>
+
+                <!-- Botón hamburguesa para móvil -->
+                <button (click)="toggleMobileMenu()"
+                    class="md:hidden p-2 text-muted-foreground hover:text-primary transition-colors"
+                    aria-label="Toggle menu">
+                    @if (!isMobileMenuOpen()) {
+                    <!-- Icono hamburguesa -->
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                    } @else {
+                    <!-- Icono cerrar (X) -->
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
+                    }
+                </button>
             </div>
         </div>
     </div>
+
+    <!-- Menú móvil desplegable -->
+    @if (isMobileMenuOpen()) {
+    <div class="md:hidden mobile-menu bg-background border-t border-border">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex flex-col gap-4">
+                @for (item of navItems; track item.name) {
+                <a [href]="item.href" (click)="onMobileNavClick(item.href)"
+                    [class]="'text-base font-medium transition-colors hover:text-primary block py-2 ' + (isActiveSection(item.href) ? 'text-primary' : 'text-muted-foreground')"
+                    style="text-decoration: none;">
+                    {{ item.name }}
+                </a>
+                }
+            </div>
+        </div>
+    </div>
+    }
 </nav>

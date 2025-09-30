@@ -16,6 +16,7 @@ interface NavItem {
 export class NavigationComponent implements OnInit {
   activeSection = signal('');
   isScrolled = signal(false);
+  isMobileMenuOpen = signal(false);
 
   navItems: NavItem[] = [
     { name: 'About', href: '#about' },
@@ -34,7 +35,7 @@ export class NavigationComponent implements OnInit {
       this.isScrolled.set(window.scrollY > 50);
 
       const sections = this.navItems.map(item => item.href.slice(1));
-      const current = sections.find(section => {
+      let current = sections.find(section => {
         const element = document.getElementById(section);
         if (element) {
           const rect = element.getBoundingClientRect();
@@ -42,13 +43,34 @@ export class NavigationComponent implements OnInit {
         }
         return false;
       });
-      if (current) {
-        this.activeSection.set(current);
+
+      // Si estamos arriba del todo, ningún elemento activo
+      if (window.scrollY < 50) {
+        current = '';
       }
+
+      this.activeSection.set(current || '');
     });
   }
 
   isActiveSection(href: string): boolean {
     return this.activeSection() === href.slice(1);
+  }
+
+  toggleMobileMenu(): void {
+    this.isMobileMenuOpen.set(!this.isMobileMenuOpen());
+  }
+
+  closeMobileMenu(): void {
+    this.isMobileMenuOpen.set(false);
+  }
+
+  onMobileNavClick(href: string): void {
+    this.closeMobileMenu();
+    // Scroll suave al elemento
+    const element = document.querySelector(href);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
   }
 }
