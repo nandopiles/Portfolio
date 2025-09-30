@@ -1,0 +1,53 @@
+<section class="min-h-screen flex items-center justify-center relative overflow-hidden">
+  <!-- Animated background gradient -->
+  <div class="absolute inset-0 opacity-30">
+    <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-primary-blur rounded-full blur-xl animate-pulse"></div>
+    <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-primary-blur-light rounded-full blur-xl animate-pulse-delay"></div>
+  </div>
+
+  <div class="container mx-auto px-6 relative z-10">
+    <div [class]="'max-w-4xl transition-all duration-1000 ' + (isVisible() ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10')">
+      <div class="mb-6">
+        <span class="text-primary font-mono text-sm md:text-base">Hi, my name is</span>
+      </div>
+
+      <h1 class="text-5xl md:text-7xl lg:text-8xl font-bold mb-4 text-balance">
+        Ferran Piles Lablanca<span class="text-primary">.</span>
+      </h1>
+
+      <h2 class="text-3xl md:text-5xl lg:text-6xl font-bold text-muted-foreground mb-8 text-balance">
+        I craft exceptional digital experiences
+      </h2>
+
+      <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mb-12 leading-relaxed">
+        Frontend Developer specializing in <span class="text-primary font-semibold">Angular</span>, building
+        accessible, performant, and intuitive user interfaces with modern web technologies.
+      </p>
+
+      <div class="flex flex-wrap gap-4">
+        <a
+          href="#projects"
+          class="px-8 py-4 bg-primary text-primary-foreground rounded-lg font-semibold hover:bg-primary-90 transition-all hover:scale-105 hover:shadow-lg hover:shadow-primary-20"
+        >
+          View My Work
+        </a>
+        <a
+          href="#contact"
+          class="px-8 py-4 border-2 border-primary text-primary rounded-lg font-semibold hover:bg-primary-10 transition-all"
+        >
+          Get In Touch
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <a
+    href="#about"
+    class="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-muted-foreground hover:text-primary transition-colors animate-bounce"
+    aria-label="Scroll to about section"
+  >
+    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+      <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+    </svg>
+  </a>
+</section>
