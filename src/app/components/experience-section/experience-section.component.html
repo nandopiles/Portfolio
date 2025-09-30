@@ -1,31 +1,36 @@
 <section id="experience" #sectionRef class="py-24 md:py-32">
-    <div class="container mx-auto px-6">
-        <div
-            [class]="'max-w-4xl mx-auto transition-all duration-1000 ' + (isVisible() ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10')">
-            <div class="mb-12">
-                <span class="text-primary font-mono text-sm">02.</span>
-                <h2 class="text-3xl md:text-4xl font-bold inline-block ml-4">
-                    Experiencia
-                    <div class="h-px bg-border mt-4 w-64"></div>
-                </h2>
+  <div class="container mx-auto px-6">
+    <div [class]="'max-w-6xl mx-auto transition-all duration-1000 ' + (isVisible() ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10')">
+      <div class="mb-12">
+        <span class="text-primary font-mono text-sm">04.</span>
+        <h2 class="text-3xl md:text-4xl font-bold inline-block ml-4">
+          Experience
+          <div class="h-px bg-border mt-4 w-64"></div>
+        </h2>
+      </div>
+      
+      <div class="timeline-container">
+        @for (exp of experiences; track $index; let isLast = $last) {
+          <div class="timeline-item" [style.animation-delay]="($index * 200) + 'ms'">
+            <div class="timeline-content">
+              <div class="content-header">
+                <span class="period-badge">{{ exp.period }}</span>
+                <div class="company-tag">{{ exp.company }}</div>
+              </div>
+              <h3 class="role-title">{{ exp.title }}</h3>
+              <p class="description">{{ exp.description }}</p>
+              <div class="tech-stack">
+                @for (tech of exp.tech; track tech) {
+                  <span class="tech-chip">{{ tech }}</span>
+                }
+              </div>
             </div>
-        <div class="experience-timeline">
-            @for (exp of experiences(); track $index) {
-            <div class="timeline-item" [style.animationDelay]="($index * 100) + 'ms'">
-                <div class="timeline-content">
-                    <span class="period">{{ exp.period }}</span>
-                    <h3 class="role" [class.active]="isVisible()">{{ exp.title }}</h3>
-                    <p class="company">{{ exp.company }}</p>
-                    <p class="description">{{ exp.description }}</p>
-                    <div class="tech-list">
-                        @for (tech of exp.tech; track $index) {
-                        <span class="tech-badge">{{ tech }}</span>
-                        }
-                    </div>
-                </div>
-            </div>
+            @if (!isLast) {
+              <div class="timeline-connector"></div>
             }
-        </div>
-        </div>
+          </div>
+        }
+      </div>
     </div>
+  </div>
 </section>
