@@ -1,0 +1,120 @@
+:host {
+  display: block;
+}
+
+.experience-section {
+  padding: 6rem 0 8rem 0;
+  background: oklch(0.2 0.02 250 / 0.3);
+  transition: background 0.3s;
+}
+
+.container {
+  max-width: 56rem;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.experience-header {
+  margin-bottom: 3rem;
+  display: flex;
+  align-items: center;
+}
+.section-index {
+  color: var(--primary);
+  font-family: monospace;
+  font-size: 1rem;
+}
+.section-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-left: 1rem;
+  display: inline-block;
+  position: relative;
+}
+.section-underline {
+  height: 2px;
+  background: var(--border);
+  margin-top: 1rem;
+  width: 16rem;
+}
+
+.experience-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+.timeline-item {
+  position: relative;
+  padding-left: 2.5rem;
+  border-left: 2px solid var(--border);
+  transition: border-color 0.2s;
+  animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+.timeline-item:hover,
+.timeline-item:focus {
+  border-color: var(--primary);
+}
+
+.timeline-content {
+  display: flex;
+  flex-direction: column;
+}
+.period {
+  color: var(--primary);
+  font-family: monospace;
+  font-size: 0.95rem;
+  margin-bottom: 0.25rem;
+}
+.role {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  color: var(--foreground);
+  transition: color 0.18s;
+}
+.timeline-item:hover .role {
+  color: var(--primary);
+}
+.company {
+  color: var(--muted-foreground);
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+.description {
+  color: var(--muted-foreground);
+  margin-bottom: 0.75rem;
+  line-height: 1.6;
+}
+.tech-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.tech-badge {
+  background: oklch(0.25 0.02 250 / 0.5);
+  color: var(--foreground);
+  font-size: 0.85rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  cursor: default;
+  transition: background 0.18s, color 0.18s;
+}
+.tech-badge:hover {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.visible .timeline-item {
+  opacity: 1;
+  transform: none;
+}

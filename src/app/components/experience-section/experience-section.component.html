@@ -1,0 +1,28 @@
+<section id="experience" [class.visible]="isVisible" class="experience-section">
+    <div class="container">
+        <div class="experience-header">
+            <span class="section-index">04.</span>
+            <h2 class="section-title">
+                Experience
+                <div class="section-underline"></div>
+            </h2>
+        </div>
+        <div class="experience-timeline">
+            @for (exp of experiences; track $index) {
+            <div class="timeline-item" [style.animationDelay]="($index * 100) + 'ms'">
+                <div class="timeline-content">
+                    <span class="period">{{ exp.period }}</span>
+                    <h3 class="role" [class.active]="isVisible">{{ exp.title }}</h3>
+                    <p class="company">{{ exp.company }}</p>
+                    <p class="description">{{ exp.description }}</p>
+                    <div class="tech-list">
+                        @for (tech of exp.tech; track $index) {
+                        <span class="tech-badge">{{ tech }}</span>
+                        }
+                    </div>
+                </div>
+            </div>
+            }
+        </div>
+    </div>
+</section>

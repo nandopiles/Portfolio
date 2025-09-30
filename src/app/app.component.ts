@@ -5,6 +5,7 @@ import { HeroSectionComponent } from './components/hero-section/hero-section.com
 import { AboutSectionComponent } from './components/about-section/about-section.component';
 import { SkillsSectionComponent } from './components/skills-section/skills-section.component';
 import { ProjectsSectionComponent } from './components/projects-section/projects-section.component';
+import { ExperienceSectionComponent } from './components/experience-section/experience-section.component';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +16,8 @@ import { ProjectsSectionComponent } from './components/projects-section/projects
     HeroSectionComponent,
     AboutSectionComponent,
     SkillsSectionComponent,
-    ProjectsSectionComponent
+  ProjectsSectionComponent,
+  ExperienceSectionComponent
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
