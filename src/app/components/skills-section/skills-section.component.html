@@ -9,20 +9,13 @@
         </h2>
       </div>
 
-      <div class="grid md:grid-cols-2 gap-8">
+      <div class="skills-grid">
         @for (category of skillCategories; track category.title; let idx = $index) {
-          <div
-            class="group p-6 rounded-lg border border-border hover:border-primary-50 transition-all hover:bg-card-50"
-            [style.animation-delay]="(idx * 100) + 'ms'"
-          >
-            <h3 class="text-xl font-semibold mb-4 text-foreground group-hover:text-primary transition-colors">
-              {{ category.title }}
-            </h3>
-            <div class="flex flex-wrap gap-2">
+          <div class="skills-card" tabindex="0">
+            <h3>{{ category.title }}</h3>
+            <div class="skills-list">
               @for (skill of category.skills; track skill) {
-                <span class="bg-secondary-50 hover:bg-primary hover:text-primary-foreground transition-colors cursor-default text-sm py-1 px-3 rounded-full">
-                  {{ skill }}
-                </span>
+                <span class="skill-badge">{{ skill }}</span>
               }
             </div>
           </div>

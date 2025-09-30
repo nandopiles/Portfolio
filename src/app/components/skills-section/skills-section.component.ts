@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 interface SkillCategory {
   title: string;
   skills: string[];
+  description?: string;
 }
 
 @Component({
@@ -19,21 +20,23 @@ export class SkillsSectionComponent implements OnInit {
 
   skillCategories: SkillCategory[] = [
     {
-      title: "Frontend Frameworks",
-      skills: ["Angular v20", "Angular Signals", "RxJS", "TypeScript", "JavaScript ES6+"],
+      title: "Frontend",
+      skills: [
+        "Angular v20", "TypeScript", "JavaScript (ES6+)", "RxJS", "PrimeNg", "Tailwind CSS", "Bootstrap"
+      ]
     },
     {
-      title: "State & Forms",
-      skills: ["Reactive Forms", "NgRx", "Signals API", "Template-driven Forms"],
+      title: "Backend",
+      skills: [
+        "Java", ".NET", "Python", "Symfony", "Flask", "MongoDb", "REST APIs", "JWT Auth", "MySQL"
+      ]
     },
     {
-      title: "Styling & UI",
-      skills: ["Tailwind CSS", "SCSS/SASS", "CSS Grid & Flexbox", "Responsive Design", "Angular Material"],
-    },
-    {
-      title: "Tools & Practices",
-      skills: ["Git", "Clean Architecture", "REST APIs", "Performance Optimization", "Accessibility (a11y)"],
-    },
+      title: "Herramientas",
+      skills: [
+        "Git", "GitHub", "Hibernate", "Postman", "Jira"
+      ]
+    }
   ];
 
   ngOnInit() {
