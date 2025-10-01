@@ -7,10 +7,52 @@
           Proyectos Destacados
           <div class="h-px bg-border mt-4 w-64"></div>
         </h2>
+
+        <!-- Filtros modernos compactos -->
+        <div class="filter-container mt-6">
+          <!-- Header con botón limpiar -->
+          <div class="filter-header">
+            <div class="filter-title">
+              <span class="filter-icon">🔍</span>
+              <span>Filtrar por tecnologías</span>
+            </div>
+            @if (hasActiveFilters) {
+              <button class="clear-btn" (click)="clearAllFilters()">
+                <span class="clear-icon">✕</span>
+                <span class="clear-text">Limpiar</span>
+              </button>
+            }
+          </div>
+          
+          <!-- Categorías de filtros -->
+          <div class="categories-grid">
+            @for (category of filterCategories; track category.name) {
+              <div class="category-section">
+                <div class="category-header">
+                  <span class="category-dot"></span>
+                  <h4 class="category-name">{{ category.name }}</h4>
+                </div>
+                <div class="chips-container">
+                  @for (item of category.items; track item) {
+                    <button 
+                      class="tech-chip"
+                      [class.selected]="isFilterActive(category.key, item)"
+                      (click)="toggleFilter(category.key, item)">
+                      {{ item }}
+                      @if (isFilterActive(category.key, item)) {
+                        <span class="check-mark">✓</span>
+                      }
+                    </button>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        </div>
       </div>
 
       <div class="grid md:grid-cols-2 gap-8">
-        @for (project of projects; track project.title; let idx = $index) {
+        @for (project of filteredProjects; track project.title; let idx = $index) {
           <div class="projects-card group">
             <div class="relative overflow-hidden">
               <img
@@ -28,9 +70,19 @@
                 {{ project.description }}
               </p>
               <div class="flex flex-wrap gap-2 mb-4">
-                @for (tech of project.technologies; track tech) {
-                  <span class="project-badge">
-                    {{ tech }}
+                @for (lang of project.technologies.languages; track lang) {
+                  <span class="project-badge language">
+                    {{ lang }}
+                  </span>
+                }
+                @for (fw of project.technologies.frameworks; track fw) {
+                  <span class="project-badge framework">
+                    {{ fw }}
+                  </span>
+                }
+                @for (tool of project.technologies.tools; track tool) {
+                  <span class="project-badge tool">
+                    {{ tool }}
                   </span>
                 }
               </div>
