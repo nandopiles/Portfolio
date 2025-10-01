@@ -1,0 +1,54 @@
+.project-tags-container {
+  width: 100%;
+  min-height: 60px; /* Altura mínima para mantener consistencia */
+  display: flex;
+  align-items: flex-start;
+}
+
+.project-tags-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  width: 100%;
+  align-items: flex-start;
+  align-content: flex-start;
+}
+
+/* Mantener la misma estética de los badges actuales */
+.project-badge {
+  background: oklch(0.25 0.02 250 / 0.5);
+  color: var(--foreground);
+  font-size: 0.95rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  cursor: default;
+  transition: background 0.18s, color 0.18s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.project-badge:hover {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.project-badge:active {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+
+/* Estilos específicos por categoría (igual que los actuales) */
+.project-badge.language {
+  background: oklch(0.6 0.15 200 / 0.15);
+  border: 1px solid oklch(0.6 0.15 200 / 0.3);
+}
+
+.project-badge.framework {
+  background: oklch(0.7 0.12 150 / 0.15);
+  border: 1px solid oklch(0.7 0.12 150 / 0.3);
+}
+
+.project-badge.tool {
+  background: oklch(0.75 0.18 50 / 0.15);
+  border: 1px solid oklch(0.75 0.18 50 / 0.3);
+}

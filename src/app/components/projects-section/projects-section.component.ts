@@ -1,11 +1,12 @@
 import { Component, OnInit, signal, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ProjectTagsComponent } from '../../shared/components/project-tags/project-tags.component';
 import { ActiveFilters, FilterCategory, Project } from './interfaces/project.interface';
 
 @Component({
   selector: 'app-projects-section',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ProjectTagsComponent],
   templateUrl: './projects-section.component.html',
   styleUrl: './projects-section.component.scss'
 })
@@ -21,42 +22,63 @@ export class ProjectsSectionComponent implements OnInit {
   projects: Project[] = [
     {
       id: 0,
-      title: "Modern E-commerce Dashboard",
-      description: "A comprehensive admin dashboard built with Angular 20 and Signals for real-time data management. Features include inventory tracking, sales analytics, and user management with a responsive, accessible interface.",
-      image: "/modern-ecommerce-dashboard.png",
+      title: "Nayeli Online Shop",
+      description: "Nayeli es una tienda en línea compuesta por dos aplicaciones principales: una API creada con Flask y Nayeli Online Store, creada con Angular19.",
+      image: "/nayeli-img.jpeg",
       technologies: {
-        languages: ["TypeScript"],
-        frameworks: ["Angular 20", "Signals API"],
-        tools: ["SCSS", "Chart.js"]
+        languages: ["TypeScript", "Python"],
+        frameworks: ["Angular19+", "Flask", "Tailwind CSS"],
+        tools: ["SQLAlchemy", "MySQL", "Clever Cloud"]
       },
-      liveUrl: "#",
-      githubUrl: "#"
+      githubUrl: "https://github.com/nandopiles/nayeli"
     },
     {
       id: 1,
-      title: "Social Media App Interface",
-      description: "A sleek social media application interface showcasing modern Angular patterns with reactive forms, lazy loading, and optimized performance. Built with accessibility and mobile-first design principles.",
-      image: "/social-media-app-interface.png",
+      title: "Estimat",
+      description: "Rediseño de la página web de la fundación contra el cáncer Estimat.Además de crear una aplicación interna para la gestión de la misma.",
+      image: "/estimat-img.jpeg",
       technologies: {
-        languages: ["TypeScript"],
-        frameworks: ["Angular", "RxJS"],
-        tools: ["Tailwind CSS", "PWA"]
+        languages: ["TypeScript", "PHP"],
+        frameworks: ["Angular19+", "Symfony", "Bootstrap"],
+        tools: ["Figma", "Docker"]
       },
-      liveUrl: "#",
-      githubUrl: "#"
+      githubUrl: "https://github.com/nandopiles/Estimat"
     },
     {
       id: 2,
-      title: "Modern E-commerce Dashboard",
-      description: "A comprehensive admin dashboard built with Angular 20 and Signals for real-time data management. Features include inventory tracking, sales analytics, and user management with a responsive, accessible interface.",
-      image: "/modern-ecommerce-dashboard.png",
+      title: "Dietet",
+      description: "Explora y filtra una amplia variedad de recetas según su nivel de salud. Guarda tus favoritas, accede a guías paso a paso y reúne los ingredientes que necesitas para disfrutar de una experiencia culinaria saludable. Simplifica tu camino hacia una alimentación equilibrada con Dietet.",
+      image: "/dietet-img.jpeg",
       technologies: {
-        languages: ["TypeScript"],
-        frameworks: ["Angular 20", "Signals API"],
-        tools: ["SCSS", "Chart.js"]
+        languages: ["Javascript"],
+        frameworks: ["Node.js", "Bootstrap"],
+        tools: ["MongoDb", "Electron"]
       },
-      liveUrl: "#",
-      githubUrl: "#"
+      githubUrl: "https://github.com/nandopiles/Dietet"
+    },
+    {
+      id: 3,
+      title: "Admin Manager (Dietet)",
+      description: "Controla y administra la aplicación Dietet. Crea, elimina y actualiza cuentas de usuario y recetas sin esfuerzo. Optimiza la gestión de tu aplicación para disfrutar de una experiencia más eficiente.",
+      image: "/admin-manager-img.jpeg",
+      technologies: {
+        languages: ["Javascript"],
+        frameworks: ["Node.js", "Bootstrap"],
+        tools: ["MongoDb", "Electron"]
+      },
+      githubUrl: "https://github.com/nandopiles/AdminManager"
+    },
+    {
+      id: 4,
+      title: "PassGenerator",
+      description: "Genera una contraseña totalmente personalizable y segura con PassGenerator. Puedes guardar la contraseña generada con el correo electrónico y el enlace web para acceder a ella. Puedes eliminar las contraseñas cuando quieras.",
+      image: "/passgenerator-img.jpeg",
+      technologies: {
+        languages: ["Javascript"],
+        frameworks: ["Bootstrap"],
+        tools: ["Sweetalerts2"]
+      },
+      githubUrl: "https://github.com/nandopiles/RandomPwdGenerator"
     }
   ];
 
