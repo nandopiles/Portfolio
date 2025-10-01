@@ -19,11 +19,11 @@ export class NavigationComponent implements OnInit {
   isMobileMenuOpen = signal(false);
 
   navItems: NavItem[] = [
-    { name: 'About', href: '#about' },
+    { name: 'Sobre Mí', href: '#about' },
+    { name: 'Experiencia', href: '#experience' },
+    { name: 'Proyectos', href: '#projects' },
     { name: 'Skills', href: '#skills' },
-    { name: 'Projects', href: '#projects' },
-    { name: 'Experience', href: '#experience' },
-    { name: 'Contact', href: '#contact' },
+    { name: 'Contacto', href: '#contact' },
   ];
 
   ngOnInit() {
