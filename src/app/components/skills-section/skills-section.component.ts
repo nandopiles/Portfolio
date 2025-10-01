@@ -1,11 +1,6 @@
 import { Component, OnInit, signal, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-interface SkillCategory {
-  title: string;
-  skills: string[];
-  description?: string;
-}
+import { SkillCategory } from './interfaces/skill.interface';
 
 @Component({
   selector: 'app-skills-section',

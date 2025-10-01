@@ -1,13 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, OnInit, ViewChild, signal } from '@angular/core';
-
-interface Experience {
-  period: string;
-  title: string;
-  company: string;
-  description: string;
-  tech: string[];
-}
+import { Experience } from './interfaces/experience.interface';
 
 @Component({
   selector: 'app-experience-section',

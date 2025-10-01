@@ -1,10 +1,6 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-interface NavItem {
-  name: string;
-  href: string;
-}
+import { NavItem } from './interfaces/navigation.interface';
 
 @Component({
   selector: 'app-navigation',
