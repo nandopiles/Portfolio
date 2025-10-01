@@ -24,28 +24,28 @@ export class ExperienceSectionComponent implements OnInit {
 
   experiences: Experience[] = [
     {
-      period: '2023 — Present',
-      title: 'Senior Frontend Developer',
-      company: 'Tech Innovations Inc.',
-      description:
-        'Leading frontend development for enterprise applications using Angular 20. Architecting scalable solutions with Signals and RxJS, mentoring junior developers, and implementing best practices for performance optimization.',
-      tech: ['Angular 20', 'Signals', 'RxJS', 'TypeScript', 'Tailwind CSS'],
-    },
-    {
-      period: '2021 — 2023',
+      period: 'Sept 2024 — Presente',
       title: 'Frontend Developer',
-      company: 'Digital Solutions Ltd.',
+      company: 'Conmuta Soluciones',
       description:
-        'Developed and maintained multiple client-facing applications using Angular. Implemented reactive forms, state management with NgRx, and collaborated with UX designers to create intuitive user interfaces.',
-      tech: ['Angular', 'NgRx', 'Reactive Forms', 'SCSS', 'REST APIs'],
+        'Lideré el desarrollo de un e-commerce personalizable para cada cliente con Angular 19, gestionando tareas en Jira y asegurando la calidad del proyecto. Además, colaboré en una plataforma de centralización de desguaces en España, trabajando en los módulos de pedidos, facturación con Holded, clientes y en la definición de reglas avanzadas de precios.',
+      tech: ['Angular 19', 'TypeScript', 'SCSS', 'Bootstrap', 'REST APIs', 'GitLab', 'Jira', 'Jenkins'],
     },
     {
-      period: '2019 — 2021',
-      title: 'Junior Frontend Developer',
-      company: 'StartUp Ventures',
+      period: 'Jan 2024 — Jul 2024',
+      title: 'Frontend Developer',
+      company: 'Onestic.',
       description:
-        'Built responsive web applications and contributed to the development of reusable component libraries. Gained expertise in modern JavaScript frameworks and agile development methodologies.',
-      tech: ['Angular', 'JavaScript', 'HTML/CSS', 'Git', 'Agile'],
+        'Desarrollé aplicaciones internas con Angular para la gestión de reservas y promociones. Creé componentes reutilizables que mejoraron la usabilidad y añadí un sistema de notificaciones automáticas conectado a API y base de datos, incrementando la participación de los usuarios.',
+      tech: ['Angular', 'TypeScript', 'Bootstrap', 'GitHub', 'REST APIs'],
+    },
+    {
+      period: 'Mar 2023 — Jun 2023',
+      title: 'Backend Developer',
+      company: 'Lãberit',
+      description:
+        'Diseñé microservicios en .NET para integrar y procesar datos entre sistemas. También personalicé soluciones en Microsoft Dynamics 365, optimizando la gestión empresarial y la eficiencia de los procesos internos.',
+      tech: ['.NET', 'Microservicios', 'Microsoft Dynamics 365', 'Git', 'GitHub'],
     },
   ];
 
