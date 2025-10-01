@@ -139,13 +139,14 @@
 .role-title {
   font-size: 1.4rem;
   font-weight: 700;
-  color: var(--foreground);
+  color: var(--primary);
   margin-bottom: 1rem;
   line-height: 1.3;
-  background: linear-gradient(135deg, var(--foreground), var(--primary));
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  /* Quitar gradiente, usar solo color plano primary */
+  background: none;
+  background-clip: unset;
+  -webkit-background-clip: unset;
+  -webkit-text-fill-color: unset;
   transition: all 0.3s;
 }
 

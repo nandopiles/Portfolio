@@ -113,14 +113,16 @@ export class ProjectsSectionComponent implements OnInit {
     }
 
     return this.projects.filter(project => {
-      const matchesLanguages = filters.languages.length === 0 ||
+      // OR entre categorías: si alguna categoría coincide, mostrar el proyecto
+      const matchesLanguages = filters.languages.length > 0 &&
         filters.languages.some(lang => project.technologies.languages.includes(lang));
-      const matchesFrameworks = filters.frameworks.length === 0 ||
+      const matchesFrameworks = filters.frameworks.length > 0 &&
         filters.frameworks.some(fw => project.technologies.frameworks.includes(fw));
-      const matchesTools = filters.tools.length === 0 ||
+      const matchesTools = filters.tools.length > 0 &&
         filters.tools.some(tool => project.technologies.tools.includes(tool));
 
-      return matchesLanguages && matchesFrameworks && matchesTools;
+      // Si no hay filtros activos, ya se retorna arriba
+      return matchesLanguages || matchesFrameworks || matchesTools;
     });
   }
 
