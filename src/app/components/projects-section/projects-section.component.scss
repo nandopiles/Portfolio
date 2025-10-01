@@ -208,6 +208,9 @@
   margin: 1rem 0;
   backdrop-filter: blur(12px);
   box-shadow: 0 4px 24px -8px oklch(0.68 0.19 25 / 0.15);
+  position: sticky;
+  top: 0;
+  z-index: 20;
 }
 
 .filter-header {
@@ -261,7 +264,7 @@
 
 .categories-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 1rem;
 }
 
@@ -321,6 +324,56 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  padding-bottom: 0.25rem;
+}
+
+@media (max-width: 768px) {
+  .filter-container {
+    padding: 0.75rem 0.5rem;
+    margin: 0.5rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+  }
+  .categories-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+  .category-section {
+    min-width: 0;
+  }
+  .chips-container {
+    flex-wrap: wrap;
+    overflow-x: visible;
+    gap: 0.4rem;
+    padding-bottom: 0.25rem;
+    margin-bottom: 0.5rem;
+  }
+  .tech-chip {
+    min-width: 90px;
+    font-size: 0.8rem;
+    padding: 0.35rem 0.7rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .filter-container {
+    padding: 0.5rem 0.25rem;
+  }
+  .categories-grid {
+    gap: 0.5rem;
+  }
+  .chips-container {
+    gap: 0.3rem;
+    padding-bottom: 0.2rem;
+  }
+  .tech-chip {
+    min-width: 70px;
+    font-size: 0.7rem;
+    padding: 0.28rem 0.5rem;
+  }
 }
 
 .tech-chip {
