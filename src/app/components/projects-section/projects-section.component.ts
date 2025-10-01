@@ -1,6 +1,6 @@
 import { Component, OnInit, signal, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ProjectTagsComponent } from '../../shared/components/project-tags/project-tags.component';
+import { ProjectTagsComponent } from './components/project-tags/project-tags.component';
 import { ActiveFilters, FilterCategory, Project } from './interfaces/project.interface';
 
 @Component({
