@@ -16,8 +16,8 @@ import { ExperienceSectionComponent } from './components/experience-section/expe
     HeroSectionComponent,
     AboutSectionComponent,
     SkillsSectionComponent,
-  ProjectsSectionComponent,
-  ExperienceSectionComponent
+    ProjectsSectionComponent,
+    ExperienceSectionComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'

@@ -23,7 +23,6 @@ export class NavigationComponent implements OnInit {
     { name: 'Experiencia', href: '#experience' },
     { name: 'Proyectos', href: '#projects' },
     { name: 'Skills', href: '#skills' },
-    { name: 'Contacto', href: '#contact' },
   ];
 
   ngOnInit() {
@@ -47,6 +46,12 @@ export class NavigationComponent implements OnInit {
       // Si estamos arriba del todo, ningún elemento activo
       if (window.scrollY < 50) {
         current = '';
+      }
+
+      // Si estamos al final de la página, activa la última sección
+      const nearBottom = (window.innerHeight + window.scrollY) >= (document.body.scrollHeight - 10);
+      if (nearBottom) {
+        current = sections[sections.length - 1];
       }
 
       this.activeSection.set(current || '');
