@@ -1,30 +1,6 @@
 import { Component, OnInit, signal, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-interface Project {
-  title: string;
-  description: string;
-  image: string;
-  technologies: {
-    languages: string[];
-    frameworks: string[];
-    tools: string[];
-  };
-  liveUrl?: string;
-  githubUrl?: string;
-}
-
-interface FilterCategory {
-  name: string;
-  key: keyof Project['technologies'];
-  items: string[];
-}
-
-interface ActiveFilters {
-  languages: string[];
-  frameworks: string[];
-  tools: string[];
-}
+import { ActiveFilters, FilterCategory, Project } from './interfaces/project.interface';
 
 @Component({
   selector: 'app-projects-section',
@@ -44,6 +20,7 @@ export class ProjectsSectionComponent implements OnInit {
 
   projects: Project[] = [
     {
+      id: 0,
       title: "Modern E-commerce Dashboard",
       description: "A comprehensive admin dashboard built with Angular 20 and Signals for real-time data management. Features include inventory tracking, sales analytics, and user management with a responsive, accessible interface.",
       image: "/modern-ecommerce-dashboard.png",
@@ -56,6 +33,7 @@ export class ProjectsSectionComponent implements OnInit {
       githubUrl: "#"
     },
     {
+      id: 1,
       title: "Social Media App Interface",
       description: "A sleek social media application interface showcasing modern Angular patterns with reactive forms, lazy loading, and optimized performance. Built with accessibility and mobile-first design principles.",
       image: "/social-media-app-interface.png",
@@ -68,37 +46,14 @@ export class ProjectsSectionComponent implements OnInit {
       githubUrl: "#"
     },
     {
-      title: "Task Management Dashboard",
-      description: "An intuitive project management tool with drag-and-drop functionality, real-time collaboration features, and comprehensive reporting. Demonstrates advanced Angular concepts and state management.",
-      image: "/task-management-dashboard.png",
+      id: 2,
+      title: "Modern E-commerce Dashboard",
+      description: "A comprehensive admin dashboard built with Angular 20 and Signals for real-time data management. Features include inventory tracking, sales analytics, and user management with a responsive, accessible interface.",
+      image: "/modern-ecommerce-dashboard.png",
       technologies: {
         languages: ["TypeScript"],
-        frameworks: ["Angular", "NgRx"],
-        tools: ["Angular Material", "WebSockets"]
-      },
-      liveUrl: "#",
-      githubUrl: "#"
-    },
-    {
-      title: "Task Management Dashboard",
-      description: "An intuitive project management tool with drag-and-drop functionality, real-time collaboration features, and comprehensive reporting. Demonstrates advanced Angular concepts and state management.",
-      image: "/task-management-dashboard.png",
-      technologies: {
-        languages: ["TypeScript"],
-        frameworks: ["Angular", "NgRx"],
-        tools: ["Angular Material", "WebSockets"]
-      },
-      liveUrl: "#",
-      githubUrl: "#"
-    },
-    {
-      title: "Task Management Dashboard",
-      description: "An intuitive project management tool with drag-and-drop functionality, real-time collaboration features, and comprehensive reporting. Demonstrates advanced Angular concepts and state management.",
-      image: "/task-management-dashboard.png",
-      technologies: {
-        languages: ["TypeScript"],
-        frameworks: ["Angular", "NgRx"],
-        tools: ["Angular Material", "WebSockets"]
+        frameworks: ["Angular 20", "Signals API"],
+        tools: ["SCSS", "Chart.js"]
       },
       liveUrl: "#",
       githubUrl: "#"
@@ -127,22 +82,22 @@ export class ProjectsSectionComponent implements OnInit {
 
   get filteredProjects(): Project[] {
     const filters = this.activeFilters();
-    const hasActiveFilters = filters.languages.length > 0 || 
-                             filters.frameworks.length > 0 || 
-                             filters.tools.length > 0;
+    const hasActiveFilters = filters.languages.length > 0 ||
+      filters.frameworks.length > 0 ||
+      filters.tools.length > 0;
 
     if (!hasActiveFilters) {
       return this.projects;
     }
 
     return this.projects.filter(project => {
-      const matchesLanguages = filters.languages.length === 0 || 
-                               filters.languages.some(lang => project.technologies.languages.includes(lang));
-      const matchesFrameworks = filters.frameworks.length === 0 || 
-                                filters.frameworks.some(fw => project.technologies.frameworks.includes(fw));
-      const matchesTools = filters.tools.length === 0 || 
-                           filters.tools.some(tool => project.technologies.tools.includes(tool));
-      
+      const matchesLanguages = filters.languages.length === 0 ||
+        filters.languages.some(lang => project.technologies.languages.includes(lang));
+      const matchesFrameworks = filters.frameworks.length === 0 ||
+        filters.frameworks.some(fw => project.technologies.frameworks.includes(fw));
+      const matchesTools = filters.tools.length === 0 ||
+        filters.tools.some(tool => project.technologies.tools.includes(tool));
+
       return matchesLanguages && matchesFrameworks && matchesTools;
     });
   }
@@ -154,7 +109,7 @@ export class ProjectsSectionComponent implements OnInit {
   toggleFilter(category: keyof Project['technologies'], item: string): void {
     const currentFilters = this.activeFilters();
     const categoryFilters = currentFilters[category];
-    
+
     if (categoryFilters.includes(item)) {
       // Remover filtro
       this.activeFilters.set({
