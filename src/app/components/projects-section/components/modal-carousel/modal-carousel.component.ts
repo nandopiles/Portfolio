@@ -62,11 +62,17 @@ export class ModalCarouselComponent implements OnInit, OnDestroy {
 
   onClose(): void {
     this.isClosing.set(true);
-    
     // Delay para la animación de fadeOut
     setTimeout(() => {
       this.currentImageIndex.set(0);
       this.isClosing.set(false);
+      // Cerrar todos los overlays de modal si hubiera más de uno
+      const overlays = document.querySelectorAll('.modal-overlay');
+      overlays.forEach(overlay => {
+        if (overlay.parentElement) {
+          overlay.parentElement.removeChild(overlay);
+        }
+      });
       document.body.style.overflow = 'auto';
       this.closeModal.emit();
     }, 300);
