@@ -1,6 +1,26 @@
-<div class="min-h-screen">
+<div class="min-h-screen relative overflow-hidden">
+  <!-- Elementos parallax lado izquierdo - Temática valenciana -->
+  <div class="parallax-container left">
+    <div #leftElement1 class="parallax-element orange-fruit"></div>
+    <div #leftElement2 class="parallax-element paella-pan"></div>
+    <div #leftElement3 class="parallax-element palm-tree"></div>
+    <div #leftElement4 class="parallax-element code-bracket"></div>
+    <div #leftElement5 class="parallax-element horchata-glass"></div>
+    <div #leftElement6 class="parallax-element valencia-tower"></div>
+  </div>
+
+  <!-- Elementos parallax lado derecho - Temática tech y mediterránea -->
+  <div class="parallax-container right">
+    <div #rightElement1 class="parallax-element code-tag"></div>
+    <div #rightElement2 class="parallax-element seashell"></div>
+    <div #rightElement3 class="parallax-element sun-valencia"></div>
+    <div #rightElement4 class="parallax-element laptop-icon"></div>
+    <div #rightElement5 class="parallax-element wave-mediterranean"></div>
+    <div #rightElement6 class="parallax-element falla-tower"></div>
+  </div>
+
   <app-navigation></app-navigation>
-  <main>
+  <main class="relative z-10">
     <app-hero-section></app-hero-section>
     <app-about-section></app-about-section>
     <app-experience-section></app-experience-section>

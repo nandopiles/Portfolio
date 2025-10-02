@@ -1,0 +1,495 @@
+/* Contenedores parallax */
+.parallax-container {
+  position: fixed;
+  top: 0;
+  width: 120px;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+
+  &.left {
+    left: -60px;
+  }
+
+  &.right {
+    right: -60px;
+  }
+}
+
+/* Base para todos los elementos parallax */
+.parallax-element {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0.6;
+  will-change: transform;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  z-index: 2;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+/* === ELEMENTOS VALENCIANOS === */
+
+/* Naranjas - símbolo de Valencia */
+.orange-fruit {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #ff8c00 0%, #ff6b00 50%, #e55a00 100%);
+  top: 10vh;
+  left: 20px;
+  animation: gentleBob 8s ease-in-out infinite;
+  box-shadow: 
+    0 4px 12px rgba(255, 107, 0, 0.3),
+    inset -8px -8px 0 rgba(0, 0, 0, 0.1),
+    inset 2px 2px 0 rgba(255, 255, 255, 0.3);
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 8px;
+    height: 8px;
+    background: #228B22;
+    border-radius: 50% 0;
+    transform: translateX(-50%) rotate(45deg);
+  }
+}
+
+/* Paella - icono culinario valenciano */
+.paella-pan {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(45deg, #C4A000 0%, #FFD700 30%, #DAA520 100%);
+  top: 25vh;
+  left: 15px;
+  animation: slowRotate 20s linear infinite;
+  box-shadow: 
+    0 6px 20px rgba(196, 160, 0, 0.4),
+    inset 0 0 20px rgba(255, 215, 0, 0.3);
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #FFA500 0%, #FF8C00 50%, #FF6B47 100%);
+    opacity: 0.7;
+  }
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 10px;
+    right: -15px;
+    width: 20px;
+    height: 4px;
+    background: #8B4513;
+    border-radius: 2px;
+  }
+}
+
+/* Palmera - elementos mediterráneos */
+.palm-tree {
+  width: 12px;
+  height: 120px;
+  background: linear-gradient(180deg, #228B22 0%, #32CD32 30%, #8B4513 100%);
+  top: 40vh;
+  left: 40px;
+  border-radius: 6px;
+  animation: palmSway 6s ease-in-out infinite;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 30px;
+    background: 
+      radial-gradient(ellipse at bottom, #228B22 0%, transparent 70%),
+      radial-gradient(ellipse at bottom left, #32CD32 0%, transparent 50%),
+      radial-gradient(ellipse at bottom right, #32CD32 0%, transparent 50%);
+    border-radius: 50% 50% 0 0;
+  }
+}
+
+/* Horchata - bebida típica valenciana */
+.horchata-glass {
+  width: 30px;
+  height: 60px;
+  background: linear-gradient(180deg, #F5F5DC 0%, #FFFACD 50%, #F0E68C 100%);
+  top: 60vh;
+  left: 25px;
+  border-radius: 0 0 15px 15px;
+  animation: gentleBob 7s ease-in-out infinite reverse;
+  box-shadow: 
+    0 3px 10px rgba(240, 230, 140, 0.4),
+    inset 2px 2px 4px rgba(255, 255, 255, 0.5);
+    
+  &::before {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 2px;
+    right: 2px;
+    height: 45px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 0 0 13px 13px;
+  }
+}
+
+/* Torres/Arquitectura valenciana */
+.valencia-tower, .falla-tower {
+  width: 20px;
+  height: 100px;
+  background: linear-gradient(180deg, #DEB887 0%, #D2B48C 50%, #BC9A6A 100%);
+  top: 75vh;
+  left: 30px;
+  animation: gentleSway 10s ease-in-out infinite;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 24px;
+    height: 20px;
+    background: #8B4513;
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  }
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 20px;
+    left: 2px;
+    right: 2px;
+    height: 2px;
+    background: #8B4513;
+    box-shadow: 
+      0 -10px 0 #8B4513,
+      0 -20px 0 #8B4513,
+      0 -30px 0 #8B4513;
+  }
+}
+
+.falla-tower {
+  top: 85vh;
+  right: 25px;
+  background: linear-gradient(180deg, #FF6B47 0%, #FF8C69 50%, #CD5C5C 100%);
+}
+
+/* === ELEMENTOS DE PROGRAMACIÓN === */
+
+/* Brackets de código */
+.code-bracket {
+  width: 40px;
+  height: 50px;
+  top: 45vh;
+  left: 50px;
+  animation: codeFloat 5s ease-in-out infinite;
+  
+  &::before {
+    content: '{';
+    position: absolute;
+    font-size: 40px;
+    font-weight: bold;
+    color: var(--primary);
+    font-family: 'Courier New', monospace;
+    text-shadow: 0 0 10px rgba(255, 107, 74, 0.5);
+  }
+}
+
+.code-tag {
+  width: 50px;
+  height: 30px;
+  top: 20vh;
+  right: 40px;
+  animation: codeFloat 6s ease-in-out infinite reverse;
+  
+  &::before {
+    content: '</>';
+    position: absolute;
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--accent);
+    font-family: 'Courier New', monospace;
+    text-shadow: 0 0 8px rgba(255, 107, 74, 0.4);
+  }
+}
+
+/* Laptop/Tech icon */
+.laptop-icon {
+  width: 70px;
+  height: 45px;
+  background: linear-gradient(135deg, #2F2F2F 0%, #4A4A4A 100%);
+  top: 55vh;
+  right: 20px;
+  border-radius: 5px 5px 0 0;
+  animation: gentleBob 8s ease-in-out infinite;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 8px;
+    background: #000;
+    border-radius: 2px;
+  }
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: -5px;
+    right: -5px;
+    height: 5px;
+    background: #1A1A1A;
+    border-radius: 0 0 8px 8px;
+  }
+}
+
+/* === ELEMENTOS MEDITERRÁNEOS === */
+
+/* Concha marina */
+.seashell {
+  width: 50px;
+  height: 45px;
+  background: linear-gradient(45deg, #F5DEB3 0%, #DDD6C8 50%, #E6D3B7 100%);
+  top: 30vh;
+  right: 30px;
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  animation: gentleBob 9s ease-in-out infinite;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 20px;
+    background: linear-gradient(180deg, transparent 0%, #8B7355 50%, transparent 100%);
+    box-shadow: 
+      -6px 0 0 #8B7355,
+      -3px 0 0 #8B7355,
+      3px 0 0 #8B7355,
+      6px 0 0 #8B7355;
+  }
+}
+
+/* Sol valenciano */
+.sun-valencia {
+  width: 70px;
+  height: 70px;
+  background: radial-gradient(circle, #FFD700 0%, #FFA500 70%, #FF8C00 100%);
+  border-radius: 50%;
+  top: 40vh;
+  right: 15px;
+  animation: sunShine 8s linear infinite;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100px;
+    height: 100px;
+    background: 
+      linear-gradient(0deg, transparent 45%, #FFD700 50%, transparent 55%),
+      linear-gradient(45deg, transparent 45%, #FFD700 50%, transparent 55%),
+      linear-gradient(90deg, transparent 45%, #FFD700 50%, transparent 55%),
+      linear-gradient(135deg, transparent 45%, #FFD700 50%, transparent 55%);
+    opacity: 0.6;
+  }
+}
+
+/* Olas mediterráneas */
+.wave-mediterranean {
+  width: 80px;
+  height: 20px;
+  top: 70vh;
+  right: 35px;
+  animation: waveMotion 4s ease-in-out infinite;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+      transparent 0%, 
+      rgba(135, 206, 235, 0.6) 25%, 
+      rgba(100, 149, 237, 0.8) 50%, 
+      rgba(135, 206, 235, 0.6) 75%, 
+      transparent 100%
+    );
+    border-radius: 50px;
+  }
+}
+
+/* === ANIMACIONES === */
+
+@keyframes gentleBob {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-15px) scale(1.02); }
+}
+
+@keyframes slowRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes palmSway {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(2deg); }
+  75% { transform: rotate(-2deg); }
+}
+
+@keyframes gentleSway {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(1deg); }
+}
+
+@keyframes codeFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  33% { transform: translateY(-10px) rotate(1deg); }
+  66% { transform: translateY(-5px) rotate(-1deg); }
+}
+
+@keyframes sunShine {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes waveMotion {
+  0%, 100% { transform: scaleX(1) translateX(0); }
+  25% { transform: scaleX(1.1) translateX(2px); }
+  75% { transform: scaleX(0.9) translateX(-2px); }
+}
+
+/* === RESPONSIVE DESIGN === */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .parallax-container {
+    width: 100px;
+    
+    &.left {
+      left: -50px;
+    }
+    
+    &.right {
+      right: -50px;
+    }
+  }
+
+  .parallax-element {
+    transform: scale(0.85);
+    opacity: 0.5;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .parallax-container {
+    width: 80px;
+    
+    &.left {
+      left: -40px;
+    }
+    
+    &.right {
+      right: -40px;
+    }
+  }
+
+  .parallax-element {
+    transform: scale(0.7);
+    opacity: 0.4;
+    will-change: transform, opacity;
+  }
+  
+  /* Simplificar animaciones en móvil */
+  .orange-fruit, .paella-pan, .horchata-glass {
+    animation-duration: 12s;
+  }
+  
+  .palm-tree, .valencia-tower, .falla-tower {
+    animation-duration: 15s;
+  }
+}
+
+/* Small mobile */
+@media (max-width: 480px) {
+  .parallax-container {
+    width: 60px;
+    
+    &.left {
+      left: -30px;
+    }
+    
+    &.right {
+      right: -30px;
+    }
+  }
+
+  .parallax-element {
+    transform: scale(0.5);
+    opacity: 0.3;
+  }
+  
+  /* Pausar animaciones complejas en pantallas muy pequeñas */
+  .code-bracket::before, .code-tag::before {
+    font-size: 16px;
+  }
+}
+
+/* Performance optimizations */
+.parallax-element {
+  /* Mejoras de rendimiento */
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  
+  /* Elementos más complejos solo en desktop */
+  @media (max-width: 768px) {
+    &::before, &::after {
+      display: none;
+    }
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-reduced-motion: reduce) {
+  .parallax-element {
+    animation: none !important;
+  }
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+  .valencia-tower, .falla-tower {
+    filter: brightness(0.9);
+  }
+  
+  .laptop-icon {
+    background: linear-gradient(135deg, #1a1a1a 0%, #333 100%);
+  }
+}
