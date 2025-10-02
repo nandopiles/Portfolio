@@ -192,15 +192,21 @@ export class ProjectsSectionComponent implements OnInit {
   }
 
   private setupIntersectionObserver() {
+    // Mostrar antes en móvil: si pantalla < 768px, mostrar directamente
+    if (window.innerWidth < 768) {
+      this.isVisible.set(true);
+      return;
+    }
+    // En desktop, mostrar antes al hacer scroll (umbral más bajo)
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           this.isVisible.set(true);
+          observer.disconnect();
         }
       },
-      { threshold: 0.2 }
+      { threshold: 0.05 } // Mostrar mucho antes
     );
-
     if (this.sectionRef?.nativeElement) {
       observer.observe(this.sectionRef.nativeElement);
     }
