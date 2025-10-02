@@ -22,7 +22,7 @@ export class ExperienceSectionComponent implements OnInit {
       company: 'Conmuta Soluciones',
       description:
         'Lideré el desarrollo de un e-commerce personalizable para cada cliente con Angular 19, gestionando tareas en Jira y asegurando la calidad del proyecto. Además, colaboré en una plataforma de centralización de desguaces en España, trabajando en los módulos de pedidos, facturación con Holded, clientes y en la definición de reglas avanzadas de precios.',
-      tech: ['Angular 19', 'TypeScript', 'SCSS', 'Bootstrap', 'REST APIs', 'GitLab', 'Jira', 'Jenkins'],
+      tech: ['Angular19', 'TypeScript', 'SCSS', 'Bootstrap', 'REST APIs', 'GitLab', 'Jira', 'Jenkins'],
     },
     {
       period: 'Jan 2024 — Jul 2024',
@@ -30,7 +30,7 @@ export class ExperienceSectionComponent implements OnInit {
       company: 'Onestic.',
       description:
         'Desarrollé aplicaciones internas con Angular para la gestión de reservas y promociones. Creé componentes reutilizables que mejoraron la usabilidad y añadí un sistema de notificaciones automáticas conectado a API y base de datos, incrementando la participación de los usuarios.',
-      tech: ['Angular', 'TypeScript', 'Bootstrap', 'GitHub', 'REST APIs'],
+      tech: ['Angular19', 'TypeScript', 'Bootstrap', 'GitHub', 'REST APIs'],
     },
     {
       period: 'Mar 2023 — Jun 2023',

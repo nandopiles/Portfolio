@@ -92,6 +92,11 @@
   display: none;
 }
 
+.logo-image {
+  height: 2.8rem;
+  width: auto;
+}
+
 @media (min-width: 768px) {
   .md\:flex {
     display: flex;
