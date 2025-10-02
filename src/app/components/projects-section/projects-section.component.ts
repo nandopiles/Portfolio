@@ -1,18 +1,21 @@
 import { Component, OnInit, signal, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProjectTagsComponent } from './components/project-tags/project-tags.component';
+import { ModalCarouselComponent } from './components/modal-carousel/modal-carousel.component';
 import { ActiveFilters, FilterCategory, Project } from './interfaces/project.interface';
 
 @Component({
   selector: 'app-projects-section',
   standalone: true,
-  imports: [CommonModule, ProjectTagsComponent],
+  imports: [CommonModule, ProjectTagsComponent, ModalCarouselComponent],
   templateUrl: './projects-section.component.html',
   styleUrl: './projects-section.component.scss'
 })
 export class ProjectsSectionComponent implements OnInit {
   @ViewChild('sectionRef', { static: true }) sectionRef!: ElementRef;
   isVisible = signal(false);
+  isModalOpen = signal(false);
+  selectedProject = signal<Project | null>(null);
   activeFilters = signal<ActiveFilters>({
     languages: [],
     frameworks: [],
@@ -24,7 +27,14 @@ export class ProjectsSectionComponent implements OnInit {
       id: 0,
       title: "Nayeli Online Shop",
       description: "Nayeli es una tienda en línea compuesta por dos aplicaciones principales: una API creada con Flask y Nayeli Online Store, creada con Angular19.",
-      image: "/nayeli-img.jpeg",
+      image: "/nayeli/nayeli-img.jpeg",
+      galleryImages: [
+        "/nayeli/nayeli-img.jpeg",
+        "/nayeli/grid.jpeg",
+        "/nayeli/detail.jpeg",
+        "/nayeli/cart.jpeg",
+        "/nayeli/contact.jpeg",
+      ],
       technologies: {
         languages: ["TypeScript", "Python"],
         frameworks: ["Angular19+", "Flask", "Tailwind CSS"],
@@ -36,7 +46,13 @@ export class ProjectsSectionComponent implements OnInit {
       id: 1,
       title: "Estimat",
       description: "Rediseño de la página web de la fundación contra el cáncer Estimat.Además de crear una aplicación interna para la gestión de la misma.",
-      image: "/estimat-img.jpeg",
+      image: "/estimat/estimat-img.jpeg",
+      galleryImages: [
+        "/estimat/home.jpeg",
+        "/estimat/register.jpeg",
+        "/estimat/gallery.jpeg",
+        "/estimat/profile.jpeg"
+      ],
       technologies: {
         languages: ["TypeScript", "PHP"],
         frameworks: ["Angular19+", "Symfony", "Bootstrap"],
@@ -48,7 +64,12 @@ export class ProjectsSectionComponent implements OnInit {
       id: 2,
       title: "Dietet",
       description: "Explora y filtra una amplia variedad de recetas según su nivel de salud. Guarda tus favoritas, accede a guías paso a paso y reúne los ingredientes que necesitas para disfrutar de una experiencia culinaria saludable. Simplifica tu camino hacia una alimentación equilibrada con Dietet.",
-      image: "/dietet-img.jpeg",
+      image: "/dietet/dietet-img.jpeg",
+      galleryImages: [
+        "/dietet/grid.jpeg",
+        "/dietet/detail.jpeg",
+        "/dietet/sidebar.jpeg",
+      ],
       technologies: {
         languages: ["Javascript"],
         frameworks: ["Node.js", "Bootstrap"],
@@ -58,21 +79,15 @@ export class ProjectsSectionComponent implements OnInit {
     },
     {
       id: 3,
-      title: "Admin Manager (Dietet)",
-      description: "Controla y administra la aplicación Dietet. Crea, elimina y actualiza cuentas de usuario y recetas sin esfuerzo. Optimiza la gestión de tu aplicación para disfrutar de una experiencia más eficiente.",
-      image: "/admin-manager-img.jpeg",
-      technologies: {
-        languages: ["Javascript"],
-        frameworks: ["Node.js", "Bootstrap"],
-        tools: ["MongoDb", "Electron"]
-      },
-      githubUrl: "https://github.com/nandopiles/AdminManager"
-    },
-    {
-      id: 4,
       title: "PassGenerator",
       description: "Genera una contraseña totalmente personalizable y segura con PassGenerator. Puedes guardar la contraseña generada con el correo electrónico y el enlace web para acceder a ella. Puedes eliminar las contraseñas cuando quieras.",
-      image: "/passgenerator-img.jpeg",
+      image: "/passgenerator/passgenerator-img.jpeg",
+      galleryImages: [
+        "/passgenerator/passgenerator-img.jpeg",
+        "/passgenerator/options.jpeg",
+        "/passgenerator/save.jpeg",
+        "/passgenerator/history.jpeg"
+      ],
       technologies: {
         languages: ["Javascript"],
         frameworks: ["Bootstrap"],
@@ -164,6 +179,16 @@ export class ProjectsSectionComponent implements OnInit {
   get hasActiveFilters(): boolean {
     const filters = this.activeFilters();
     return filters.languages.length > 0 || filters.frameworks.length > 0 || filters.tools.length > 0;
+  }
+
+  openModal(project: Project): void {
+    this.selectedProject.set(project);
+    this.isModalOpen.set(true);
+  }
+
+  closeModal(): void {
+    this.isModalOpen.set(false);
+    this.selectedProject.set(null);
   }
 
   private setupIntersectionObserver() {

@@ -3,6 +3,7 @@ export interface Project {
     title: string;
     description: string;
     image: string;
+    galleryImages?: string[];
     technologies: {
         languages: string[];
         frameworks: string[];

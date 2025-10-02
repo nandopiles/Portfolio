@@ -1,0 +1,98 @@
+@if (isOpen && project) {
+  <div 
+    class="modal-overlay" 
+    [class.closing]="isClosing()"
+    (click)="onOverlayClick($event)"
+  >
+    <div class="modal-container" [class.closing]="isClosing()">
+      <!-- Header del modal -->
+      <div class="modal-header">
+        <h3 class="modal-title">{{ project.title }}</h3>
+        <button 
+          class="modal-close-btn" 
+          (click)="onClose()"
+          aria-label="Cerrar galería"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Contenido del carousel -->
+      <div class="carousel-container">
+        <!-- Imagen principal -->
+        <div class="image-container">
+          <img 
+            [src]="currentImage" 
+            [alt]="project.title"
+            class="carousel-image"
+            loading="lazy"
+          />
+          
+          <!-- Controles de navegación -->
+          <button 
+            class="nav-btn nav-btn-prev" 
+            (click)="previousImage()"
+            aria-label="Imagen anterior"
+          >
+            <svg class="w-auto h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+            </svg>
+          </button>
+          
+          <button 
+            class="nav-btn nav-btn-next" 
+            (click)="nextImage()"
+            aria-label="Siguiente imagen"
+          >
+            <svg class="w-auto h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+            </svg>
+          </button>
+
+          <!-- Indicador de posición -->
+          <div class="image-counter">
+            {{ currentImageIndex() + 1 }} / {{ images.length }}
+          </div>
+        </div>
+
+        <!-- Thumbnails -->
+        @if (images.length <= 6) {
+          <div class="thumbnails-container">
+            @for (image of images; track $index) {
+              <button 
+                class="thumbnail"
+                [class.active]="currentImageIndex() === $index"
+                (click)="goToImage($index)"
+                [attr.aria-label]="'Ir a imagen ' + ($index + 1)"
+              >
+                <img 
+                  [src]="image" 
+                  [alt]="project.title + ' - Imagen ' + ($index + 1)"
+                  class="thumbnail-image"
+                  loading="lazy"
+                />
+              </button>
+            }
+          </div>
+        }
+
+        <!-- Dots navigation (para más de 6 imágenes) -->
+        @if (images.length > 6) {
+          <div class="dots-container">
+            @for (image of images; track $index) {
+              <button 
+                class="dot"
+                [class.active]="currentImageIndex() === $index"
+                (click)="goToImage($index)"
+                [attr.aria-label]="'Ir a imagen ' + ($index + 1)"
+              >
+              </button>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+}

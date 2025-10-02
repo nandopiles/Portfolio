@@ -1,6 +1,7 @@
 <section id="projects" #sectionRef class="py-24 md:py-32">
   <div class="container mx-auto px-6">
-    <div [class]="'max-w-6xl mx-auto transition-all duration-1000 ' + (isVisible() ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10')">
+    <div
+      [class]="'max-w-6xl mx-auto transition-all duration-1000 ' + (isVisible() ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10')">
       <div class="mb-12">
         <span class="text-primary font-mono text-sm">03.</span>
         <h2 class="text-3xl md:text-4xl font-bold inline-block ml-4">
@@ -14,35 +15,33 @@
           <div class="filter-header">
             <span class="filter-title">Filtrar por tecnologías</span>
             @if (hasActiveFilters) {
-              <button class="clear-btn" (click)="clearAllFilters()">
-                <span class="clear-icon">✕</span>
-                <span class="clear-text">Limpiar</span>
-              </button>
+            <button class="clear-btn" (click)="clearAllFilters()">
+              <span class="clear-icon">✕</span>
+              <span class="clear-text">Limpiar</span>
+            </button>
             }
           </div>
-          
+
           <!-- Categorías de filtros -->
           <div class="categories-grid">
             @for (category of filterCategories; track category.name) {
-              <div class="category-section">
-                <div class="category-header">
-                  <span class="category-dot category-dot-{{category.key}}"></span>
-                  <h4 class="category-name category-name-{{category.key}}">{{ category.name }}</h4>
-                </div>
-                <div class="chips-container">
-                  @for (item of category.items; track item) {
-                    <button 
-                      class="tech-chip"
-                      [class.selected]="isFilterActive(category.key, item)"
-                      (click)="toggleFilter(category.key, item)">
-                      {{ item }}
-                      @if (isFilterActive(category.key, item)) {
-                        <span class="check-mark">✓</span>
-                      }
-                    </button>
-                  }
-                </div>
+            <div class="category-section">
+              <div class="category-header">
+                <span class="category-dot category-dot-{{category.key}}"></span>
+                <h4 class="category-name category-name-{{category.key}}">{{ category.name }}</h4>
               </div>
+              <div class="chips-container">
+                @for (item of category.items; track item) {
+                <button class="tech-chip" [class.selected]="isFilterActive(category.key, item)"
+                  (click)="toggleFilter(category.key, item)">
+                  {{ item }}
+                  @if (isFilterActive(category.key, item)) {
+                  <span class="check-mark">✓</span>
+                  }
+                </button>
+                }
+              </div>
+            </div>
             }
           </div>
         </div>
@@ -50,51 +49,59 @@
 
       <div class="grid md:grid-cols-2 gap-8">
         @for (project of filteredProjects; track project.id) {
-          <div class="projects-card group">
-            <div class="relative project-image-wrapper overflow-hidden">
-              <img
-                [src]="project.image"
-                [alt]="project.title"
-                class="project-image w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-              />
-              <div class="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+        <div class="projects-card group">
+          <div class="relative project-image-wrapper overflow-hidden">
+            <img [src]="project.image" [alt]="project.title"
+              class="project-image w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" />
+            <div class="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          </div>
+          <div class="p-6">
+            <div class="project-content">
+              <h3 class="text-xl font-bold mb-2 group-hover:text-primary transition-colors text-balance">
+                {{ project.title }}
+              </h3>
+              <p class="text-muted-foreground mb-4 leading-relaxed text-pretty">
+                {{ project.description }}
+              </p>
+              <app-project-tags [languages]="project.technologies.languages"
+                [frameworks]="project.technologies.frameworks" [tools]="project.technologies.tools" class="mb-4" />
             </div>
-            <div class="p-6">
-              <div class="project-content">
-                <h3 class="text-xl font-bold mb-2 group-hover:text-primary transition-colors text-balance">
-                  {{ project.title }}
-                </h3>
-                <p class="text-muted-foreground mb-4 leading-relaxed text-pretty">
-                  {{ project.description }}
-                </p>
-                <app-project-tags
-                  [languages]="project.technologies.languages"
-                  [frameworks]="project.technologies.frameworks"
-                  [tools]="project.technologies.tools"
-                  class="mb-4"
-                />
-              </div>
-              <div class="project-actions">
-                <div class="flex gap-4">
-                  @if (project.githubUrl) {
-                    <a
-                      [href]="project.githubUrl"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      class="text-muted-foreground hover:text-primary transition-colors flex items-center gap-2"
-                      aria-label="Ver repositorio en GitHub"
-                      style="text-decoration: none;"
-                    >
-                      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.867 8.166 6.839 9.489.5.092.682-.217.682-.483 0-.237-.009-.868-.013-1.703-2.782.604-3.369-1.342-3.369-1.342-.454-1.154-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.004.07 1.532 1.032 1.532 1.032.892 1.529 2.341 1.088 2.91.832.091-.647.35-1.088.636-1.339-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.272.098-2.65 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0 1 12 6.844c.85.004 1.705.115 2.504.337 1.909-1.294 2.748-1.025 2.748-1.025.546 1.378.202 2.397.1 2.65.64.699 1.028 1.592 1.028 2.683 0 3.842-2.337 4.687-4.565 4.936.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.749 0 .268.18.579.688.481C19.135 20.163 22 16.417 22 12c0-5.523-4.477-10-10-10Z"/></svg>
-                      <span>Ver repositorio</span>
-                    </a>
-                  }
-                </div>
+            <div class="project-actions">
+              <div class="flex gap-4">
+                @if (project.githubUrl) {
+                <a [href]="project.githubUrl" target="_blank" rel="noopener noreferrer"
+                  class="text-muted-foreground hover:text-primary transition-colors flex items-center gap-2"
+                  aria-label="Ver repositorio en GitHub" style="text-decoration: none;">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.867 8.166 6.839 9.489.5.092.682-.217.682-.483 0-.237-.009-.868-.013-1.703-2.782.604-3.369-1.342-3.369-1.342-.454-1.154-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.004.07 1.532 1.032 1.532 1.032.892 1.529 2.341 1.088 2.91.832.091-.647.35-1.088.636-1.339-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.272.098-2.65 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0 1 12 6.844c.85.004 1.705.115 2.504.337 1.909-1.294 2.748-1.025 2.748-1.025.546 1.378.202 2.397.1 2.65.64.699 1.028 1.592 1.028 2.683 0 3.842-2.337 4.687-4.565 4.936.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.749 0 .268.18.579.688.481C19.135 20.163 22 16.417 22 12c0-5.523-4.477-10-10-10Z" />
+                  </svg>
+                  <span>Ver repositorio</span>
+                </a>
+                }
+
+                <a (click)="openModal(project)"
+                  class="text-muted-foreground hover:text-primary transition-colors flex items-center gap-2 cursor-pointer"
+                  aria-label="Ver multimedia del proyecto" style="text-decoration: none; cursor: pointer;">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <rect x="2.25" y="4.5" width="19.5" height="15" rx="2.25" ry="2.25" stroke-linecap="round"
+                      stroke-linejoin="round" />
+                    <path d="M4.5 18.75l5.25-6 3.75 4.5L19.5 9.75" stroke-linecap="round" stroke-linejoin="round" />
+                    <circle cx="15.5" cy="8.5" r="1.25" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                  <span>Ver multimedia</span>
+                </a>
               </div>
             </div>
           </div>
+        </div>
         }
       </div>
     </div>
   </div>
+
+  <!-- Modal Carousel Component -->
+  <app-modal-carousel [project]="selectedProject()" [isOpen]="isModalOpen()"
+    (closeModal)="closeModal()"></app-modal-carousel>
 </section>
