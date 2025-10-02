@@ -1,3 +1,28 @@
+/* Scrollbar personalizada */
+::-webkit-scrollbar {
+  width: 12px;
+  background: var(--background);
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, var(--primary) 40%, var(--card) 100%);
+  border-radius: 8px;
+  border: 2px solid var(--background);
+  box-shadow: 0 2px 8px 0 oklch(0.68 0.19 25 / 0.10);
+  transition: background 0.3s;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, var(--primary) 60%, var(--accent) 100%);
+}
+::-webkit-scrollbar-track {
+  background: var(--background);
+  border-radius: 8px;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary) var(--background);
+}
 * {
   margin: 0;
   padding: 0;
