@@ -12,7 +12,7 @@ import { Experience } from './interfaces/experience.interface';
 export class ExperienceSectionComponent implements OnInit {
   @ViewChild('sectionRef', { static: true }) sectionRef!: ElementRef;
 
-  private _isVisible = signal(false);
+  private _isVisible = signal(true);
   isVisible = this._isVisible.asReadonly();
 
   experiences: Experience[] = [
@@ -43,7 +43,7 @@ export class ExperienceSectionComponent implements OnInit {
   ];
 
   ngOnInit(): void {
-    if (this.sectionRef) {
+  /*   if (this.sectionRef) {
       const observer = new IntersectionObserver(
         ([entry]) => {
           if (entry.isIntersecting) {
@@ -54,6 +54,6 @@ export class ExperienceSectionComponent implements OnInit {
         { threshold: 0.2 }
       );
       observer.observe(this.sectionRef.nativeElement);
-    }
+    } */
   }
 }
