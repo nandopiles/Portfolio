@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, OnInit, ViewChild, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { Experience } from './interfaces/experience.interface';
 
 @Component({
@@ -9,12 +9,8 @@ import { Experience } from './interfaces/experience.interface';
   templateUrl: './experience-section.component.html',
   styleUrls: ['./experience-section.component.scss']
 })
-export class ExperienceSectionComponent implements OnInit {
-  @ViewChild('sectionRef', { static: true }) sectionRef!: ElementRef;
 
-  private _isVisible = signal(true);
-  isVisible = this._isVisible.asReadonly();
-
+export class ExperienceSectionComponent {
   experiences: Experience[] = [
     {
       period: 'Sept 2024 — Presente',
@@ -41,19 +37,4 @@ export class ExperienceSectionComponent implements OnInit {
       tech: ['.NET', 'Microservicios', 'Microsoft Dynamics 365', 'Git', 'GitHub'],
     },
   ];
-
-  ngOnInit(): void {
-  /*   if (this.sectionRef) {
-      const observer = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) {
-            this._isVisible.set(true);
-            observer.disconnect();
-          }
-        },
-        { threshold: 0.2 }
-      );
-      observer.observe(this.sectionRef.nativeElement);
-    } */
-  }
 }
