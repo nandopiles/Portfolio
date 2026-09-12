@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 
 /**
- * Custom cursor: a dot that trails the pointer with easing/inertia and grows
- * (showing a label) over interactive elements.
+ * Custom cursor: a classic arrow pointer (white fill, dark outline) that trails
+ * the pointer with easing/inertia. Over interactive elements it swaps to a
+ * rounded label pill (e.g. "View").
  *
  * - Only mounts on precise pointers (mouse). On touch devices it renders
  *   nothing and the native cursor is used.
@@ -66,15 +67,15 @@ export default function Cursor() {
       if (dotRef.current) dotRef.current.style.opacity = '0';
     };
 
-    const onDown = () => dotRef.current?.style.setProperty('--press', '0.85');
+    const onDown = () => dotRef.current?.style.setProperty('--press', '0.82');
     const onUp = () => dotRef.current?.style.setProperty('--press', '1');
 
     const render = () => {
-      const ease = reduce ? 1 : 0.18;
+      const ease = reduce ? 1 : 0.2;
       current.current.x += (target.current.x - current.current.x) * ease;
       current.current.y += (target.current.y - current.current.y) * ease;
       if (dotRef.current) {
-        dotRef.current.style.transform = `translate3d(${current.current.x}px, ${current.current.y}px, 0) translate(-50%, -50%)`;
+        dotRef.current.style.transform = `translate3d(${current.current.x}px, ${current.current.y}px, 0)`;
       }
       raf.current = requestAnimationFrame(render);
     };
@@ -112,20 +113,50 @@ export default function Cursor() {
         '--press': 1,
       }}
     >
+      {/* Arrow pointer — hidden while hovering an interactive element. */}
+      <svg
+        width="26"
+        height="26"
+        viewBox="0 0 24 24"
+        fill="none"
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          // Hotspot at the tip (top-left), matching a native arrow cursor.
+          transformOrigin: '3px 2px',
+          transform: `scale(var(--press, 1))`,
+          opacity: hovering ? 0 : 1,
+          transition: 'opacity 0.2s ease',
+          filter: 'drop-shadow(0 1px 1.5px rgba(0,0,0,0.55))',
+        }}
+      >
+        <path
+          d="M3 2 L3 20 L8 15 L11.5 22.5 L14.5 21 L11 13.5 L18 13.5 Z"
+          fill="#f5f5f0"
+          stroke="#0a0a0a"
+          strokeWidth="1.4"
+          strokeLinejoin="round"
+        />
+      </svg>
+
+      {/* Label pill — shown over interactive elements. */}
       <div
         style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
           display: 'grid',
           placeItems: 'center',
-          width: hovering ? 72 : 12,
-          height: hovering ? 72 : 12,
+          width: hovering ? 72 : 0,
+          height: hovering ? 72 : 0,
           borderRadius: 9999,
-          background: hovering ? 'var(--color-bone)' : 'transparent',
-          border: hovering ? 'none' : '1.5px solid var(--color-bone)',
+          background: 'var(--color-bone)',
           color: 'var(--color-ink)',
+          transform: 'translate(-50%, -50%) scale(var(--press, 1))',
+          opacity: hovering ? 1 : 0,
           transition:
-            'width 0.35s var(--ease-out-expo), height 0.35s var(--ease-out-expo), background 0.35s var(--ease-out-expo)',
-          transform: 'scale(var(--press, 1))',
-          mixBlendMode: hovering ? 'normal' : 'difference',
+            'width 0.35s var(--ease-out-expo), height 0.35s var(--ease-out-expo), opacity 0.25s var(--ease-out-expo)',
         }}
       >
         {hovering && label && (

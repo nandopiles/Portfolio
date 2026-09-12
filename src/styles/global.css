@@ -4,13 +4,13 @@
    Design tokens (Tailwind v4 @theme)
    ========================================================================== */
 @theme {
-  /* Colour system — warm-tinted near-black, off-white, single muted accent */
-  --color-ink: #0a0a0a; /* base background (not pure black) */
-  --color-ink-soft: #111110; /* raised surfaces / cards */
-  --color-ink-line: #1f1e1c; /* hairline borders */
+  /* Colour system — warm dark grey (not black), off-white, single muted accent */
+  --color-ink: #171613; /* base background — dark but lifted, warm-tinted */
+  --color-ink-soft: #201f1b; /* raised surfaces / cards */
+  --color-ink-line: #302e29; /* hairline borders */
   --color-bone: #f5f5f0; /* primary foreground (off-white) */
-  --color-bone-dim: #a8a69e; /* secondary text */
-  --color-bone-faint: #6a6862; /* tertiary / captions */
+  --color-bone-dim: #aeaca3; /* secondary text */
+  --color-bone-faint: #77746c; /* tertiary / captions */
   --color-accent: #c8c2b4; /* single warm-grey accent */
 
   /* Typography */
@@ -40,11 +40,26 @@
   }
 
   body {
+    position: relative;
     background-color: var(--color-ink);
     color: var(--color-bone);
     font-family: var(--font-sans);
     font-feature-settings: 'ss01', 'cv01';
     overflow-x: hidden;
+  }
+
+  /* Film grain overlay — a fixed, non-interactive noise texture over the whole
+     page. Uses an inline SVG fractalNoise so there's no extra network request. */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.06;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 160px 160px;
   }
 
   ::selection {
