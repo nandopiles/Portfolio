@@ -136,18 +136,15 @@ export default function ProjectsHorizontal({ projects }: Props) {
 }
 
 function ProjectCard({ project }: { project: Project }) {
-  const href = project.demo ?? project.repo ?? '#';
   return (
     <article
       role="listitem"
       className="group relative flex w-[82vw] max-w-[540px] shrink-0 snap-center flex-col sm:w-[46vw] lg:w-[38vw]"
     >
       <a
-        href={href}
-        target="_blank"
-        rel="noopener noreferrer"
+        href={`/work/${project.slug}`}
         data-cursor={project.cursorLabel ?? 'View'}
-        aria-label={`${project.title} — open project`}
+        aria-label={`${project.title} — view case study`}
         className="block overflow-hidden rounded-xl border border-ink-line bg-ink-soft"
       >
         <div className="aspect-[4/3] overflow-hidden">
@@ -156,6 +153,7 @@ function ProjectCard({ project }: { project: Project }) {
             alt={`${project.title} — project preview`}
             loading="lazy"
             decoding="async"
+            style={{ viewTransitionName: `project-${project.slug}` }}
             className="h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
           />
         </div>

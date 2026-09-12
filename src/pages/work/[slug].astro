@@ -1,0 +1,103 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Navbar from '@/components/Navbar.astro';
+import { projects } from '@/data/projects';
+import { site } from '@/data/site';
+
+export function getStaticPaths() {
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const year = new Date().getFullYear();
+---
+
+<Layout
+  title={`${project.title} — ${site.name}`}
+  description={project.summary}
+  image={project.image}
+>
+  <Navbar />
+  <main id="main" class="container-gutter pt-32 pb-24">
+    <a href="/#work" class="link-underline text-sm text-bone-dim" data-cursor="Back">
+      ← Back to work
+    </a>
+
+    <header class="mt-10 flex flex-col gap-4 border-b border-ink-line pb-10">
+      <span class="text-sm uppercase tracking-[0.25em] text-bone-faint">
+        {project.index} — {project.year}
+      </span>
+      <h1 class="text-[length:var(--text-display)] text-bone">{project.title}</h1>
+      <p class="max-w-[52ch] text-lg text-bone-dim">{project.summary}</p>
+    </header>
+
+    <div class="mt-10 overflow-hidden rounded-xl border border-ink-line bg-ink-soft">
+      <img
+        src={project.image}
+        alt={`${project.title} — full preview`}
+        loading="eager"
+        decoding="async"
+        style={`view-transition-name: project-${project.slug}`}
+        class="aspect-[16/10] w-full object-cover"
+      />
+    </div>
+
+    <div class="mt-14 grid gap-10 md:grid-cols-12">
+      <aside class="md:col-span-4">
+        <h2 class="text-sm uppercase tracking-[0.25em] text-bone-faint">(Stack)</h2>
+        <ul class="mt-4 flex flex-wrap gap-2">
+          {
+            project.stack.map((tech) => (
+              <li class="rounded-full border border-ink-line px-3 py-1 text-sm text-bone-dim">
+                {tech}
+              </li>
+            ))
+          }
+        </ul>
+
+        <div class="mt-8 flex gap-6 text-sm">
+          {
+            project.demo && (
+              <a
+                href={project.demo}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="link-underline text-bone"
+                data-cursor="Open"
+              >
+                Live demo ↗
+              </a>
+            )
+          }
+          {
+            project.repo && (
+              <a
+                href={project.repo}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="link-underline text-bone-dim"
+                data-cursor="Code"
+              >
+                Source ↗
+              </a>
+            )
+          }
+        </div>
+      </aside>
+
+      <div class="md:col-span-8">
+        <h2 class="text-sm uppercase tracking-[0.25em] text-bone-faint">(Overview)</h2>
+        <p class="mt-4 max-w-[60ch] text-lg leading-relaxed text-bone-dim">
+          {project.description ?? project.summary}
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="container-gutter border-t border-ink-line py-8 text-sm text-bone-faint">
+    <span>© {year} {site.name}.</span>
+  </footer>
+</Layout>

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://nandopiles.dev/sitemap-index.xml
