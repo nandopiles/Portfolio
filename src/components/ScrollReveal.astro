@@ -1,0 +1,47 @@
+---
+/**
+ * Drop this once per page. It animates every `[data-reveal]` element with a
+ * subtle fade + translateY as it enters the viewport, using GSAP ScrollTrigger.
+ * Respects prefers-reduced-motion (elements are simply shown).
+ */
+---
+
+<script>
+  import { gsap, ScrollTrigger, prefersReducedMotion } from '@/lib/gsap';
+
+  function initReveals() {
+    const els = gsap.utils.toArray<HTMLElement>('[data-reveal]');
+
+    if (prefersReducedMotion()) {
+      els.forEach((el) => el.classList.add('is-visible'));
+      gsap.set(els, { clearProps: 'all', opacity: 1, y: 0 });
+      return;
+    }
+
+    els.forEach((el) => {
+      gsap.fromTo(
+        el,
+        { opacity: 0, y: 32 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.9,
+          ease: 'expo.out',
+          scrollTrigger: {
+            trigger: el,
+            start: 'top 85%',
+            once: true,
+          },
+        }
+      );
+    });
+
+    ScrollTrigger.refresh();
+  }
+
+  initReveals();
+  document.addEventListener('astro:page-load', () => {
+    ScrollTrigger.getAll().forEach((t) => t.kill());
+    initReveals();
+  });
+</script>

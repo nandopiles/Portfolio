@@ -1,0 +1,62 @@
+---
+import { skills } from '@/data/skills';
+
+// Duplicate the list so the marquee can loop seamlessly (-50% translate).
+const loop = [...skills, ...skills];
+---
+
+<section id="about" class="container-gutter py-28 sm:py-40" aria-label="About">
+  <div class="grid gap-12 md:grid-cols-12 md:gap-8">
+    <div class="md:col-span-3">
+      <h2
+        class="reveal text-sm uppercase tracking-[0.25em] text-bone-faint"
+        data-reveal
+      >
+        (About)
+      </h2>
+    </div>
+
+    <div class="md:col-span-9">
+      <p
+        class="reveal max-w-[24ch] text-[length:var(--text-section)] leading-[1.05] text-bone"
+        data-reveal
+      >
+        I build interfaces that feel considered — fast, accessible, and quietly expressive.
+      </p>
+      <div class="mt-10 grid gap-8 text-bone-dim sm:grid-cols-2 sm:gap-14">
+        <p class="reveal leading-relaxed" data-reveal>
+          For the last several years I've partnered with studios and product teams to ship
+          high-end web experiences, from marketing sites with motion systems to complex,
+          data-dense dashboards.
+        </p>
+        <p class="reveal leading-relaxed" data-reveal>
+          I care about the details most people never notice: easing curves, focus states,
+          layout rhythm, and shaving milliseconds off the first paint.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Infinite skills marquee -->
+<div
+  class="relative flex overflow-hidden border-y border-ink-line py-6 select-none"
+  aria-label="Technologies I work with"
+>
+  <div
+    class="animate-marquee flex shrink-0 items-center gap-10 pr-10 motion-reduce:animate-none"
+    style="--marquee-duration: 40s"
+    aria-hidden="false"
+  >
+    {
+      loop.map((skill) => (
+        <span class="flex items-center gap-10 text-[length:var(--text-display)] font-[family-name:var(--font-display)] font-bold text-bone/90">
+          {skill}
+          <span class="text-accent" aria-hidden="true">
+            ✦
+          </span>
+        </span>
+      ))
+    }
+  </div>
+</div>
