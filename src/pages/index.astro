@@ -4,6 +4,8 @@ import Navbar from '@/components/Navbar.astro';
 import Hero from '@/components/Hero.astro';
 import About from '@/components/About.astro';
 import ProjectsHorizontal from '@/components/ProjectsHorizontal.tsx';
+import Experience from '@/components/Experience.astro';
+import Contact from '@/components/Contact.astro';
 import ScrollReveal from '@/components/ScrollReveal.astro';
 import { projects } from '@/data/projects';
 ---
@@ -14,6 +16,8 @@ import { projects } from '@/data/projects';
     <Hero />
     <About />
     <ProjectsHorizontal projects={projects} client:visible />
+    <Experience />
+    <Contact />
   </main>
   <ScrollReveal />
 </Layout>
