@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900" role="img" aria-label="Halcyon mockup">
+  <rect width="1200" height="900" fill="#111110"/>
+  <g fill="none" stroke="#c8c2b4" stroke-width="2">
+    <path d="M120 560 Q300 440 480 560 T840 560 T1200 560" opacity="0.5"/>
+    <path d="M120 620 Q300 500 480 620 T840 620 T1200 620" opacity="0.35"/>
+    <path d="M120 680 Q300 560 480 680 T840 680 T1200 680" opacity="0.2"/>
+  </g>
+  <circle cx="600" cy="330" r="90" fill="none" stroke="#f5f5f0" stroke-width="3"/>
+  <circle cx="600" cy="330" r="30" fill="#f5f5f0"/>
+  <text x="60" y="110" fill="#6a6862" font-family="monospace" font-size="28">06 — HALCYON</text>
+</svg>

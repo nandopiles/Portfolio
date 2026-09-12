@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900" role="img" aria-label="Monolith Docs mockup">
+  <rect width="1200" height="900" fill="#111110"/>
+  <rect x="120" y="180" width="220" height="540" fill="#1a1a18" rx="6"/>
+  <g fill="#3a3a36">
+    <rect x="150" y="220" width="160" height="10" rx="5"/>
+    <rect x="150" y="250" width="120" height="10" rx="5"/>
+    <rect x="150" y="280" width="140" height="10" rx="5"/>
+  </g>
+  <g fill="#c8c2b4">
+    <rect x="400" y="200" width="360" height="18" rx="9"/>
+  </g>
+  <g fill="#3a3a36">
+    <rect x="400" y="260" width="680" height="10" rx="5"/>
+    <rect x="400" y="290" width="640" height="10" rx="5"/>
+    <rect x="400" y="320" width="700" height="10" rx="5"/>
+    <rect x="400" y="380" width="600" height="10" rx="5"/>
+    <rect x="400" y="410" width="660" height="10" rx="5"/>
+  </g>
+  <text x="60" y="110" fill="#6a6862" font-family="monospace" font-size="28">05 — MONOLITH</text>
+</svg>
