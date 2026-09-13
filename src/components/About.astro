@@ -1,8 +1,5 @@
 ---
 import { skills } from '@/data/skills';
-
-// Duplicate the list so the marquee can loop seamlessly (-50% translate).
-const loop = [...skills, ...skills];
 ---
 
 <section id="about" class="container-gutter py-28 sm:py-40" aria-label="About">
@@ -34,29 +31,20 @@ const loop = [...skills, ...skills];
           layout rhythm, and shaving milliseconds off the first paint.
         </p>
       </div>
+
+      <!-- Tech stack — a quiet, static list that fits the editorial tone. -->
+      <div class="reveal mt-16 border-t border-ink-line pt-8" data-reveal>
+        <h3 class="text-sm uppercase tracking-[0.25em] text-bone-faint">
+          (Stack)
+        </h3>
+        <ul class="mt-5 flex flex-wrap gap-x-8 gap-y-3">
+          {
+            skills.map((skill) => (
+              <li class="text-lg text-bone/90 sm:text-xl">{skill}</li>
+            ))
+          }
+        </ul>
+      </div>
     </div>
   </div>
 </section>
-
-<!-- Infinite skills marquee -->
-<div
-  class="relative flex overflow-hidden border-y border-ink-line py-6 select-none"
-  aria-label="Technologies I work with"
->
-  <div
-    class="animate-marquee flex shrink-0 items-center gap-10 pr-10 motion-reduce:animate-none"
-    style="--marquee-duration: 40s"
-    aria-hidden="false"
-  >
-    {
-      loop.map((skill) => (
-        <span class="flex items-center gap-10 text-[length:var(--text-display)] font-[family-name:var(--font-display)] font-bold text-bone/90">
-          {skill}
-          <span class="text-accent" aria-hidden="true">
-            ✦
-          </span>
-        </span>
-      ))
-    }
-  </div>
-</div>
