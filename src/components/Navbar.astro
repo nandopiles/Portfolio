@@ -47,7 +47,8 @@ const langCodes = Object.keys(languages) as Lang[];
         }
       </ul>
 
-      <!-- Language switcher: ES | EN -->
+      <!-- Language switcher: active language keeps a fixed underline;
+           the inactive one animates its underline in on hover/focus. -->
       <div
         class="flex items-center gap-2 text-base font-medium sm:text-lg"
         aria-label={t('nav.langLabel')}
@@ -62,8 +63,10 @@ const langCodes = Object.keys(languages) as Lang[];
                 lang={code}
                 aria-current={code === lang ? 'true' : undefined}
                 class:list={[
-                  'transition-opacity hover:opacity-100',
-                  code === lang ? 'text-bone' : 'text-bone-faint hover:text-bone/90',
+                  'link-underline transition-colors',
+                  code === lang
+                    ? 'is-active text-bone'
+                    : 'text-bone-faint hover:text-bone',
                 ]}
               >
                 {languages[code]}

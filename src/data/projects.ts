@@ -52,7 +52,7 @@ const projectSources: ProjectSource[] = [
   {
     index: '01',
     slug: 'nebula-analytics',
-    stack: ['React', 'TypeScript', 'D3', 'WebSocket'],
+    stack: ['Angular', 'TypeScript', 'D3', 'WebSocket'],
     year: '2025',
     image: '/projects/nebula.svg',
     demo: 'https://example.com/nebula',

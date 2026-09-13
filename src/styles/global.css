@@ -217,6 +217,11 @@
   transform: scaleX(1);
   transform-origin: left;
 }
+/* Fixed underline for the active item (e.g. current language). */
+.link-underline.is-active::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
 
 /* Elements revealed on scroll start hidden; JS adds .is-visible.
    If JS/GSAP is unavailable, a no-js fallback keeps them visible. */
