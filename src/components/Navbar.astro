@@ -8,10 +8,7 @@ const links = [
 ];
 ---
 
-<header
-  class="fixed inset-x-0 top-0 z-50 mix-blend-difference"
-  data-navbar
->
+<header class="fixed inset-x-0 top-0 z-50 mix-blend-difference">
   <nav
     class="container-gutter flex items-center justify-between py-5"
     aria-label="Primary"
@@ -30,7 +27,7 @@ const links = [
           <li>
             <a
               href={link.href}
-              class="link-underline text-sm font-medium tracking-wide text-bone/90 transition-opacity hover:opacity-100"
+              class="link-underline text-base font-medium tracking-wide text-bone/90 transition-opacity hover:opacity-100 sm:text-lg"
             >
               {link.label}
             </a>
@@ -41,31 +38,4 @@ const links = [
   </nav>
 </header>
 
-<script>
-  // Hide the navbar when scrolling down, reveal when scrolling up.
-  const nav = document.querySelector('[data-navbar]') as HTMLElement | null;
-  if (nav) {
-    let lastY = window.scrollY;
-    let ticking = false;
 
-    const update = () => {
-      const y = window.scrollY;
-      const goingDown = y > lastY && y > 120;
-      nav.style.transform = goingDown ? 'translateY(-100%)' : 'translateY(0)';
-      nav.style.transition = 'transform 0.4s var(--ease-out-expo)';
-      lastY = y;
-      ticking = false;
-    };
-
-    window.addEventListener(
-      'scroll',
-      () => {
-        if (!ticking) {
-          window.requestAnimationFrame(update);
-          ticking = true;
-        }
-      },
-      { passive: true }
-    );
-  }
-</script>
