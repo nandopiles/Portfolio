@@ -48,6 +48,39 @@
     overflow-x: hidden;
   }
 
+  /* Scrollbar styled to match the dark, warm aesthetic.
+     Firefox uses scrollbar-color; WebKit/Blink uses ::-webkit-scrollbar. */
+  html {
+    scrollbar-color: var(--color-ink-line) transparent;
+    scrollbar-width: thin;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--color-ink);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--color-ink-line);
+    border-radius: 9999px;
+    /* Inset the thumb with a transparent border so it looks slim and floating. */
+    border: 2px solid var(--color-ink);
+    background-clip: padding-box;
+    transition: background-color 0.3s var(--ease-out-expo);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-bone-faint);
+  }
+
+  ::-webkit-scrollbar-corner {
+    background: var(--color-ink);
+  }
+
   /* Film grain overlay — a fixed, non-interactive noise texture over the whole
      page. Uses an inline SVG fractalNoise so there's no extra network request. */
   body::before {
