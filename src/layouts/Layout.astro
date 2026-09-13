@@ -38,5 +38,32 @@ const { title, description, image } = Astro.props;
     <!-- Interactive islands -->
     <SmoothScroll client:idle />
     <Cursor client:idle />
+
+    <script>
+      // Lift the page background while the Work section is on screen.
+      let bgObserver: IntersectionObserver | null = null;
+
+      function watchWorkSection() {
+        bgObserver?.disconnect();
+        const work = document.querySelector('#work');
+        if (!work) {
+          document.body.classList.remove('work-active');
+          return;
+        }
+        bgObserver = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              document.body.classList.toggle('work-active', entry.isIntersecting);
+            }
+          },
+          // Trigger once the section meaningfully fills the viewport.
+          { threshold: 0.35 }
+        );
+        bgObserver.observe(work);
+      }
+
+      watchWorkSection();
+      document.addEventListener('astro:page-load', watchWorkSection);
+    </script>
   </body>
 </html>

@@ -86,7 +86,7 @@ export default function ProjectsHorizontal({ projects }: Props) {
       id="work"
       ref={sectionRef}
       aria-label="Selected work"
-      className="relative bg-ink"
+      className="relative bg-transparent"
     >
       <div ref={pinRef} className="min-h-svh overflow-hidden">
         {/* Section header + progress */}
