@@ -1,6 +1,8 @@
 ---
 import { getLangFromUrl, useTranslations, localizePath, stripLangPrefix } from '@/i18n/utils';
 import { languages, type Lang } from '@/i18n/ui';
+// Inline the logo so its `currentColor` strokes/fills inherit the brand colour.
+import logo from '@/../public/logo.svg?raw';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -24,19 +26,10 @@ const langCodes = Object.keys(languages) as Lang[];
   >
     <a
       href={localizePath('/', lang) + '#hero'}
-      class="inline-flex items-center transition-opacity hover:opacity-80"
+      class="inline-flex items-center text-bone transition-opacity hover:opacity-80 [&_svg]:h-9 [&_svg]:w-9"
       aria-label={t('nav.home')}
-    >
-      <img
-        src="/image.svg"
-        alt={t('nav.home')}
-        width="32"
-        height="32"
-        class="h-8 w-8"
-        loading="eager"
-        decoding="async"
-      />
-    </a>
+      set:html={logo}
+    />
 
     <div class="flex items-center gap-6 sm:gap-9">
       <ul class="flex items-center gap-6 sm:gap-9">
