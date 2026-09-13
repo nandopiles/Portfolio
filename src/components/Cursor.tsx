@@ -40,7 +40,10 @@ export default function Cursor() {
     target.current = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
     current.current = { ...target.current };
 
-    const interactiveSelector = 'a, button, [role="button"], [data-cursor], input, textarea, select';
+    // The label pill only appears on elements that explicitly opt in with
+    // `data-cursor` (e.g. project cards). Regular links/buttons keep the plain
+    // arrow so the pill never covers small text CTAs.
+    const interactiveSelector = '[data-cursor]';
 
     const onMove = (e: MouseEvent) => {
       target.current.x = e.clientX;
