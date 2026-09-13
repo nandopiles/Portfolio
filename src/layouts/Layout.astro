@@ -40,30 +40,41 @@ const { title, description, image } = Astro.props;
     <Cursor client:idle />
 
     <script>
-      // Lift the page background while the Work section is on screen.
+      // Shift the page background per section: lighter over Work, darker over
+      // Experience. Each section toggles its own body class as it enters view.
       let bgObserver: IntersectionObserver | null = null;
 
-      function watchWorkSection() {
+      function watchSectionBackgrounds() {
         bgObserver?.disconnect();
-        const work = document.querySelector('#work');
-        if (!work) {
-          document.body.classList.remove('work-active');
-          return;
+
+        const sections: Array<{ id: string; cls: string }> = [
+          { id: '#work', cls: 'work-active' },
+          { id: '#experience', cls: 'experience-active' },
+        ];
+
+        const map = new Map<Element, string>();
+        for (const { id, cls } of sections) {
+          const el = document.querySelector(id);
+          if (el) map.set(el, cls);
+          else document.body.classList.remove(cls);
         }
+        if (map.size === 0) return;
+
         bgObserver = new IntersectionObserver(
           (entries) => {
             for (const entry of entries) {
-              document.body.classList.toggle('work-active', entry.isIntersecting);
+              const cls = map.get(entry.target);
+              if (cls) document.body.classList.toggle(cls, entry.isIntersecting);
             }
           },
-          // Trigger once the section meaningfully fills the viewport.
+          // Trigger once a section meaningfully fills the viewport.
           { threshold: 0.35 }
         );
-        bgObserver.observe(work);
+        for (const el of map.keys()) bgObserver.observe(el);
       }
 
-      watchWorkSection();
-      document.addEventListener('astro:page-load', watchWorkSection);
+      watchSectionBackgrounds();
+      document.addEventListener('astro:page-load', watchSectionBackgrounds);
     </script>
   </body>
 </html>
