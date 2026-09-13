@@ -40,37 +40,50 @@ const { title, description, image } = Astro.props;
     <Cursor client:idle />
 
     <script>
-      // Shift the page background per section: lighter over Work, darker over
-      // Experience. Each section toggles its own body class as it enters view.
+      // Shift the page background per section: lifted (lighter) from About
+      // through Work, then deeper during Experience. Because several sections
+      // can share a class, we track which elements are visible per class and
+      // only toggle the class off once none of its sections are on screen.
       let bgObserver: IntersectionObserver | null = null;
 
       function watchSectionBackgrounds() {
         bgObserver?.disconnect();
 
         const sections: Array<{ id: string; cls: string }> = [
-          { id: '#work', cls: 'work-active' },
+          { id: '#about', cls: 'bg-lifted' },
+          { id: '#work', cls: 'bg-lifted' },
           { id: '#experience', cls: 'experience-active' },
         ];
 
-        const map = new Map<Element, string>();
+        const classForEl = new Map<Element, string>();
+        const visibleByClass = new Map<string, Set<Element>>();
+
         for (const { id, cls } of sections) {
           const el = document.querySelector(id);
-          if (el) map.set(el, cls);
-          else document.body.classList.remove(cls);
+          if (el) {
+            classForEl.set(el, cls);
+            if (!visibleByClass.has(cls)) visibleByClass.set(cls, new Set());
+          } else {
+            document.body.classList.remove(cls);
+          }
         }
-        if (map.size === 0) return;
+        if (classForEl.size === 0) return;
 
         bgObserver = new IntersectionObserver(
           (entries) => {
             for (const entry of entries) {
-              const cls = map.get(entry.target);
-              if (cls) document.body.classList.toggle(cls, entry.isIntersecting);
+              const cls = classForEl.get(entry.target);
+              if (!cls) continue;
+              const set = visibleByClass.get(cls)!;
+              if (entry.isIntersecting) set.add(entry.target);
+              else set.delete(entry.target);
+              document.body.classList.toggle(cls, set.size > 0);
             }
           },
           // Trigger once a section meaningfully fills the viewport.
           { threshold: 0.35 }
         );
-        for (const el of map.keys()) bgObserver.observe(el);
+        for (const el of classForEl.keys()) bgObserver.observe(el);
       }
 
       watchSectionBackgrounds();

@@ -5,7 +5,7 @@
    ========================================================================== */
 @theme {
   /* Colour system — warm dark grey (not black), off-white, single muted accent */
-  --color-ink: #171613; /* base background — dark but lifted, warm-tinted */
+  --color-ink: #100f0d; /* base background — dark, warm-tinted */
   --color-ink-soft: #201f1b; /* raised surfaces / cards */
   --color-ink-line: #302e29; /* hairline borders */
   --color-bone: #f5f5f0; /* primary foreground (off-white) */
@@ -51,14 +51,14 @@
     transition: background-color 0.8s var(--ease-out-expo);
   }
 
-  /* Lift the background clearly while the Work section is in view. */
-  body.work-active {
-    --bg: #34322b;
+  /* Lift the background to a muted, low-brightness tone from About through Work. */
+  body.bg-lifted {
+    --bg: #211f1a;
   }
 
   /* Sink back to a deeper tone during the Experience section. */
   body.experience-active {
-    --bg: #100f0d;
+    --bg: #0b0a09;
   }
 
   /* Scrollbar styled to match the dark, warm aesthetic.
