@@ -8,7 +8,7 @@ import type { Lang } from '@/i18n/ui';
 export const site = {
   name: 'Ferran Piles Lablanca',
   initials: 'FPL',
-  location: 'Valencia, Spain',
+  location: 'València, Spain',
   email: 'nandopiless@gmail.com',
   url: 'https://ferranpiles.dev',
   /** Used for Open Graph / Twitter cards. Place the image in /public. */

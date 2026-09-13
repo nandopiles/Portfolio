@@ -21,12 +21,12 @@ const langCodes = Object.keys(languages) as Lang[];
 
 <header class="fixed inset-x-0 top-0 z-50 mix-blend-difference">
   <nav
-    class="container-gutter flex items-center justify-between py-5"
+    class="container-gutter flex items-center justify-between py-2"
     aria-label="Primary"
   >
     <a
       href={localizePath('/', lang) + '#hero'}
-      class="inline-flex items-center text-bone transition-opacity hover:opacity-80 [&_svg]:h-9 [&_svg]:w-9"
+      class="inline-flex items-center text-bone transition-opacity hover:opacity-80 [&_svg]:h-20 [&_svg]:w-20 sm:[&_svg]:h-28 sm:[&_svg]:w-28"
       aria-label={t('nav.home')}
       set:html={logo}
     />
