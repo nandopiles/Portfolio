@@ -5,7 +5,7 @@
    ========================================================================== */
 @theme {
   /* Colour system — warm dark grey (not black), off-white, single muted accent */
-  --color-ink: #100f0d; /* base background — dark, warm-tinted */
+  --color-ink: #060504; /* base background — near-black, warm-tinted */
   --color-ink-soft: #201f1b; /* raised surfaces / cards */
   --color-ink-line: #302e29; /* hairline borders */
   --color-bone: #f5f5f0; /* primary foreground (off-white) */
@@ -55,12 +55,12 @@
   /* One continuous lifted zone spanning About through Work — no change between
      those sections. */
   body.bg-lifted {
-    --bg: #211f1a;
+    --bg: #171512;
   }
 
-  /* Sink back to a deeper tone during the Experience section. */
+  /* Return to the exact base (Hero) background during the Experience section. */
   body.experience-active {
-    --bg: #0b0a09;
+    --bg: var(--color-ink);
   }
 
   /* Scrollbar styled to match the dark, warm aesthetic.
