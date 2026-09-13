@@ -24,10 +24,18 @@ const langCodes = Object.keys(languages) as Lang[];
   >
     <a
       href={localizePath('/', lang) + '#hero'}
-      class="font-[family-name:var(--font-display)] text-lg font-bold tracking-tight text-bone"
+      class="inline-flex items-center transition-opacity hover:opacity-80"
       aria-label={t('nav.home')}
     >
-      FPL<span class="text-accent">.</span>
+      <img
+        src="/image.svg"
+        alt={t('nav.home')}
+        width="32"
+        height="32"
+        class="h-8 w-8"
+        loading="eager"
+        decoding="async"
+      />
     </a>
 
     <div class="flex items-center gap-6 sm:gap-9">
