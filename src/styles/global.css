@@ -48,10 +48,12 @@
     font-family: var(--font-sans);
     font-feature-settings: 'ss01', 'cv01';
     overflow-x: hidden;
-    transition: background-color 0.8s var(--ease-out-expo);
+    /* Long, gentle ease so background shifts feel organic and almost unnoticed. */
+    transition: background-color 1.6s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  /* Lift the background to a muted, low-brightness tone from About through Work. */
+  /* One continuous lifted zone spanning About through Work — no change between
+     those sections. */
   body.bg-lifted {
     --bg: #211f1a;
   }

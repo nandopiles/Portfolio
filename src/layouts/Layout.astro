@@ -80,8 +80,11 @@ const { title, description, image } = Astro.props;
               document.body.classList.toggle(cls, set.size > 0);
             }
           },
-          // Trigger once a section meaningfully fills the viewport.
-          { threshold: 0.35 }
+          // Consider a section active as soon as any part crosses the middle
+          // band of the viewport. Contiguous sections (About → Work) overlap at
+          // their shared edge, so the lifted background stays continuous with no
+          // gap or flicker between them.
+          { threshold: 0, rootMargin: '-40% 0px -40% 0px' }
         );
         for (const el of classForEl.keys()) bgObserver.observe(el);
       }
