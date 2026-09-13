@@ -1,15 +1,20 @@
 ---
-import { experience } from '@/data/experience';
+import { getExperience } from '@/data/experience';
+import { getLangFromUrl, useTranslations } from '@/i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const experience = getExperience(lang);
 ---
 
-<section id="experience" class="container-gutter py-28 sm:py-40" aria-label="Experience">
+<section id="experience" class="container-gutter py-28 sm:py-40" aria-label={t('exp.label')}>
   <div class="grid gap-12 md:grid-cols-12 md:gap-8">
     <div class="md:col-span-3">
       <h2
         class="reveal text-sm uppercase tracking-[0.25em] text-bone-faint"
         data-reveal
       >
-        (Experience)
+        {t('exp.label')}
       </h2>
     </div>
 

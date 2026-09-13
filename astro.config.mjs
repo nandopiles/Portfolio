@@ -7,7 +7,16 @@ import tailwindcss from '@tailwindcss/vite';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://ferranpiles.dev',
-  integrations: [react(), sitemap()],
+  // Spanish is the default (served at `/`); English is served under `/en/`.
+  i18n: {
+    locales: ['es', 'en'],
+    defaultLocale: 'es',
+    routing: {
+      prefixDefaultLocale: false,
+      redirectToDefaultLocale: false,
+    },
+  },
+  integrations: [react(), sitemap({ i18n: { defaultLocale: 'es', locales: { es: 'es', en: 'en' } } })],
   vite: {
     plugins: [tailwindcss()],
   },

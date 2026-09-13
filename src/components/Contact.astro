@@ -1,27 +1,30 @@
 ---
 import { site } from '@/data/site';
+import { getLangFromUrl, useTranslations } from '@/i18n/utils';
 
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 const year = new Date().getFullYear();
 ---
 
 <section
   id="contact"
   class="container-gutter flex min-h-svh flex-col justify-between pt-28 pb-10"
-  aria-label="Contact"
+  aria-label={t('nav.contact')}
 >
   <div class="flex flex-1 flex-col justify-center">
     <p
       class="reveal text-sm uppercase tracking-[0.25em] text-bone-faint"
       data-reveal
     >
-      (Let's talk)
+      {t('contact.label')}
     </p>
 
     <h2
       class="reveal mt-8 block text-[length:var(--text-hero)] leading-[0.95] text-bone"
       data-reveal
     >
-      Let's build<br />something.
+      {t('contact.headline.1')}<br />{t('contact.headline.2')}
     </h2>
 
     <div class="reveal mt-12 flex flex-wrap items-center gap-x-10 gap-y-4" data-reveal>
@@ -55,8 +58,8 @@ const year = new Date().getFullYear();
   <footer
     class="flex flex-col items-start justify-between gap-3 border-t border-ink-line pt-8 text-sm text-bone-faint sm:flex-row sm:items-center"
   >
-    <span>© {year} {site.name}. All rights reserved.</span>
-    <span>Built with Astro, GSAP &amp; care.</span>
-    <a href="#hero" class="link-underline text-bone-dim">Back to top ↑</a>
+    <span>{site.name}</span>
+    <span>{t('contact.rights')}</span>
+    <span>{year}</span>
   </footer>
 </section>

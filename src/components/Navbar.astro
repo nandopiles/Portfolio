@@ -1,11 +1,20 @@
 ---
-import { site } from '@/data/site';
+import { getLangFromUrl, useTranslations, localizePath, stripLangPrefix } from '@/i18n/utils';
+import { languages, type Lang } from '@/i18n/ui';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 
 const links = [
-  { label: 'About', href: '#about' },
-  { label: 'Work', href: '#work' },
-  { label: 'Contact', href: '#contact' },
+  { label: t('nav.about'), href: '#about' },
+  { label: t('nav.work'), href: '#work' },
+  { label: t('nav.contact'), href: '#contact' },
 ];
+
+// The canonical (unprefixed) path of the current page, so each language link
+// points to the same page in the other language.
+const currentPath = stripLangPrefix(Astro.url.pathname);
+const langCodes = Object.keys(languages) as Lang[];
 ---
 
 <header class="fixed inset-x-0 top-0 z-50 mix-blend-difference">
@@ -14,28 +23,54 @@ const links = [
     aria-label="Primary"
   >
     <a
-      href="#hero"
+      href={localizePath('/', lang) + '#hero'}
       class="font-[family-name:var(--font-display)] text-lg font-bold tracking-tight text-bone"
-      aria-label={`${site.name} — home`}
+      aria-label={t('nav.home')}
     >
-      {site.initials}<span class="text-accent">.</span>
+      FPL<span class="text-accent">.</span>
     </a>
 
-    <ul class="flex items-center gap-6 sm:gap-9">
-      {
-        links.map((link) => (
-          <li>
-            <a
-              href={link.href}
-              class="link-underline text-base font-medium tracking-wide text-bone/90 transition-opacity hover:opacity-100 sm:text-lg"
-            >
-              {link.label}
-            </a>
-          </li>
-        ))
-      }
-    </ul>
+    <div class="flex items-center gap-6 sm:gap-9">
+      <ul class="flex items-center gap-6 sm:gap-9">
+        {
+          links.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                class="link-underline text-base font-medium tracking-wide text-bone/90 transition-opacity hover:opacity-100 sm:text-lg"
+              >
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <!-- Language switcher: ES | EN -->
+      <div
+        class="flex items-center gap-2 text-base font-medium sm:text-lg"
+        aria-label={t('nav.langLabel')}
+      >
+        {
+          langCodes.map((code, i) => (
+            <>
+              {i > 0 && <span class="text-bone-faint" aria-hidden="true">|</span>}
+              <a
+                href={localizePath(currentPath, code)}
+                hreflang={code}
+                lang={code}
+                aria-current={code === lang ? 'true' : undefined}
+                class:list={[
+                  'transition-opacity hover:opacity-100',
+                  code === lang ? 'text-bone' : 'text-bone-faint hover:text-bone/90',
+                ]}
+              >
+                {languages[code]}
+              </a>
+            </>
+          ))
+        }
+      </div>
+    </div>
   </nav>
 </header>
-
-

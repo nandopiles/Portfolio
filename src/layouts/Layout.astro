@@ -3,6 +3,7 @@ import { ClientRouter } from 'astro:transitions';
 import BaseHead from '@/components/BaseHead.astro';
 import Cursor from '@/components/Cursor.tsx';
 import SmoothScroll from '@/components/SmoothScroll.tsx';
+import { getLangFromUrl, useTranslations } from '@/i18n/utils';
 import '@/styles/global.css';
 
 interface Props {
@@ -12,12 +13,14 @@ interface Props {
 }
 
 const { title, description, image } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 ---
 
 <!doctype html>
-<html lang="en" class="no-js">
+<html lang={lang} class="no-js">
   <head>
-    <BaseHead title={title} description={description} image={image} />
+    <BaseHead title={title} description={description} image={image} lang={lang} />
     <ClientRouter />
     <script is:inline>
       // Swap the no-js class as early as possible so CSS can react.
@@ -30,7 +33,7 @@ const { title, description, image } = Astro.props;
       href="#main"
       class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[10000] focus:rounded focus:bg-bone focus:px-4 focus:py-2 focus:text-ink"
     >
-      Skip to content
+      {t('a11y.skip')}
     </a>
 
     <slot />

@@ -1,23 +1,28 @@
 ---
-import { site } from '@/data/site';
+import { site, getSiteMeta } from '@/data/site';
+import { getLangFromUrl, useTranslations } from '@/i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const meta = getSiteMeta(lang);
 ---
 
 <section
   id="hero"
   class="relative flex min-h-svh flex-col justify-center container-gutter pb-16 pt-32"
-  aria-label="Introduction"
+  aria-label={t('nav.home')}
 >
   <p
     class="mb-8 flex items-center gap-3 text-sm uppercase tracking-[0.25em] text-bone-dim"
     data-hero-line
   >
     <span class="inline-block h-px w-10 bg-accent"></span>
-    {site.role} · {site.location}
+    {meta.role} · {site.location}
   </p>
 
   <h1 class="max-w-[15ch] text-[length:var(--text-hero)] text-bone">
     <span class="block overflow-hidden">
-      <span class="block" data-hero-line>Hi, I'm</span>
+      <span class="block" data-hero-line>{t('hero.greeting')}</span>
     </span>
     <span class="block overflow-hidden">
       <span class="block" data-hero-line>{site.name}.</span>
@@ -28,7 +33,7 @@ import { site } from '@/data/site';
     class="mt-10 max-w-[42ch] text-lg leading-relaxed text-bone-dim sm:text-xl"
     data-hero-line
   >
-    {site.tagline}
+    {meta.tagline}
   </p>
 
   <div class="mt-12 flex flex-wrap items-center gap-6" data-hero-line>
@@ -36,14 +41,14 @@ import { site } from '@/data/site';
       href="#work"
       class="group inline-flex items-center gap-3 rounded-full border border-bone/25 px-7 py-3 text-sm font-medium text-bone transition-colors hover:bg-bone hover:text-ink"
     >
-      View my work
+      {t('hero.cta.work')}
       <span class="transition-transform group-hover:translate-x-1" aria-hidden="true">→</span>
     </a>
     <a
       href="#contact"
       class="link-underline text-sm font-medium text-bone-dim"
     >
-      Get in touch
+      {t('hero.cta.contact')}
     </a>
   </div>
 
@@ -51,7 +56,7 @@ import { site } from '@/data/site';
     class="pointer-events-none absolute bottom-8 right-[var(--spacing-gutter)] hidden items-center gap-2 text-xs uppercase tracking-[0.2em] text-bone-faint sm:flex"
     aria-hidden="true"
   >
-    Scroll
+    {t('hero.scroll')}
     <span class="inline-block h-8 w-px animate-pulse bg-bone-faint"></span>
   </div>
 </section>

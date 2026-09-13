@@ -1,0 +1,42 @@
+---
+import Navbar from '@/components/Navbar.astro';
+import Hero from '@/components/Hero.astro';
+import About from '@/components/About.astro';
+import ProjectsHorizontal from '@/components/ProjectsHorizontal.tsx';
+import Experience from '@/components/Experience.astro';
+import Contact from '@/components/Contact.astro';
+import ScrollReveal from '@/components/ScrollReveal.astro';
+import { getProjects } from '@/data/projects';
+import { getLangFromUrl, useTranslations, localizePath } from '@/i18n/utils';
+
+/**
+ * The full single-page portfolio. Language is derived from the URL, so the
+ * same component renders correctly for both `/` (es) and `/en/`.
+ */
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const projects = getProjects(lang);
+
+const workStrings = {
+  label: t('work.label'),
+  heading: t('work.heading'),
+  demo: t('work.demo'),
+  code: t('work.code'),
+};
+const workBase = localizePath('/work', lang);
+---
+
+<Navbar />
+<main id="main">
+  <Hero />
+  <About />
+  <ProjectsHorizontal
+    projects={projects}
+    workBase={workBase}
+    strings={workStrings}
+    client:visible
+  />
+  <Experience />
+  <Contact />
+</main>
+<ScrollReveal />

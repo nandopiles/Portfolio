@@ -1,45 +1,65 @@
 ---
-import { site } from '@/data/site';
+import { site, getSiteMeta } from '@/data/site';
+import { defaultLang, stripLangPrefix, localizePath, type Lang } from '@/i18n/utils';
 
 interface Props {
   title?: string;
   description?: string;
   image?: string;
+  lang: Lang;
 }
 
-const {
-  title = `${site.name} — ${site.role}`,
-  description = site.description,
-  image = site.ogImage,
-} = Astro.props;
+const { lang, title, description, image = site.ogImage } = Astro.props;
+const meta = getSiteMeta(lang);
 
-const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url).href;
-const ogImageUrl = new URL(image, Astro.site ?? Astro.url).href;
+const resolvedTitle = title ?? `${site.name} — ${meta.role}`;
+const resolvedDescription = description ?? meta.description;
+
+const baseUrl = Astro.site ?? Astro.url;
+const canonical = new URL(Astro.url.pathname, baseUrl).href;
+const ogImageUrl = new URL(image, baseUrl).href;
+
+// Build hreflang alternates: same page in every language + x-default.
+const canonicalPath = stripLangPrefix(Astro.url.pathname);
+const alternates: Array<{ hreflang: string; href: string }> = [
+  { hreflang: 'es', href: new URL(localizePath(canonicalPath, 'es'), baseUrl).href },
+  { hreflang: 'en', href: new URL(localizePath(canonicalPath, 'en'), baseUrl).href },
+  {
+    hreflang: 'x-default',
+    href: new URL(localizePath(canonicalPath, defaultLang), baseUrl).href,
+  },
+];
+
+const ogLocale = lang === 'es' ? 'es_ES' : 'en_US';
+const ogLocaleAlt = lang === 'es' ? 'en_US' : 'es_ES';
 ---
 
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="generator" content={Astro.generator} />
 
-<title>{title}</title>
-<meta name="description" content={description} />
+<title>{resolvedTitle}</title>
+<meta name="description" content={resolvedDescription} />
 <meta name="author" content={site.name} />
 <link rel="canonical" href={canonical} />
+{alternates.map((a) => <link rel="alternate" hreflang={a.hreflang} href={a.href} />)}
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-<meta name="theme-color" content="#171613" />
+<meta name="theme-color" content="#060504" />
 
 <!-- Open Graph -->
 <meta property="og:type" content="website" />
-<meta property="og:title" content={title} />
-<meta property="og:description" content={description} />
+<meta property="og:title" content={resolvedTitle} />
+<meta property="og:description" content={resolvedDescription} />
 <meta property="og:url" content={canonical} />
 <meta property="og:image" content={ogImageUrl} />
 <meta property="og:site_name" content={site.name} />
+<meta property="og:locale" content={ogLocale} />
+<meta property="og:locale:alternate" content={ogLocaleAlt} />
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content={title} />
-<meta name="twitter:description" content={description} />
+<meta name="twitter:title" content={resolvedTitle} />
+<meta name="twitter:description" content={resolvedDescription} />
 <meta name="twitter:image" content={ogImageUrl} />
 
 <!-- Fonts: preconnect + display=swap for performance -->

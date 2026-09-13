@@ -1,15 +1,19 @@
 ---
 import { skills } from '@/data/skills';
+import { getLangFromUrl, useTranslations } from '@/i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 ---
 
-<section id="about" class="container-gutter py-28 sm:py-40" aria-label="About">
+<section id="about" class="container-gutter py-28 sm:py-40" aria-label={t('nav.about')}>
   <div class="grid gap-12 md:grid-cols-12 md:gap-8">
     <div class="md:col-span-3">
       <h2
         class="reveal text-sm uppercase tracking-[0.25em] text-bone-faint"
         data-reveal
       >
-        (About)
+        {t('about.label')}
       </h2>
     </div>
 
@@ -18,24 +22,21 @@ import { skills } from '@/data/skills';
         class="reveal max-w-[24ch] text-[length:var(--text-section)] leading-[1.05] text-bone"
         data-reveal
       >
-        I build interfaces that feel considered — fast, accessible, and quietly expressive.
+        {t('about.lead')}
       </p>
       <div class="mt-10 grid gap-8 text-bone-dim sm:grid-cols-2 sm:gap-14">
         <p class="reveal leading-relaxed" data-reveal>
-          For the last several years I've partnered with studios and product teams to ship
-          high-end web experiences, from marketing sites with motion systems to complex,
-          data-dense dashboards.
+          {t('about.p1')}
         </p>
         <p class="reveal leading-relaxed" data-reveal>
-          I care about the details most people never notice: easing curves, focus states,
-          layout rhythm, and shaving milliseconds off the first paint.
+          {t('about.p2')}
         </p>
       </div>
 
       <!-- Tech stack — a quiet, static list that fits the editorial tone. -->
       <div class="reveal mt-16 border-t border-ink-line pt-8" data-reveal>
         <h3 class="text-sm uppercase tracking-[0.25em] text-bone-faint">
-          (Stack)
+          {t('about.stack')}
         </h3>
         <ul class="mt-5 flex flex-wrap gap-x-8 gap-y-3">
           {

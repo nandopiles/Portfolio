@@ -2,8 +2,19 @@ import { useEffect, useRef, useState } from 'react';
 import { gsap, ScrollTrigger, prefersReducedMotion } from '@/lib/gsap';
 import type { Project } from '@/data/projects';
 
+/** UI strings passed from the Astro layer so this island stays language-aware. */
+export interface WorkStrings {
+  label: string;
+  heading: string;
+  demo: string;
+  code: string;
+}
+
 interface Props {
   projects: Project[];
+  /** Base path for project detail links, e.g. '/work' or '/en/work'. */
+  workBase: string;
+  strings: WorkStrings;
 }
 
 /**
@@ -18,7 +29,7 @@ interface Props {
  *   Falls back to native horizontal scrolling with CSS scroll-snap — no pin,
  *   which keeps the touch experience intact and honours motion preferences.
  */
-export default function ProjectsHorizontal({ projects }: Props) {
+export default function ProjectsHorizontal({ projects, workBase, strings }: Props) {
   const sectionRef = useRef<HTMLElement | null>(null);
   const pinRef = useRef<HTMLDivElement | null>(null);
   const trackRef = useRef<HTMLDivElement | null>(null);
@@ -93,10 +104,10 @@ export default function ProjectsHorizontal({ projects }: Props) {
         <div className="container-gutter flex items-end justify-between pt-28 pb-10">
           <div>
             <h2 className="text-sm uppercase tracking-[0.25em] text-bone-faint">
-              (Selected Work)
+              {strings.label}
             </h2>
             <p className="mt-3 max-w-[20ch] text-[length:var(--text-section)] leading-none text-bone">
-              Things I've built.
+              {strings.heading}
             </p>
           </div>
           <div className="hidden shrink-0 items-center gap-4 sm:flex" aria-hidden="true">
@@ -127,7 +138,12 @@ export default function ProjectsHorizontal({ projects }: Props) {
           role="list"
         >
           {projects.map((project) => (
-            <ProjectCard key={project.index} project={project} />
+            <ProjectCard
+              key={project.index}
+              project={project}
+              workBase={workBase}
+              strings={strings}
+            />
           ))}
         </div>
       </div>
@@ -135,16 +151,24 @@ export default function ProjectsHorizontal({ projects }: Props) {
   );
 }
 
-function ProjectCard({ project }: { project: Project }) {
+function ProjectCard({
+  project,
+  workBase,
+  strings,
+}: {
+  project: Project;
+  workBase: string;
+  strings: WorkStrings;
+}) {
   return (
     <article
       role="listitem"
       className="group relative flex w-[82vw] max-w-[540px] shrink-0 snap-center flex-col sm:w-[46vw] lg:w-[38vw]"
     >
       <a
-        href={`/work/${project.slug}`}
-        data-cursor={project.cursorLabel ?? 'View'}
-        aria-label={`${project.title} — view case study`}
+        href={`${workBase}/${project.slug}`}
+        data-cursor={project.cursorLabel ?? strings.demo}
+        aria-label={project.title}
         className="block overflow-hidden rounded-xl border border-ink-line bg-ink-soft"
       >
         <div className="aspect-[4/3] overflow-hidden">
@@ -183,7 +207,7 @@ function ProjectCard({ project }: { project: Project }) {
             rel="noopener noreferrer"
             className="link-underline text-bone"
           >
-            Live demo
+            {strings.demo}
           </a>
         )}
         {project.repo && (
@@ -193,7 +217,7 @@ function ProjectCard({ project }: { project: Project }) {
             rel="noopener noreferrer"
             className="link-underline text-bone-dim"
           >
-            Code
+            {strings.code}
           </a>
         )}
       </div>
