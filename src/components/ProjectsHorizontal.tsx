@@ -158,8 +158,10 @@ export default function ProjectsHorizontal({ projects, workBase, strings }: Prop
               {strings.label}
             </h2>
 
-            {/* Heading as a comic/sticker badge (see .sticker utility). */}
-            <span className="sticker mt-5 px-5 py-3 text-[length:var(--text-section)] leading-[0.95]">
+            {/* Heading as a comic/sticker badge (see .sticker utility).
+                Capped to the placard width so it never overflows on mobile;
+                the text wraps inside the badge instead of stretching wide. */}
+            <span className="sticker mt-5 block max-w-full px-5 py-3 text-[length:var(--text-section)] leading-[0.95] [text-wrap:balance]">
               {strings.heading}
             </span>
 

@@ -1,10 +1,8 @@
 ---
-import { site, getSiteMeta } from '@/data/site';
 import { getLangFromUrl, useTranslations } from '@/i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-const meta = getSiteMeta(lang);
 ---
 
 <section
@@ -12,46 +10,42 @@ const meta = getSiteMeta(lang);
   class="relative flex min-h-svh flex-col justify-center container-gutter pb-16 pt-32"
   aria-label={t('nav.home')}
 >
-  <div class="mb-8" data-hero-line>
-    <span class="sticker px-4 py-1.5 text-sm uppercase tracking-wide">
-      {meta.role} · {site.location}
-    </span>
-  </div>
+  <div class="mx-auto w-full max-w-6xl">
+    <!-- Poster-style headline: three short, huge words. What I do — the hook —
+         not my name. The name lives in the sticker tucked into the first line. -->
+    <!-- The headline flows at its natural width; the name sticker is layered
+         ON TOP (absolute) so it reads like a sticker slapped over the type,
+         rather than a badge pushing the words aside. -->
+    <div class="relative">
+      <h1 class="poster-title text-[length:var(--text-hero)]">
+        <span class="block">
+          <span class="poster-line poster-line-fill">{t('hero.title.1')}</span>
+        </span>
+        <span class="block">
+          <span class="poster-line poster-line-fill">{t('hero.title.2')}</span>
+        </span>
+        <span class="block">
+          <span
+            class="poster-line poster-line-fill poster-line-shine"
+            data-text={t('hero.title.3')}
+          >
+            {t('hero.title.3')}
+          </span>
+        </span>
+      </h1>
 
-  <h1 class="max-w-[15ch] text-[length:var(--text-hero)] text-bone">
-    <span class="block overflow-hidden">
-      <span class="block" data-hero-line>{t('hero.greeting')}</span>
-    </span>
-    <span class="block overflow-hidden">
-      <span class="block" data-hero-line>{site.name}.</span>
-    </span>
-  </h1>
-
-  <p
-    class="mt-10 max-w-[42ch] text-lg leading-relaxed text-bone-dim sm:text-xl"
-    data-hero-line
-  >
-    {meta.tagline}
-  </p>
-
-  <div class="mt-12 flex flex-wrap items-center gap-6" data-hero-line>
-    <a
-      href="#work"
-      class="group inline-flex items-center gap-3 rounded-full border border-bone/25 px-7 py-3 text-sm font-medium text-bone transition-colors hover:bg-bone hover:text-ink"
-    >
-      {t('hero.cta.work')}
-      <span class="transition-transform group-hover:translate-x-1" aria-hidden="true">→</span>
-    </a>
-    <a
-      href="#contact"
-      class="link-underline text-sm font-medium text-bone-dim"
-    >
-      {t('hero.cta.contact')}
-    </a>
+      <!-- Sticker slapped over the top-left corner of the "F". -->
+      <span
+        class="sticker hero-sticker absolute left-[-2.75rem] top-[-1.7rem] z-10 px-6 py-2 text-xs sm:left-[-3.75rem] sm:top-[-2.2rem] sm:text-sm"
+        style="text-transform: none; font-weight: 700; -webkit-text-fill-color: var(--color-ink); color: var(--color-ink);"
+      >
+        {t('hero.sticker')}
+      </span>
+    </div>
   </div>
 
   <div
-    class="pointer-events-none absolute bottom-8 right-[var(--spacing-gutter)] hidden items-center gap-2 text-xs uppercase tracking-[0.2em] text-bone-faint sm:flex"
+    class="pointer-events-none absolute bottom-8 right-gutter hidden items-center gap-2 text-xs uppercase tracking-[0.2em] text-bone-faint sm:flex"
     aria-hidden="true"
   >
     {t('hero.scroll')}
@@ -59,33 +53,3 @@ const meta = getSiteMeta(lang);
   </div>
 </section>
 
-<script>
-  import { gsap, prefersReducedMotion } from '@/lib/gsap';
-
-  function playHero() {
-    const lines = gsap.utils.toArray<HTMLElement>('[data-hero-line]');
-    if (!lines.length) return;
-
-    if (prefersReducedMotion()) {
-      gsap.set(lines, { opacity: 1, y: 0 });
-      return;
-    }
-
-    gsap.fromTo(
-      lines,
-      { yPercent: 110, opacity: 0 },
-      {
-        yPercent: 0,
-        opacity: 1,
-        duration: 1.1,
-        ease: 'expo.out',
-        stagger: 0.09,
-        delay: 0.15,
-      }
-    );
-  }
-
-  playHero();
-  // Re-run after Astro view transitions swap the DOM.
-  document.addEventListener('astro:page-load', playHero);
-</script>

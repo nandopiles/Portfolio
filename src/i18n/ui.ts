@@ -23,9 +23,11 @@ export const ui = {
     'nav.langLabel': 'Cambiar idioma',
 
     // Hero
-    'hero.greeting': 'Hola, soy',
-    'hero.tagline':
-      'Diseño interfaces rápidas y expresivas donde el movimiento y el detalle hablan por sí solos.',
+    'hero.sticker': 'Yee!! soy Ferran.',
+    // Big poster headline, one word per line for maximum impact.
+    'hero.title.1': 'Frontend',
+    'hero.title.2': 'Product &',
+    'hero.title.3': 'Craft',
     'hero.cta.work': 'Ver mi trabajo',
     'hero.cta.contact': 'Hablemos',
     'hero.scroll': 'Scroll',
@@ -33,11 +35,9 @@ export const ui = {
     // About
     'about.label': '(Sobre mí)',
     'about.lead':
-      'Construyo interfaces cuidadas: rápidas, accesibles y discretamente expresivas.',
-    'about.p1':
-      'Durante los últimos años he colaborado con estudios y equipos de producto para crear experiencias web de alto nivel, desde sitios de marketing con sistemas de animación hasta paneles complejos con mucha densidad de datos.',
-    'about.p2':
-      'Me importan los detalles que casi nadie nota: las curvas de easing, los estados de foco, el ritmo del layout y recortar milisegundos del primer pintado.',
+      'Ayudo a equipos a llevar productos digitales a la vida.',
+    'about.lead2':
+      'Disfruto trabajando en equipo, cuidando el detalle y convirtiendo lo complejo en algo simple.',
     'about.stack': '(Stack)',
 
     // Work
@@ -47,9 +47,6 @@ export const ui = {
       'Una selección de proyectos personales en los que he trabajado. Pasa el ratón por encima de cada disco y ábrelo para ver más.',
     'work.demo': 'Ver demo',
     'work.code': 'Código',
-    'work.cursor.view': 'Ver',
-    'work.cursor.play': 'Play',
-    'work.cursor.drag': 'Arrastra',
 
     // Experience
     'exp.label': '(Experiencia)',
@@ -82,9 +79,11 @@ export const ui = {
     'nav.langLabel': 'Switch language',
 
     // Hero
-    'hero.greeting': "Hi, I'm",
-    'hero.tagline':
-      'I craft fast, expressive interfaces where motion and detail do the talking.',
+    'hero.sticker': "Yee!! I'm Ferran.",
+    // Big poster headline, one word per line for maximum impact.
+    'hero.title.1': 'Frontend',
+    'hero.title.2': 'Product &',
+    'hero.title.3': 'Craft',
     'hero.cta.work': 'View my work',
     'hero.cta.contact': 'Get in touch',
     'hero.scroll': 'Scroll',
@@ -92,11 +91,9 @@ export const ui = {
     // About
     'about.label': '(About)',
     'about.lead':
-      'I build interfaces that feel considered — fast, accessible, and quietly expressive.',
-    'about.p1':
-      "For the last several years I've partnered with studios and product teams to ship high-end web experiences, from marketing sites with motion systems to complex, data-dense dashboards.",
-    'about.p2':
-      'I care about the details most people never notice: easing curves, focus states, layout rhythm, and shaving milliseconds off the first paint.',
+      'I help teams bring digital products to life.',
+    'about.lead2':
+      'I enjoy working as a team, sweating the details, and turning complexity into something simple.',
     'about.stack': '(Stack)',
 
     // Work
@@ -106,9 +103,6 @@ export const ui = {
       'A selection of personal projects I have worked on. Hover over each record and open it to see more.',
     'work.demo': 'Live demo',
     'work.code': 'Code',
-    'work.cursor.view': 'View',
-    'work.cursor.play': 'Play',
-    'work.cursor.drag': 'Drag',
 
     // Experience
     'exp.label': '(Experience)',

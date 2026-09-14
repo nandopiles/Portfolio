@@ -198,6 +198,85 @@
   padding-inline: var(--spacing-gutter);
 }
 
+/* Poster headline — huge, wide, ultra-bold grotesque with a gritty grain
+   texture clipped to the letters and a slight skew for depth. Inspired by
+   bold editorial hero type. */
+.poster-title {
+  font-family: var(--font-display); /* Archivo Expanded */
+  font-weight: 900;
+  line-height: 0.82;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+}
+
+/* Per-line treatments create rhythm: some lines are hollow (outline), some are
+   filled with a gritty grain — so the headline has personality without a new
+   font. Each line is its own painted layer. */
+.poster-line {
+  display: inline-block;
+}
+
+/* FILLED: bone with a stippled grain, clipped to the glyphs. */
+.poster-line-fill {
+  background-color: var(--color-bone);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.55'/%3E%3C/svg%3E");
+  background-size: 130px 130px;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.55));
+}
+
+/* OUTLINE: stroke only, hollow letters. */
+.poster-line-outline {
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  background: none;
+  -webkit-text-stroke: clamp(1.5px, 0.35vw, 3px) var(--color-bone);
+  text-stroke: clamp(1.5px, 0.35vw, 3px) var(--color-bone);
+}
+
+/* SHINE: a slow diagonal light sweep travelling across a filled line — the
+   subtle, premium "alive" hook. Built as a moving gradient clipped to text,
+   layered over the grain via a pseudo-element. */
+.poster-line-shine {
+  position: relative;
+}
+.poster-line-shine::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.95) 48%,
+    transparent 66%
+  );
+  background-size: 250% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: poster-shine 5.5s var(--ease-out-expo) infinite;
+  pointer-events: none;
+}
+@keyframes poster-shine {
+  0% {
+    background-position: 180% 0;
+  }
+  55%,
+  100% {
+    background-position: -80% 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .poster-line-shine::after {
+    animation: none;
+    opacity: 0;
+  }
+}
+
 /* Comic/sticker badge — chunky outline, hard offset shadow, tilted, wide
    informal accent face. Straightens + lifts on hover. Reused across the site
    (work heading, hero tag, contact CTA, …). */
@@ -221,6 +300,22 @@
 .group:hover .sticker {
   transform: rotate(0deg) translateY(-2px);
   box-shadow: 6px 8px 0 rgba(0, 0, 0, 0.9);
+}
+
+/* Hero name sticker — layered over the top-left of the headline, tilted like
+   it was slapped on by hand, with a lifted double shadow. On hover it nudges
+   up and straightens a touch, matching the other stickers. */
+.hero-sticker {
+  transform: rotate(-12deg);
+  box-shadow:
+    3px 5px 0 rgba(0, 0, 0, 0.55),
+    6px 9px 14px rgba(0, 0, 0, 0.4);
+}
+.hero-sticker:hover {
+  transform: rotate(-8deg) translateY(-3px);
+  box-shadow:
+    4px 6px 0 rgba(0, 0, 0, 0.6),
+    8px 12px 18px rgba(0, 0, 0, 0.45);
 }
 
 /* Animated underline for links */
