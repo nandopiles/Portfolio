@@ -130,8 +130,8 @@ export default function Cursor() {
       {/* Arrow pointer — comic/sticker style: chunky, bold outline, hard
           offset shadow. Hidden while hovering an interactive element. */}
       <svg
-        width="40"
-        height="40"
+        width="32"
+        height="32"
         viewBox="0 0 24 24"
         fill="none"
         style={{

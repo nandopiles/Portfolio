@@ -21,18 +21,21 @@ const langCodes = Object.keys(languages) as Lang[];
 
 <header class="fixed inset-x-0 top-0 z-50 mix-blend-difference">
   <nav
-    class="container-gutter flex items-center justify-between py-2"
+    class="container-gutter grid grid-cols-[1fr_auto_1fr] items-center py-2 sm:flex sm:justify-between"
     aria-label="Primary"
   >
+    <!-- Logo: centred on mobile (middle grid column), left-aligned from sm up.
+         In the flow (not absolute) so the nav padding applies to it. -->
     <a
       href={localizePath('/', lang) + '#hero'}
-      class="inline-flex items-center text-bone transition-opacity hover:opacity-80 [&_svg]:h-20 [&_svg]:w-20 sm:[&_svg]:h-28 sm:[&_svg]:w-28"
+      class="col-start-2 inline-flex items-center justify-self-center text-bone transition-opacity hover:opacity-80 [&_svg]:h-16 [&_svg]:w-16 sm:col-start-auto sm:justify-self-auto sm:[&_svg]:h-28 sm:[&_svg]:w-28"
       aria-label={t('nav.home')}
       set:html={logo}
     />
 
-    <div class="flex items-center gap-6 sm:gap-9">
-      <ul class="flex items-center gap-6 sm:gap-9">
+    <div class="col-start-3 flex items-center justify-self-end gap-6 sm:col-start-auto sm:justify-self-auto sm:gap-9">
+      <!-- Primary nav links: hidden on mobile, shown from sm up. -->
+      <ul class="hidden items-center gap-6 sm:flex sm:gap-9">
         {
           links.map((link) => (
             <li>

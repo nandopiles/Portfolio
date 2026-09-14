@@ -46,18 +46,21 @@ export default function ProjectsHorizontal({ projects, workBase, strings }: Prop
     setPinned(usePin);
 
     if (!usePin) {
-      // Native-scroll fallback: update counter from the scroll container.
-      const scroller = trackRef.current;
-      if (!scroller) return;
+      // Mobile / reduced-motion fallback: projects are stacked vertically, so
+      // derive the counter from how far the section has scrolled through the
+      // viewport rather than from any horizontal offset.
+      const section = sectionRef.current;
+      if (!section) return;
       const onScroll = () => {
-        const max = scroller.scrollWidth - scroller.clientWidth;
-        const p = max > 0 ? scroller.scrollLeft / max : 0;
+        const rect = section.getBoundingClientRect();
+        const scrollable = rect.height - window.innerHeight;
+        const p = scrollable > 0 ? Math.min(1, Math.max(0, -rect.top / scrollable)) : 0;
         setCurrent(Math.min(total, Math.max(1, Math.round(p * (total - 1)) + 1)));
         if (barRef.current) barRef.current.style.transform = `scaleX(${Math.max(0.02, p)})`;
       };
-      scroller.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('scroll', onScroll, { passive: true });
       onScroll();
-      return () => scroller.removeEventListener('scroll', onScroll);
+      return () => window.removeEventListener('scroll', onScroll);
     }
 
     // Desktop pinned horizontal scroll.
@@ -99,7 +102,7 @@ export default function ProjectsHorizontal({ projects, workBase, strings }: Prop
       aria-label="Selected work"
       className="relative bg-transparent"
     >
-      <div ref={pinRef} className="min-h-svh overflow-hidden">
+      <div ref={pinRef} className={pinned ? 'min-h-svh overflow-hidden' : ''}>
         {/* Section header + progress */}
         <div className="container-gutter flex items-end justify-between pt-28 pb-10">
           <div>
@@ -133,7 +136,7 @@ export default function ProjectsHorizontal({ projects, workBase, strings }: Prop
           className={
             pinned
               ? 'flex w-max items-stretch gap-6 px-[var(--spacing-gutter)] will-change-transform'
-              : 'flex snap-x snap-mandatory items-stretch gap-6 overflow-x-auto px-[var(--spacing-gutter)] pb-8 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden'
+              : 'flex flex-col items-stretch gap-12 px-[var(--spacing-gutter)] pb-8'
           }
           role="list"
         >
@@ -143,6 +146,7 @@ export default function ProjectsHorizontal({ projects, workBase, strings }: Prop
               project={project}
               workBase={workBase}
               strings={strings}
+              pinned={pinned}
             />
           ))}
         </div>
@@ -155,15 +159,21 @@ function ProjectCard({
   project,
   workBase,
   strings,
+  pinned,
 }: {
   project: Project;
   workBase: string;
   strings: WorkStrings;
+  pinned: boolean;
 }) {
   return (
     <article
       role="listitem"
-      className="group relative flex w-[82vw] max-w-[540px] shrink-0 snap-center flex-col sm:w-[46vw] lg:w-[38vw]"
+      className={
+        pinned
+          ? 'group relative flex w-[82vw] max-w-[540px] shrink-0 snap-center flex-col sm:w-[46vw] lg:w-[38vw]'
+          : 'group relative flex w-full flex-col'
+      }
     >
       <a
         href={`${workBase}/${project.slug}`}
