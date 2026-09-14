@@ -43,6 +43,8 @@ export const ui = {
     // Work
     'work.label': '(Proyectos seleccionados)',
     'work.heading': 'Cosas que he construido.',
+    'work.intro':
+      'Una selección de proyectos personales en los que he trabajado. Pasa el ratón por encima de cada disco y ábrelo para ver más.',
     'work.demo': 'Ver demo',
     'work.code': 'Código',
     'work.cursor.view': 'Ver',
@@ -100,6 +102,8 @@ export const ui = {
     // Work
     'work.label': '(Selected Work)',
     'work.heading': "Things I've built.",
+    'work.intro':
+      'A selection of personal projects I have worked on. Hover over each record and open it to see more.',
     'work.demo': 'Live demo',
     'work.code': 'Code',
     'work.cursor.view': 'View',

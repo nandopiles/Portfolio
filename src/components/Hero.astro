@@ -12,13 +12,11 @@ const meta = getSiteMeta(lang);
   class="relative flex min-h-svh flex-col justify-center container-gutter pb-16 pt-32"
   aria-label={t('nav.home')}
 >
-  <p
-    class="mb-8 flex items-center gap-3 text-sm uppercase tracking-[0.25em] text-bone-dim"
-    data-hero-line
-  >
-    <span class="inline-block h-px w-10 bg-accent"></span>
-    {meta.role} · {site.location}
-  </p>
+  <div class="mb-8" data-hero-line>
+    <span class="sticker px-4 py-1.5 text-sm uppercase tracking-wide">
+      {meta.role} · {site.location}
+    </span>
+  </div>
 
   <h1 class="max-w-[15ch] text-[length:var(--text-hero)] text-bone">
     <span class="block overflow-hidden">

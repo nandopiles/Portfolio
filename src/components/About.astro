@@ -6,46 +6,60 @@ const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 ---
 
-<section id="about" class="container-gutter py-28 sm:py-40" aria-label={t('nav.about')}>
-  <div class="grid gap-12 md:grid-cols-12 md:gap-8">
-    <div class="md:col-span-3">
-      <h2
-        class="reveal text-sm uppercase tracking-[0.25em] text-bone-faint"
-        data-reveal
-      >
-        {t('about.label')}
-      </h2>
-    </div>
+<section
+  id="about"
+  class="container-gutter py-32 sm:py-48"
+  aria-label={t('nav.about')}
+>
+  <div class="mx-auto max-w-3xl text-left">
+    <h2
+      class="reveal text-sm uppercase tracking-[0.25em] text-bone-faint"
+      data-reveal
+    >
+      {t('about.label')}
+    </h2>
 
-    <div class="md:col-span-9">
-      <p
-        class="reveal max-w-[24ch] text-[length:var(--text-section)] leading-[1.05] text-bone"
-        data-reveal
-      >
-        {t('about.lead')}
-      </p>
-      <div class="mt-10 grid gap-8 text-bone-dim sm:grid-cols-2 sm:gap-14">
-        <p class="reveal leading-relaxed" data-reveal>
-          {t('about.p1')}
-        </p>
-        <p class="reveal leading-relaxed" data-reveal>
-          {t('about.p2')}
-        </p>
-      </div>
+    <p
+      class="reveal mt-8 text-[length:var(--text-section)] leading-[1.08] text-bone"
+      data-reveal
+    >
+      {t('about.lead')}
+    </p>
+  </div>
+</section>
 
-      <!-- Tech stack — a quiet, static list that fits the editorial tone. -->
-      <div class="reveal mt-16 border-t border-ink-line pt-8" data-reveal>
-        <h3 class="text-sm uppercase tracking-[0.25em] text-bone-faint">
-          {t('about.stack')}
-        </h3>
-        <ul class="mt-5 flex flex-wrap gap-x-8 gap-y-3">
-          {
-            skills.map((skill) => (
-              <li class="text-lg text-bone/90 sm:text-xl">{skill}</li>
-            ))
-          }
-        </ul>
-      </div>
-    </div>
+<!-- Skills — a hand-placed "sticker collage". The badges are laid out in a
+     centred cluster, each at a slightly different angle like stickers stuck by
+     hand. They reveal on scroll (via ScrollReveal) and straighten + lift on
+     hover. Static: no auto-scrolling. -->
+<section class="container-gutter pb-32 sm:pb-48" aria-label={t('about.stack')}>
+  <div class="mx-auto max-w-4xl">
+    <h3
+      class="reveal text-center text-sm uppercase tracking-[0.25em] text-bone-faint"
+      data-reveal
+    >
+      {t('about.stack')}
+    </h3>
+
+    <ul class="mt-10 flex flex-wrap items-center justify-center gap-x-5 gap-y-6" role="list">
+      {
+        skills.map((skill, i) => {
+          // Deterministic per-index "hand-placed" angles (no random → stable
+          // between SSR and client).
+          const angles = [-5, 3, -2, 6, -4, 2, -6, 4, -3];
+          const angle = angles[i % angles.length];
+          return (
+            <li data-reveal class="reveal">
+              <span
+                class="sticker px-5 py-2.5 text-lg sm:text-xl"
+                style={`transform: rotate(${angle}deg);`}
+              >
+                {skill}
+              </span>
+            </li>
+          );
+        })
+      }
+    </ul>
   </div>
 </section>
