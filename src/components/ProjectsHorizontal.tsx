@@ -78,7 +78,9 @@ export default function ProjectsHorizontal({ projects, workBase, strings }: Prop
       ScrollTrigger.create({
         animation: tween,
         trigger: section,
-        start: 'top top',
+        // Pin a bit before the section reaches the very top so the header
+        // ("Selected work") keeps some breathing room below the navbar.
+        start: 'top top+=60',
         end: () => `+=${getScrollDistance()}`,
         pin: pinRef.current,
         scrub: 1,
