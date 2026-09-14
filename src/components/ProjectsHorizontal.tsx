@@ -97,34 +97,89 @@ export default function ProjectsHorizontal({ projects, workBase, strings }: Prop
       const section = sectionRef.current!;
       const track = trackRef.current!;
 
-      const ctx = gsap.context(() => {
-        const getScrollDistance = () => track.scrollWidth - window.innerWidth;
+      // The horizontal distance depends on the track's final laid-out width,
+      // which is only correct once fonts and every poster image have loaded.
+      // We create the trigger after the first paint, then force ScrollTrigger
+      // to re-measure whenever something that affects layout finishes loading
+      // (fonts, window load, each image). Without these refreshes the trigger
+      // can be built against a too-small/zero scroll distance and the pinned
+      // section appears not to work at all.
+      let rafId = 0;
+      let ctx: gsap.Context | undefined;
+      const cleanups: Array<() => void> = [];
 
-        const tween = gsap.to(track, {
-          x: () => -getScrollDistance(),
-          ease: 'none',
-        });
+      const build = () => {
+        ctx = gsap.context(() => {
+          const getScrollDistance = () =>
+            Math.max(0, track.scrollWidth - window.innerWidth);
 
-        ScrollTrigger.create({
-          animation: tween,
-          trigger: section,
-          // Pin a bit before the section reaches the very top so the header
-          // ("Selected work") keeps some breathing room below the navbar.
-          start: 'top top+=60',
-          end: () => `+=${getScrollDistance()}`,
-          pin: pinRef.current,
-          scrub: 1,
-          invalidateOnRefresh: true,
-          onUpdate: (self) => {
-            setCurrent(Math.min(total, Math.floor(self.progress * total) + 1));
-            if (barRef.current) {
-              barRef.current.style.transform = `scaleX(${Math.max(0.02, self.progress)})`;
-            }
-          },
-        });
-      }, section);
+          const tween = gsap.to(track, {
+            x: () => -getScrollDistance(),
+            ease: 'none',
+          });
 
-      cleanupMode = () => ctx.revert();
+          ScrollTrigger.create({
+            animation: tween,
+            trigger: section,
+            // Pin a bit before the section reaches the very top so the header
+            // ("Selected work") keeps some breathing room below the navbar.
+            start: 'top top+=60',
+            end: () => `+=${getScrollDistance()}`,
+            pin: pinRef.current,
+            scrub: 1,
+            invalidateOnRefresh: true,
+            onUpdate: (self) => {
+              setCurrent(Math.min(total, Math.floor(self.progress * total) + 1));
+              if (barRef.current) {
+                barRef.current.style.transform = `scaleX(${Math.max(0.02, self.progress)})`;
+              }
+            },
+          });
+        }, section);
+
+        // Re-measure once everything that changes the track width has settled.
+        const refresh = () => ScrollTrigger.refresh();
+
+        if (document.fonts?.ready) {
+          document.fonts.ready.then(refresh).catch(() => {});
+        }
+        if (document.readyState !== 'complete') {
+          window.addEventListener('load', refresh, { once: true });
+          cleanups.push(() => window.removeEventListener('load', refresh));
+        }
+        // Any poster image that finishes loading shifts the layout width.
+        const imgs = Array.from(track.querySelectorAll('img'));
+        for (const img of imgs) {
+          if (img.complete) continue;
+          img.addEventListener('load', refresh, { once: true });
+          img.addEventListener('error', refresh, { once: true });
+          cleanups.push(() => {
+            img.removeEventListener('load', refresh);
+            img.removeEventListener('error', refresh);
+          });
+        }
+        // After an Astro view-transition navigation back to this page, layout
+        // metrics can be stale until the new document settles — refresh then.
+        document.addEventListener('astro:page-load', refresh);
+        cleanups.push(() =>
+          document.removeEventListener('astro:page-load', refresh)
+        );
+
+        // One more measurement on the next frame, after layout has painted.
+        requestAnimationFrame(refresh);
+      };
+
+      // Wait two frames so the browser has laid out the freshly-rendered track
+      // before we measure it for the first time.
+      rafId = requestAnimationFrame(() => {
+        rafId = requestAnimationFrame(build);
+      });
+
+      cleanupMode = () => {
+        cancelAnimationFrame(rafId);
+        for (const fn of cleanups) fn();
+        ctx?.revert();
+      };
     };
 
     applyMode();
@@ -347,7 +402,10 @@ function ProjectCard({
             <img
               src={project.image}
               alt={`${project.title} — project preview`}
-              loading="lazy"
+              // In the pinned horizontal layout every poster contributes to the
+              // track width that ScrollTrigger measures, so images must load
+              // up front (they're lightweight SVGs) to keep that width stable.
+              loading={pinned ? 'eager' : 'lazy'}
               decoding="async"
               style={{ viewTransitionName: `project-${project.slug}` }}
               className="h-full w-full object-cover transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]"

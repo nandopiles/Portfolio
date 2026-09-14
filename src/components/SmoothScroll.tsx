@@ -33,6 +33,17 @@ export default function SmoothScroll() {
     gsap.ticker.add(onTick);
     gsap.ticker.lagSmoothing(0);
 
+    // This island and the pinned Work island hydrate independently (idle vs
+    // visible), so their init order isn't deterministic. Starting Lenis also
+    // changes the scroll metrics. Refresh ScrollTrigger now — and again after
+    // the next frame and on view-transition loads — so any trigger that was
+    // created before Lenis was ready (e.g. the pinned horizontal section) is
+    // re-measured against the smooth-scroll setup instead of being left dead.
+    const refresh = () => ScrollTrigger.refresh();
+    refresh();
+    requestAnimationFrame(refresh);
+    document.addEventListener('astro:page-load', refresh);
+
     // Intercept in-page anchor links and hand them to Lenis.
     const onClick = (e: MouseEvent) => {
       const anchor = (e.target as HTMLElement)?.closest(
@@ -51,6 +62,7 @@ export default function SmoothScroll() {
 
     return () => {
       document.removeEventListener('click', onClick);
+      document.removeEventListener('astro:page-load', refresh);
       gsap.ticker.remove(onTick);
       lenis.destroy();
       delete window.__lenis;
