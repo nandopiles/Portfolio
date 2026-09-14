@@ -10,7 +10,7 @@
   --color-ink-line: #302e29; /* hairline borders */
   --color-bone: #f5f5f0; /* primary foreground (off-white) */
   --color-bone-dim: #aeaca3; /* secondary text */
-  --color-bone-faint: #77746c; /* tertiary / captions */
+  --color-bone-faint: #928f85; /* tertiary / captions — meets WCAG AA (>=4.5:1) on both ink backgrounds */
   --color-accent: #c8c2b4; /* single warm-grey accent */
 
   /* Typography — Archivo throughout. Display/accents use the Expanded width
@@ -19,8 +19,10 @@
   --font-sans: 'Archivo', ui-sans-serif, system-ui, sans-serif;
   --font-accent: 'Archivo Expanded', 'Archivo', ui-sans-serif, system-ui, sans-serif;
 
-  /* Fluid display sizes */
-  --text-hero: clamp(3rem, 10vw, 9rem);
+  /* Fluid display sizes. The hero scales aggressively with viewport width so
+     the poster headline fills the screen on mobile the same way it does on
+     desktop, instead of collapsing to a small minimum on narrow phones. */
+  --text-hero: clamp(3.75rem, 16vw, 9rem);
   --text-display: clamp(2.25rem, 6vw, 5.5rem);
   --text-section: clamp(1.75rem, 4vw, 3.5rem);
 
@@ -111,9 +113,18 @@
     opacity: 0.22;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     background-size: 150px 150px;
-    /* Jitter the grain each frame like a real film-grain filter. */
-    animation: film-grain 0.5s steps(1) infinite;
-    will-change: transform;
+  }
+
+  /* Animate the grain only where it's cheap and actually noticeable: precise
+     pointers (desktop). On touch devices the constant repaint of a fullscreen
+     layer is a major source of main-thread/GPU work for a barely-visible
+     effect, so the grain stays static there. */
+  @media (hover: hover) and (pointer: fine) {
+    body::before {
+      /* Jitter the grain each frame like a real film-grain filter. */
+      animation: film-grain 0.5s steps(1) infinite;
+      will-change: transform;
+    }
   }
 
   @keyframes film-grain {

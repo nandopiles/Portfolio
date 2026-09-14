@@ -7,7 +7,7 @@ const t = useTranslations(lang);
 
 <section
   id="hero"
-  class="relative flex min-h-svh flex-col justify-center container-gutter pb-16 pt-32"
+  class="relative flex min-h-svh flex-col justify-center container-gutter pb-16 pt-24 sm:pt-32"
   aria-label={t('nav.home')}
 >
   <div class="mx-auto w-full max-w-6xl">
@@ -34,9 +34,12 @@ const t = useTranslations(lang);
         </span>
       </h1>
 
-      <!-- Sticker slapped over the top-left corner of the "F". -->
+      <!-- Sticker slapped over the top-left corner of the "F". On mobile it
+           sits just inside the left edge (no negative offset that would push it
+           off-screen and cause horizontal scroll); from sm up it hangs slightly
+           outside the headline like a hand-placed sticker. -->
       <span
-        class="sticker hero-sticker absolute left-[-2.75rem] top-[-1.7rem] z-10 px-6 py-2 text-xs sm:left-[-3.75rem] sm:top-[-2.2rem] sm:text-sm"
+        class="sticker hero-sticker absolute left-0 top-[-1.4rem] z-10 px-4 py-1.5 text-xs sm:left-[-3.75rem] sm:top-[-2.2rem] sm:px-6 sm:py-2 sm:text-sm"
         style="text-transform: none; font-weight: 700; -webkit-text-fill-color: var(--color-ink); color: var(--color-ink);"
       >
         {t('hero.sticker')}

@@ -63,10 +63,26 @@ const ogLocaleAlt = lang === 'es' ? 'en_US' : 'es_ES';
 <meta name="twitter:description" content={resolvedDescription} />
 <meta name="twitter:image" content={ogImageUrl} />
 
-<!-- Fonts: preconnect + display=swap for performance -->
+<!-- Fonts: preconnect + non-blocking stylesheet load.
+     The stylesheet is fetched with media="print" then flipped to "all" on load
+     so it never blocks first render; a <noscript> keeps it working without JS.
+     display=swap ensures text is visible immediately with a fallback face. -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link
-  rel="stylesheet"
-  href="https://fonts.googleapis.com/css2?family=Archivo:wght@100..900&family=Archivo+Expanded:wght@400..900&display=swap"
+  rel="preload"
+  as="style"
+  href="https://fonts.googleapis.com/css2?family=Archivo:wght@400..700&family=Archivo+Expanded:wght@700..900&display=swap"
 />
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Archivo:wght@400..700&family=Archivo+Expanded:wght@700..900&display=swap"
+  media="print"
+  onload="this.media='all'"
+/>
+<noscript>
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Archivo:wght@400..700&family=Archivo+Expanded:wght@700..900&display=swap"
+  />
+</noscript>

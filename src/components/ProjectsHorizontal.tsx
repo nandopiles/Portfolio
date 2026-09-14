@@ -8,6 +8,8 @@ export interface WorkStrings {
   label: string;
   heading: string;
   intro: string;
+  /** Short poster kicker, e.g. "Project" / "Proyecto". */
+  item: string;
   demo: string;
   code: string;
 }
@@ -43,67 +45,103 @@ export default function ProjectsHorizontal({ projects, workBase, strings }: Prop
   const pad = (n: number) => String(n).padStart(2, '0');
 
   useEffect(() => {
-    const mql = window.matchMedia('(min-width: 768px) and (pointer: fine)');
-    const usePin = mql.matches && !prefersReducedMotion();
-    setPinned(usePin);
+    // The pinned horizontal experience is desktop-only: it requires a wide
+    // viewport AND a real (hovering, precise) pointer. Touch devices — phones
+    // and tablets — always get the vertical stack, regardless of width or
+    // orientation. `hover: hover` reliably excludes touchscreens even when
+    // they report `pointer: fine` (e.g. some Android/stylus devices).
+    const mql = window.matchMedia(
+      '(min-width: 768px) and (hover: hover) and (pointer: fine)'
+    );
 
-    if (!usePin) {
-      // Mobile / reduced-motion fallback: projects are stacked vertically, so
-      // derive the counter from how far the section has scrolled through the
-      // viewport rather than from any horizontal offset.
-      const section = sectionRef.current;
-      if (!section) return;
-      const onScroll = () => {
-        const rect = section.getBoundingClientRect();
-        const scrollable = rect.height - window.innerHeight;
-        const p = scrollable > 0 ? Math.min(1, Math.max(0, -rect.top / scrollable)) : 0;
-        setCurrent(Math.min(total, Math.max(1, Math.round(p * (total - 1)) + 1)));
-        if (barRef.current) barRef.current.style.transform = `scaleX(${Math.max(0.02, p)})`;
-      };
-      window.addEventListener('scroll', onScroll, { passive: true });
-      onScroll();
-      return () => window.removeEventListener('scroll', onScroll);
-    }
+    // Re-evaluate whenever the match state changes (resize, rotate, moving the
+    // window between displays) so we never get stuck in the wrong mode.
+    let cleanupMode: (() => void) | undefined;
 
-    // Desktop pinned horizontal scroll.
-    const section = sectionRef.current!;
-    const track = trackRef.current!;
+    const applyMode = () => {
+      cleanupMode?.();
+      cleanupMode = undefined;
 
-    const ctx = gsap.context(() => {
-      const getScrollDistance = () => track.scrollWidth - window.innerWidth;
+      const usePin = mql.matches && !prefersReducedMotion();
+      setPinned(usePin);
 
-      const tween = gsap.to(track, {
-        x: () => -getScrollDistance(),
-        ease: 'none',
-      });
+      if (!usePin) {
+        // Mobile / reduced-motion fallback: projects are stacked vertically, so
+        // derive the counter from how far the section has scrolled through the
+        // viewport rather than from any horizontal offset.
+        const section = sectionRef.current;
+        if (!section) return;
+        // Read layout inside rAF and coalesce bursts of scroll events into a
+        // single measurement per frame, so we never force a synchronous reflow
+        // on the scroll thread (avoids Lighthouse "forced reflow" warnings).
+        let ticking = false;
+        const measure = () => {
+          ticking = false;
+          const rect = section.getBoundingClientRect();
+          const scrollable = rect.height - window.innerHeight;
+          const p = scrollable > 0 ? Math.min(1, Math.max(0, -rect.top / scrollable)) : 0;
+          setCurrent(Math.min(total, Math.max(1, Math.round(p * (total - 1)) + 1)));
+          if (barRef.current) barRef.current.style.transform = `scaleX(${Math.max(0.02, p)})`;
+        };
+        const onScroll = () => {
+          if (ticking) return;
+          ticking = true;
+          requestAnimationFrame(measure);
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        measure();
+        cleanupMode = () => window.removeEventListener('scroll', onScroll);
+        return;
+      }
 
-      ScrollTrigger.create({
-        animation: tween,
-        trigger: section,
-        // Pin a bit before the section reaches the very top so the header
-        // ("Selected work") keeps some breathing room below the navbar.
-        start: 'top top+=60',
-        end: () => `+=${getScrollDistance()}`,
-        pin: pinRef.current,
-        scrub: 1,
-        invalidateOnRefresh: true,
-        onUpdate: (self) => {
-          setCurrent(Math.min(total, Math.floor(self.progress * total) + 1));
-          if (barRef.current) {
-            barRef.current.style.transform = `scaleX(${Math.max(0.02, self.progress)})`;
-          }
-        },
-      });
-    }, section);
+      // Desktop pinned horizontal scroll.
+      const section = sectionRef.current!;
+      const track = trackRef.current!;
 
-    return () => ctx.revert();
+      const ctx = gsap.context(() => {
+        const getScrollDistance = () => track.scrollWidth - window.innerWidth;
+
+        const tween = gsap.to(track, {
+          x: () => -getScrollDistance(),
+          ease: 'none',
+        });
+
+        ScrollTrigger.create({
+          animation: tween,
+          trigger: section,
+          // Pin a bit before the section reaches the very top so the header
+          // ("Selected work") keeps some breathing room below the navbar.
+          start: 'top top+=60',
+          end: () => `+=${getScrollDistance()}`,
+          pin: pinRef.current,
+          scrub: 1,
+          invalidateOnRefresh: true,
+          onUpdate: (self) => {
+            setCurrent(Math.min(total, Math.floor(self.progress * total) + 1));
+            if (barRef.current) {
+              barRef.current.style.transform = `scaleX(${Math.max(0.02, self.progress)})`;
+            }
+          },
+        });
+      }, section);
+
+      cleanupMode = () => ctx.revert();
+    };
+
+    applyMode();
+    mql.addEventListener('change', applyMode);
+
+    return () => {
+      mql.removeEventListener('change', applyMode);
+      cleanupMode?.();
+    };
   }, [total]);
 
   return (
     <section
       id="work"
       ref={sectionRef}
-      aria-label="Selected work"
+      aria-label={strings.label}
       className="relative bg-transparent"
     >
       <div
@@ -134,8 +172,8 @@ export default function ProjectsHorizontal({ projects, workBase, strings }: Prop
           </span>
         </div>
 
-        {/* Track: an intro placard sits first (left), followed by the vinyl
-            records. On desktop the first record ends up centred beside the
+        {/* Track: an intro placard sits first (left), followed by the project
+            posters. On desktop the first poster ends up centred beside the
             placard; on mobile everything stacks vertically. */}
         <div
           ref={trackRef}
@@ -144,7 +182,6 @@ export default function ProjectsHorizontal({ projects, workBase, strings }: Prop
               ? 'flex w-max items-center gap-16 px-[var(--spacing-gutter)] will-change-transform lg:gap-24'
               : 'flex flex-col items-stretch gap-20 px-[var(--spacing-gutter)]'
           }
-          role="list"
         >
           {/* Intro placard */}
           <div
@@ -170,13 +207,15 @@ export default function ProjectsHorizontal({ projects, workBase, strings }: Prop
             </p>
           </div>
 
-          {projects.map((project) => (
+          {projects.map((project, i) => (
             <ProjectCard
               key={project.index}
               project={project}
               workBase={workBase}
               strings={strings}
               pinned={pinned}
+              // Alternate the resting tilt so the wall of posters looks hand-pinned.
+              restTilt={i % 2 === 0 ? -2.5 : 2}
             />
           ))}
         </div>
@@ -186,15 +225,18 @@ export default function ProjectsHorizontal({ projects, workBase, strings }: Prop
 }
 
 /**
- * A single project rendered as an interactive 3D vinyl record.
+ * A single project rendered as an interactive silk-screen poster.
  *
- * The disc is layered to read as a real pressed record: a beveled outer edge,
- * fine concentric grooves broken up by smooth "band" separators, a fixed
- * diagonal specular sheen (the pressing reflection — it does NOT follow the
- * cursor), and a raised centre label carrying the project image/logo.
+ * Each project reads like a pinned-up exhibition / gig poster: a paper canvas
+ * with a hard offset shadow, a strip of tape on the top edge, a large printed
+ * image panel, a poster-type title, a short line of copy, and a footer band
+ * listing the stack + year. A big edition number ("01") sits like a print-run
+ * mark. It hangs at a slight resting angle (the sticker language used across
+ * the site) and straightens + tilts in 3D towards the pointer on hover.
  *
- * On hover the whole disc tilts in 3D towards the pointer (rotateX/rotateY
- * driven by the cursor position over the element). Leaving eases it back flat.
+ * On hover the whole poster tilts in 3D towards the pointer (rotateX/rotateY
+ * driven by the cursor position over the element) and lifts. Leaving eases it
+ * back to its resting angle.
  *
  * Pointer tracking is done imperatively via a ref (CSS custom properties) to
  * avoid re-rendering on every mouse move. Respects reduced-motion.
@@ -204,40 +246,47 @@ function ProjectCard({
   workBase,
   strings,
   pinned,
+  restTilt,
 }: {
   project: Project;
   workBase: string;
   strings: WorkStrings;
   pinned: boolean;
+  /** Resting rotation (deg) so posters hang at slightly different angles. */
+  restTilt: number;
 }) {
-  const discRef = useRef<HTMLDivElement | null>(null);
+  const posterRef = useRef<HTMLDivElement | null>(null);
 
   const onPointerMove = (e: ReactPointerEvent<HTMLDivElement>) => {
-    const el = discRef.current;
+    const el = posterRef.current;
     if (!el) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const rect = el.getBoundingClientRect();
     // Normalised position within the element, -0.5..0.5.
     const px = (e.clientX - rect.left) / rect.width - 0.5;
     const py = (e.clientY - rect.top) / rect.height - 0.5;
-    const MAX = 20; // max tilt in degrees
+    const MAX = 12; // max tilt in degrees
     el.style.setProperty('--rx', `${(-py * MAX).toFixed(2)}deg`);
     el.style.setProperty('--ry', `${(px * MAX).toFixed(2)}deg`);
+    // Straighten out of the resting angle and lift while hovered.
+    el.style.setProperty('--rz', '0deg');
+    el.style.setProperty('--lift', '-6px');
   };
 
   const onPointerLeave = () => {
-    const el = discRef.current;
+    const el = posterRef.current;
     if (!el) return;
     el.style.setProperty('--rx', '0deg');
     el.style.setProperty('--ry', '0deg');
+    el.style.setProperty('--rz', `${restTilt}deg`);
+    el.style.setProperty('--lift', '0px');
   };
 
   return (
     <article
-      role="listitem"
       className={
         pinned
-          ? 'group relative flex w-[86vw] max-w-[560px] shrink-0 snap-center flex-col items-center sm:w-[60vw] lg:w-[42vw]'
+          ? 'group relative flex w-[80vw] max-w-[440px] shrink-0 snap-center flex-col items-center sm:w-[52vw] lg:w-[34vw]'
           : 'group relative flex w-full flex-col items-center'
       }
     >
@@ -246,116 +295,91 @@ function ProjectCard({
         data-cursor={project.cursorLabel ?? strings.demo}
         aria-label={project.title}
         className="block w-full"
-        style={{ perspective: '1200px' }}
+        style={{ perspective: '1400px' }}
       >
-        {/* Tilting disc */}
+        {/* Tilting poster */}
         <div
-          ref={discRef}
+          ref={posterRef}
           onPointerMove={onPointerMove}
           onPointerLeave={onPointerLeave}
-          className="relative mx-auto aspect-square w-full max-w-[540px] rounded-full"
+          className="relative mx-auto flex aspect-[3/4] w-full max-w-[420px] flex-col overflow-hidden border-2 border-ink bg-bone p-4 text-ink"
           style={{
             transformStyle: 'preserve-3d',
             // @ts-expect-error custom properties
             '--rx': '0deg',
             '--ry': '0deg',
-            transform: 'rotateX(var(--rx)) rotateY(var(--ry))',
-            transition: 'transform 0.45s cubic-bezier(0.16,1,0.3,1)',
-            filter: 'drop-shadow(8px 12px 0 rgba(0,0,0,0.5))',
+            '--rz': `${restTilt}deg`,
+            '--lift': '0px',
+            transform:
+              'translateY(var(--lift)) rotateZ(var(--rz)) rotateX(var(--rx)) rotateY(var(--ry))',
+            transition: 'transform 0.5s cubic-bezier(0.16,1,0.3,1)',
+            boxShadow: '8px 10px 0 rgba(0,0,0,0.6)',
           }}
         >
-          {/* Beveled outer edge of the disc. */}
+          {/* Grain wash over the paper so the poster matches the site texture. */}
           <div
-            className="absolute inset-0 rounded-full border-2 border-ink"
+            className="pointer-events-none absolute inset-0 opacity-[0.18] mix-blend-multiply"
             style={{
-              background:
-                'radial-gradient(circle at 50% 50%, #242424 0%, #0c0c0c 78%, #000 100%)',
+              backgroundImage:
+                "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E\")",
+              backgroundSize: '140px 140px',
             }}
           />
 
-          {/* Groove field: fine concentric lines confined to the playable area. */}
-          <div
-            className="absolute inset-[5%] rounded-full"
+          {/* Strip of tape holding the poster to the wall. */}
+          <span
+            className="pointer-events-none absolute -top-3 left-1/2 h-7 w-24 border border-white/25 bg-bone-dim/40 backdrop-blur-[1px]"
             style={{
-              background: `
-                repeating-radial-gradient(circle at 50% 50%,
-                  rgba(255,255,255,0.055) 0px,
-                  rgba(255,255,255,0.055) 0.5px,
-                  rgba(0,0,0,0) 1.5px,
-                  rgba(0,0,0,0) 3px)
-              `,
+              transform: 'translate(-50%, 0) translateZ(30px) rotate(-3deg)',
+              boxShadow: '0 2px 5px rgba(0,0,0,0.35)',
             }}
+            aria-hidden="true"
           />
 
-          {/* Smooth "band" separators between song groups (darker rings). */}
-          <div
-            className="absolute inset-[5%] rounded-full"
-            style={{
-              background: `
-                repeating-radial-gradient(circle at 50% 50%,
-                  rgba(0,0,0,0) 0px,
-                  rgba(0,0,0,0) 42px,
-                  rgba(0,0,0,0.55) 43px,
-                  rgba(0,0,0,0.55) 47px)
-              `,
-            }}
-          />
+          {/* Header row: a short "Project" kicker + edition number, like a
+              numbered print in a series. Avoids repeating the section label. */}
+          <div className="relative z-10 flex items-start justify-between">
+            <span className="font-[family-name:var(--font-accent)] text-[0.7rem] font-bold uppercase tracking-[0.2em] text-ink/70">
+              {strings.item}
+            </span>
+            <span className="font-[family-name:var(--font-display)] text-3xl font-black leading-none text-ink">
+              {project.index}
+            </span>
+          </div>
 
-          {/* Fixed specular sheen — a soft diagonal band of light across the
-              disc, like the reflection on real vinyl. Does not track cursor. */}
-          <div
-            className="pointer-events-none absolute inset-0 rounded-full mix-blend-screen"
-            style={{
-              background:
-                'conic-gradient(from 210deg at 50% 50%, rgba(255,255,255,0) 0deg, rgba(255,255,255,0.14) 32deg, rgba(255,255,255,0) 70deg, rgba(255,255,255,0) 200deg, rgba(255,255,255,0.08) 236deg, rgba(255,255,255,0) 270deg)',
-            }}
-          />
-
-          {/* Inner + outer rim highlights for a crisp pressed edge. */}
-          <div
-            className="pointer-events-none absolute inset-0 rounded-full"
-            style={{
-              boxShadow:
-                'inset 0 0 0 3px rgba(255,255,255,0.05), inset 0 0 55px rgba(0,0,0,0.85)',
-            }}
-          />
-
-          {/* Centre label — raised, carrying the project image / logo. */}
-          <div
-            className="absolute left-1/2 top-1/2 aspect-square w-[38%] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-full border-[3px] border-ink bg-ink-soft"
-            style={{
-              transform: 'translate(-50%, -50%) translateZ(28px)',
-              boxShadow: '0 0 0 6px rgba(0,0,0,0.6), 0 8px 18px rgba(0,0,0,0.5)',
-            }}
-          >
+          {/* Image panel — the printed artwork of the poster. */}
+          <div className="relative z-10 mt-3 aspect-[4/3] w-full overflow-hidden border-2 border-ink bg-ink-soft">
             <img
               src={project.image}
               alt={`${project.title} — project preview`}
               loading="lazy"
               decoding="async"
               style={{ viewTransitionName: `project-${project.slug}` }}
-              className="h-full w-full object-cover"
+              className="h-full w-full object-cover transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]"
             />
           </div>
 
-          {/* Spindle hole, above the label. */}
-          <span
-            className="absolute left-1/2 top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/10 bg-black"
-            style={{
-              transform: 'translate(-50%, -50%) translateZ(30px)',
-              boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.9)',
-            }}
-          />
+          {/* Poster type: the big title. */}
+          <h3 className="poster-title relative z-10 mt-4 text-[clamp(1.6rem,4vw,2.4rem)] uppercase text-ink">
+            {project.title}
+          </h3>
+
+          {/* Short summary line, kept to a couple of lines. */}
+          <p className="relative z-10 mt-2 line-clamp-2 text-sm leading-snug text-ink/70">
+            {project.summary}
+          </p>
+
+          {/* Footer band: stack + year, like a gig-poster credits strip. */}
+          <div className="relative z-10 mt-auto flex items-end justify-between gap-3 border-t-2 border-ink pt-3">
+            <span className="max-w-[70%] text-[0.7rem] font-semibold uppercase tracking-wide text-ink/70">
+              {project.stack.join(' · ')}
+            </span>
+            <span className="font-[family-name:var(--font-display)] text-lg font-black leading-none text-ink">
+              {project.year}
+            </span>
+          </div>
         </div>
       </a>
-
-      {/* Footer: title + year only (replaces the old description/stack card). */}
-      <div className="mt-8 flex w-full max-w-[540px] items-center justify-between gap-4">
-        <h3 className="font-[family-name:var(--font-display)] text-2xl font-bold text-bone sm:text-3xl">
-          {project.title}
-        </h3>
-        <span className="shrink-0 text-sm text-bone-faint">{project.year}</span>
-      </div>
     </article>
   );
 }

@@ -21,7 +21,10 @@ export default defineConfig({
     plugins: [tailwindcss()],
   },
   prefetch: {
+    // Prefetch on hover/tap intent rather than eagerly for every link in the
+    // viewport. On the home page that avoids firing 6 project-detail prefetches
+    // at once while keeping navigation feeling instant.
     prefetchAll: true,
-    defaultStrategy: 'viewport',
+    defaultStrategy: 'hover',
   },
 });

@@ -2,10 +2,15 @@
 import { getLangFromUrl, useTranslations, localizePath, stripLangPrefix } from '@/i18n/utils';
 import { languages, type Lang } from '@/i18n/ui';
 // Inline the logo so its `currentColor` strokes/fills inherit the brand colour.
-import logo from '@/../public/logo.svg?raw';
+import logoRaw from '@/../public/logo.svg?raw';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
+
+// The logo is purely decorative markup; the link's accessible name comes from
+// its aria-label. Mark the inlined SVG as hidden from assistive tech so the
+// link exposes descriptive text (its label) rather than an anonymous graphic.
+const logo = logoRaw.replace('<svg ', '<svg aria-hidden="true" focusable="false" ');
 
 const links = [
   { label: t('nav.about'), href: '#about' },

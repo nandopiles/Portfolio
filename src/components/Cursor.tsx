@@ -2,8 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 
 /**
  * Custom cursor: a classic arrow pointer (white fill, dark outline) that trails
- * the pointer with easing/inertia. Over interactive elements it swaps to a
- * rounded label pill (e.g. "View").
+ * the pointer with easing/inertia. Over interactive elements it swaps to an
+ * inked rubber-stamp label (e.g. "View →") that thumps down at a tilt,
+ * matching the silk-screen poster concept of the Work section.
  *
  * - Only mounts on precise pointers (mouse). On touch devices it renders
  *   nothing and the native cursor is used.
@@ -155,7 +156,10 @@ export default function Cursor() {
         />
       </svg>
 
-      {/* Label pill — shown over interactive elements. */}
+      {/* Rubber-stamp label — shown over interactive elements. Reads like an
+          inked exhibition/print stamp: a tilted rectangle with a chunky double
+          ink border, grain texture, and a small "thump" as it lands. Matches
+          the silk-screen poster concept of the Work section. */}
       <div
         style={{
           position: 'absolute',
@@ -163,30 +167,48 @@ export default function Cursor() {
           left: 0,
           display: 'grid',
           placeItems: 'center',
-          width: hovering ? 88 : 0,
-          height: hovering ? 88 : 0,
-          borderRadius: 9999,
-          background: 'var(--color-bone)',
+          padding: hovering ? '10px 18px' : '0px',
+          background: 'var(--color-accent)',
           color: 'var(--color-ink)',
+          // Double ink border: solid inner + a second boxed outline for the
+          // "pressed twice" stamp look.
           border: '2.5px solid var(--color-ink)',
-          boxShadow: '3px 4px 0 rgba(0,0,0,0.9)',
-          transform: 'translate(-50%, -50%) scale(var(--press, 1))',
-          opacity: hovering ? 1 : 0,
+          boxShadow:
+            'inset 0 0 0 2px var(--color-accent), inset 0 0 0 4px var(--color-ink), 3px 4px 0 rgba(0,0,0,0.55)',
+          transform: `translate(-50%, -50%) rotate(-8deg) scale(calc(var(--press, 1) * ${hovering ? 1 : 0.4}))`,
+          transformOrigin: 'center',
+          opacity: hovering ? 0.95 : 0,
           transition:
-            'width 0.35s var(--ease-out-expo), height 0.35s var(--ease-out-expo), opacity 0.25s var(--ease-out-expo)',
+            'opacity 0.18s var(--ease-out-expo), transform 0.28s var(--ease-out-expo), padding 0.28s var(--ease-out-expo)',
+          overflow: 'hidden',
+          whiteSpace: 'nowrap',
         }}
       >
+        {/* Uneven ink texture clipped to the stamp so the fill looks printed. */}
+        <span
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            inset: 0,
+            opacity: 0.25,
+            mixBlendMode: 'multiply',
+            backgroundImage:
+              "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cfilter id='s'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23s)'/%3E%3C/svg%3E\")",
+            backgroundSize: '90px 90px',
+          }}
+        />
         {hovering && label && (
           <span
             style={{
+              position: 'relative',
               fontFamily: 'var(--font-display)',
-              fontSize: 12,
-              fontWeight: 600,
-              letterSpacing: '0.02em',
+              fontSize: 13,
+              fontWeight: 800,
+              letterSpacing: '0.14em',
               textTransform: 'uppercase',
             }}
           >
-            {label}
+            {label} →
           </span>
         )}
       </div>
