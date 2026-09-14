@@ -26,6 +26,7 @@ export default function Cursor() {
   const current = useRef({ x: 0, y: 0 });
   const visible = useRef(false);
   const raf = useRef<number | null>(null);
+  const lastTime = useRef<number | null>(null);
 
   useEffect(() => {
     const finePointer = window.matchMedia('(pointer: fine)').matches;
@@ -73,8 +74,18 @@ export default function Cursor() {
     const onDown = () => dotRef.current?.style.setProperty('--press', '0.82');
     const onUp = () => dotRef.current?.style.setProperty('--press', '1');
 
-    const render = () => {
-      const ease = reduce ? 1 : 0.2;
+    // Follow "stiffness": higher = snappier. Framerate-independent easing so
+    // the motion feels identically smooth on 60Hz, 120Hz or 144Hz displays.
+    const STIFFNESS = 18;
+
+    const render = (now: number) => {
+      const prev = lastTime.current ?? now;
+      // Clamp dt so returning to the tab after a pause doesn't cause a jump.
+      const dt = Math.min((now - prev) / 1000, 0.05);
+      lastTime.current = now;
+
+      // Exponential smoothing: frame-rate independent version of a lerp.
+      const ease = reduce ? 1 : 1 - Math.exp(-STIFFNESS * dt);
       current.current.x += (target.current.x - current.current.x) * ease;
       current.current.y += (target.current.y - current.current.y) * ease;
       if (dotRef.current) {
@@ -116,10 +127,11 @@ export default function Cursor() {
         '--press': 1,
       }}
     >
-      {/* Arrow pointer — hidden while hovering an interactive element. */}
+      {/* Arrow pointer — comic/sticker style: chunky, bold outline, hard
+          offset shadow. Hidden while hovering an interactive element. */}
       <svg
-        width="26"
-        height="26"
+        width="40"
+        height="40"
         viewBox="0 0 24 24"
         fill="none"
         style={{
@@ -130,15 +142,15 @@ export default function Cursor() {
           transformOrigin: '3px 2px',
           transform: `scale(var(--press, 1))`,
           opacity: hovering ? 0 : 1,
-          transition: 'opacity 0.2s ease',
-          filter: 'drop-shadow(0 1px 1.5px rgba(0,0,0,0.55))',
+          transition: 'opacity 0.2s ease, transform 0.12s ease',
+          filter: 'drop-shadow(2px 3px 0 rgba(0,0,0,0.9))',
         }}
       >
         <path
           d="M3 2 L3 20 L8 15 L11.5 22.5 L14.5 21 L11 13.5 L18 13.5 Z"
           fill="#f5f5f0"
           stroke="#0a0a0a"
-          strokeWidth="1.4"
+          strokeWidth="2.2"
           strokeLinejoin="round"
         />
       </svg>
@@ -151,11 +163,13 @@ export default function Cursor() {
           left: 0,
           display: 'grid',
           placeItems: 'center',
-          width: hovering ? 72 : 0,
-          height: hovering ? 72 : 0,
+          width: hovering ? 88 : 0,
+          height: hovering ? 88 : 0,
           borderRadius: 9999,
           background: 'var(--color-bone)',
           color: 'var(--color-ink)',
+          border: '2.5px solid var(--color-ink)',
+          boxShadow: '3px 4px 0 rgba(0,0,0,0.9)',
           transform: 'translate(-50%, -50%) scale(var(--press, 1))',
           opacity: hovering ? 1 : 0,
           transition:
