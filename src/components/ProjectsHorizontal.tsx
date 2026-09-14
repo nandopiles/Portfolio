@@ -7,7 +7,6 @@ import type { Project } from '@/data/projects';
 export interface WorkStrings {
   label: string;
   heading: string;
-  intro: string;
   /** Short poster kicker, e.g. "Project" / "Proyecto". */
   item: string;
   demo: string;
@@ -201,10 +200,6 @@ export default function ProjectsHorizontal({ projects, workBase, strings }: Prop
             <span className="sticker mt-5 block max-w-full px-5 py-3 text-[length:var(--text-section)] leading-[0.95] [text-wrap:balance]">
               {strings.heading}
             </span>
-
-            <p className="mt-8 max-w-[42ch] leading-relaxed text-bone-dim">
-              {strings.intro}
-            </p>
           </div>
 
           {projects.map((project, i) => (

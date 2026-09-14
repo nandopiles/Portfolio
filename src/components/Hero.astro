@@ -39,7 +39,7 @@ const t = useTranslations(lang);
            off-screen and cause horizontal scroll); from sm up it hangs slightly
            outside the headline like a hand-placed sticker. -->
       <span
-        class="sticker hero-sticker absolute left-0 top-[-1.4rem] z-10 px-4 py-1.5 text-xs sm:left-[-3.75rem] sm:top-[-2.2rem] sm:px-6 sm:py-2 sm:text-sm"
+        class="sticker hero-sticker absolute left-4 top-[-3.5rem] z-10 px-5 py-2 text-base sm:left-[-3.75rem] sm:top-[-2.2rem] sm:px-6 sm:py-2 sm:text-sm"
         style="text-transform: none; font-weight: 700; -webkit-text-fill-color: var(--color-ink); color: var(--color-ink);"
       >
         {t('hero.sticker')}
@@ -48,7 +48,7 @@ const t = useTranslations(lang);
   </div>
 
   <div
-    class="pointer-events-none absolute bottom-8 right-gutter hidden items-center gap-2 text-xs uppercase tracking-[0.2em] text-bone-faint sm:flex"
+    class="pointer-events-none absolute bottom-8 right-[var(--spacing-gutter)] flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-bone-faint"
     aria-hidden="true"
   >
     {t('hero.scroll')}

@@ -22,7 +22,11 @@
   /* Fluid display sizes. The hero scales aggressively with viewport width so
      the poster headline fills the screen on mobile the same way it does on
      desktop, instead of collapsing to a small minimum on narrow phones. */
-  --text-hero: clamp(3.75rem, 16vw, 9rem);
+  --text-hero: clamp(3.25rem, 14vw, 9rem);
+  /* Contact headline uses longer words ("Construyamos"/"something"), so it
+     scales more gently on mobile to fit within the side gutters, while still
+     reaching the same large maximum as the hero on desktop. */
+  --text-contact: clamp(3rem, 12vw, 9rem);
   --text-display: clamp(2.25rem, 6vw, 5.5rem);
   --text-section: clamp(1.75rem, 4vw, 3.5rem);
 
@@ -30,7 +34,10 @@
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 
   /* Layout */
-  --spacing-gutter: clamp(1.25rem, 5vw, 5rem);
+  /* Side margin applied to every section via `container-gutter`. The larger
+     mobile minimum keeps text comfortably inset from both edges on phones so
+     it reads as centred; desktop still reaches the 5rem maximum. */
+  --spacing-gutter: clamp(1.75rem, 5vw, 5rem);
 }
 
 /* ==========================================================================
@@ -225,6 +232,9 @@
    font. Each line is its own painted layer. */
 .poster-line {
   display: inline-block;
+  /* Small trailing space so the last glyph's ink (and its drop-shadow) is never
+     clipped by the text background-clip when the word sits near the edge. */
+  padding-right: 0.08em;
 }
 
 /* FILLED: bone with a stippled grain, clipped to the glyphs. */
