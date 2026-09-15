@@ -22,53 +22,53 @@ export interface ExperienceItem extends ExperienceContent {
 
 const experienceSources: ExperienceSource[] = [
   {
-    company: 'Studio Aurora',
+    company: 'Hiberus',
     i18n: {
       en: {
-        period: '2023 — Now',
-        role: 'Senior Frontend Developer',
+        period: 'Oct 2025 — Now',
+        role: 'Frontend Developer',
         description:
-          'Lead front-end for award-driven marketing sites: motion systems, WebGL, and performance budgets.',
+          'Modernize legacy apps into scalable, from-scratch products with a modern architecture. Lead the frontend on the main project, owning technical direction and best practices.',
       },
       es: {
-        period: '2023 — Actualidad',
-        role: 'Frontend Developer Senior',
+        period: 'Oct 2025 — Actualidad',
+        role: 'Frontend Developer',
         description:
-          'Lidero el front-end de sitios de marketing orientados a premios: sistemas de animación, WebGL y presupuestos de rendimiento.',
+          'Modernizo aplicaciones legacy en productos escalables construidos desde cero con arquitectura moderna. Lidero el frontend del proyecto principal, definiendo dirección técnica y buenas prácticas.',
       },
     },
   },
   {
-    company: 'Northwind Labs',
+    company: 'Conmuta',
     i18n: {
       en: {
-        period: '2021 — 2023',
+        period: 'Sep 2024 — Oct 2025',
         role: 'Frontend Developer',
         description:
-          'Built design systems and complex dashboards in React, shipping accessible, well-tested UI.',
+          'Built a customizable e-commerce product and business modules for orders, billing, and clients. Refactored the app architecture and migrated legacy code to modern Angular.',
       },
       es: {
-        period: '2021 — 2023',
+        period: 'Sep 2024 — Oct 2025',
         role: 'Frontend Developer',
         description:
-          'Desarrollé sistemas de diseño y paneles complejos en React, entregando interfaces accesibles y bien testeadas.',
+          'Desarrollé un e-commerce personalizable y módulos de negocio de pedidos, facturación y clientes. Refactoricé la arquitectura de la app y migré código legacy a Angular moderno.',
       },
     },
   },
   {
-    company: 'Freelance',
+    company: 'Onestic',
     i18n: {
       en: {
-        period: '2019 — 2021',
-        role: 'Web Developer',
+        period: 'Jan 2024 — Jul 2024',
+        role: 'Frontend Developer',
         description:
-          'Delivered end-to-end sites for small businesses, from design hand-off to deployment.',
+          'Built internal apps with Angular and REST APIs for bookings and promotions. Designed reusable components for better usability and shipped an automated notifications module that boosted engagement.',
       },
       es: {
-        period: '2019 — 2021',
-        role: 'Desarrollador Web',
+        period: 'Ene 2024 — Jul 2024',
+        role: 'Frontend Developer',
         description:
-          'Entregué sitios de principio a fin para pequeñas empresas, desde la entrega de diseño hasta el despliegue.',
+          'Creé apps internas con Angular y APIs REST para reservas y promociones. Diseñé componentes reutilizables que mejoraron la usabilidad e implementé un módulo de notificaciones automáticas que aumentó la participación.',
       },
     },
   },

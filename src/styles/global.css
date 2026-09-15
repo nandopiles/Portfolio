@@ -45,9 +45,21 @@
    ========================================================================== */
 @layer base {
   html {
-    scroll-behavior: smooth;
+    /* No CSS smooth-scroll: Lenis owns smooth scrolling when motion is
+       allowed, and native anchor jumps must be instant so they can't fight
+       Lenis. Under reduced-motion (Lenis disabled) scrolling stays instant. */
+    scroll-behavior: auto;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+  }
+
+  /* Offset native anchor jumps so a targeted section clears the fixed navbar
+     instead of sitting flush under it. */
+  :target {
+    scroll-margin-top: 6rem;
+  }
+  [id] {
+    scroll-margin-top: 6rem;
   }
 
   body {

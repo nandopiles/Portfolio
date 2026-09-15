@@ -1,5 +1,6 @@
 ---
 import type { Project } from '@/data/projects';
+import { site } from '@/data/site';
 import { getLangFromUrl, useTranslations, localizePath } from '@/i18n/utils';
 
 interface Props {
@@ -14,81 +15,104 @@ const backHref = localizePath('/', lang) + '#work';
 ---
 
 <main id="main" class="container-gutter pt-32 pb-24">
-  <a href={backHref} class="link-underline text-sm text-bone-dim" data-cursor={t('project.cursor.back')}>
+  <a href={backHref} class="link-underline text-sm text-bone-dim">
     {t('project.back')}
   </a>
 
-  <header class="mt-10 flex flex-col gap-4 border-b border-ink-line pb-10">
+  <!-- Full-width poster header. -->
+  <header class="mt-12">
     <span class="text-sm uppercase tracking-[0.25em] text-bone-faint">
       {project.index} — {project.year}
     </span>
-    <h1 class="text-[length:var(--text-display)] text-bone">{project.title}</h1>
-    <p class="max-w-[52ch] text-lg text-bone-dim">{project.summary}</p>
+    <h1 class="poster-title mt-5 text-[length:var(--text-display)] text-bone">
+      {project.title}
+    </h1>
   </header>
 
-  <div class="mt-10 overflow-hidden rounded-xl border border-ink-line bg-ink-soft">
-    <img
-      src={project.image}
-      alt={project.title}
-      loading="eager"
-      decoding="async"
-      style={`view-transition-name: project-${project.slug}`}
-      class="aspect-[16/10] w-full object-cover"
-    />
-  </div>
+  <!-- Two-column split: text on the left, a compact contained image on the
+       right. Both share the row so neither the image nor the text dominates. -->
+  <div class="mt-14 grid gap-x-14 gap-y-12 lg:grid-cols-12 lg:items-start">
+    <div class="flex flex-col gap-12 lg:col-span-6">
+      <p class="text-2xl leading-relaxed text-bone">
+        {project.summary}
+      </p>
 
-  <div class="mt-14 grid gap-10 md:grid-cols-12">
-    <aside class="md:col-span-4">
-      <h2 class="text-sm uppercase tracking-[0.25em] text-bone-faint">{t('project.stack')}</h2>
-      <ul class="mt-4 flex flex-wrap gap-2">
-        {
-          project.stack.map((tech) => (
-            <li class="rounded-full border border-ink-line px-3 py-1 text-sm text-bone-dim">
-              {tech}
-            </li>
-          ))
-        }
-      </ul>
+      <div>
+        <h2 class="text-sm uppercase tracking-[0.25em] text-bone-faint">
+          {t('project.overview')}
+        </h2>
+        <p class="mt-5 text-lg leading-relaxed text-bone-dim">
+          {project.description ?? project.summary}
+        </p>
+      </div>
 
-      <div class="mt-8 flex gap-6 text-sm">
+      <div class="flex flex-wrap items-start gap-x-14 gap-y-8 border-t border-ink-line pt-8">
+        <div>
+          <h2 class="text-sm uppercase tracking-[0.25em] text-bone-faint">
+            {t('project.stack')}
+          </h2>
+          <ul class="mt-4 flex flex-wrap gap-2">
+            {
+              project.stack.map((tech) => (
+                <li class="rounded-full border border-ink-line px-3 py-1 text-sm text-bone-dim">
+                  {tech}
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+
         {
-          project.demo && (
-            <a
-              href={project.demo}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="link-underline text-bone"
-              data-cursor={t('project.cursor.open')}
-            >
-              {t('project.demo')}
-            </a>
-          )
-        }
-        {
-          project.repo && (
-            <a
-              href={project.repo}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="link-underline text-bone-dim"
-              data-cursor={t('project.cursor.code')}
-            >
-              {t('project.source')}
-            </a>
+          (project.demo || project.repo) && (
+            <div>
+              <h2 class="text-sm uppercase tracking-[0.25em] text-bone-faint">
+                {t('nav.work')}
+              </h2>
+              <div class="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2 text-lg">
+                {project.demo && (
+                  <a
+                    href={project.demo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="link-underline text-bone"
+                  >
+                    {t('project.demo')}
+                  </a>
+                )}
+                {project.repo && (
+                  <a
+                    href={project.repo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="link-underline text-bone-dim"
+                  >
+                    {t('project.source')}
+                  </a>
+                )}
+              </div>
+            </div>
           )
         }
       </div>
-    </aside>
-
-    <div class="md:col-span-8">
-      <h2 class="text-sm uppercase tracking-[0.25em] text-bone-faint">{t('project.overview')}</h2>
-      <p class="mt-4 max-w-[60ch] text-lg leading-relaxed text-bone-dim">
-        {project.description ?? project.summary}
-      </p>
     </div>
+
+    <figure class="overflow-hidden rounded-2xl border border-ink-line bg-ink-soft lg:col-span-6 lg:sticky lg:top-28">
+      <img
+        src={project.image}
+        alt={project.title}
+        loading="eager"
+        decoding="async"
+        style={`view-transition-name: project-${project.slug}`}
+        class="aspect-[4/3] w-full object-cover"
+      />
+    </figure>
   </div>
 </main>
 
-<footer class="container-gutter border-t border-ink-line py-8 text-sm text-bone-faint">
-  <span>© {year} Ferran Piles Lablanca.</span>
+<footer
+  class="container-gutter flex flex-col items-start justify-between gap-3 border-t border-ink-line pt-8 pb-10 text-sm text-bone-faint sm:flex-row sm:items-center"
+>
+  <span>{site.name}</span>
+  <span>{t('contact.rights')}</span>
+  <span>{year}</span>
 </footer>

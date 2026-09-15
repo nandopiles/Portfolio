@@ -17,6 +17,7 @@ export const ui = {
   es: {
     // Navigation
     'nav.about': 'Sobre mí',
+    'nav.experience': 'Experiencia',
     'nav.work': 'Proyectos',
     'nav.contact': 'Contacto',
     'nav.home': 'Inicio',
@@ -72,6 +73,7 @@ export const ui = {
   en: {
     // Navigation
     'nav.about': 'About',
+    'nav.experience': 'Experience',
     'nav.work': 'Work',
     'nav.contact': 'Contact',
     'nav.home': 'Home',
