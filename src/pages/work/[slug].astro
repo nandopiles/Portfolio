@@ -17,7 +17,7 @@ const project = getProjects(lang).find((p) => p.slug === slug)!;
 <Layout
   title={`${project.title} — ${site.name}`}
   description={project.summary}
-  image={project.image}
+  image={project.cover ?? project.image}
 >
   <Navbar />
   <ProjectDetail project={project} />

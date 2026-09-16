@@ -397,8 +397,15 @@ function ProjectCard({
             </span>
           </div>
 
-          {/* Image panel — the printed artwork of the poster. */}
-          <div className="relative z-10 mt-3 aspect-[4/3] w-full overflow-hidden border-2 border-ink bg-ink-soft">
+          {/* Image panel — the printed artwork of the poster. A square-artwork
+              project (imageFit: contain) gets a square panel; photographic
+              covers keep the 4:3 crop. Either way the image fills the panel via
+              object-cover, so it never letterboxes or stretches. */}
+          <div
+            className={`relative z-10 mt-3 w-full overflow-hidden border-2 border-ink bg-ink-soft ${
+              project.imageFit === 'contain' ? 'aspect-square' : 'aspect-[4/3]'
+            }`}
+          >
             <img
               src={project.image}
               alt={`${project.title} — project preview`}

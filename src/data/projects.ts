@@ -27,7 +27,15 @@ export interface ProjectSource {
   /** Tech stack, rendered as "React · Node · PostgreSQL". */
   stack: string[];
   year: string;
+  /** Poster artwork shown in the horizontal "Work" section (e.g. a logo). */
   image: string;
+  /** Wide artwork shown on the detail page. Falls back to `image` if unset. */
+  cover?: string;
+  /**
+   * How the poster image fills its panel. `cover` (default) crops to fill;
+   * `contain` fits the whole image inside — useful for logos with padding.
+   */
+  imageFit?: 'cover' | 'contain';
   demo?: string;
   repo?: string;
   i18n: Record<Lang, ProjectContent>;
@@ -40,6 +48,8 @@ export interface Project {
   stack: string[];
   year: string;
   image: string;
+  cover?: string;
+  imageFit?: 'cover' | 'contain';
   demo?: string;
   repo?: string;
   title: string;
@@ -51,6 +61,32 @@ export interface Project {
 const projectSources: ProjectSource[] = [
   {
     index: '01',
+    slug: 'a11ylens',
+    stack: ['Astro', 'React', 'TypeScript', 'axe-core', 'Vitest', 'WCAG 2.2'],
+    year: '2026',
+    image: '/projects/a11ylens-logo.webp',
+    cover: '/projects/a11ylens-cover.webp',
+    demo: 'https://a11ylens.nandopiless.workers.dev',
+    repo: 'https://github.com/nandopiles/A11yLens',
+    i18n: {
+      en: {
+        title: 'A11yLens',
+        summary: 'A web accessibility simulator that lets you feel how others browse the web.',
+        description:
+          'An interactive accessibility simulator built around WCAG 2.2. A11yLens recreates how people with different visual, motor, and cognitive abilities experience digital products, running real checks with axe-core and offering preconfigured test environments so teams can catch friction before it reaches production.',
+        cursorLabel: 'Try',
+      },
+      es: {
+        title: 'A11yLens',
+        summary: 'Un simulador de accesibilidad web que te hace sentir cómo navegan otras personas.',
+        description:
+          'Un simulador de accesibilidad interactivo construido en torno a WCAG 2.2. A11yLens recrea cómo experimentan los productos digitales las personas con distintas capacidades visuales, motoras y cognitivas, ejecuta comprobaciones reales con axe-core y ofrece entornos de prueba preconfigurados para detectar la fricción antes de que llegue a producción.',
+        cursorLabel: 'Probar',
+      },
+    },
+  },
+  {
+    index: '02',
     slug: 'nebula-analytics',
     stack: ['Angular', 'TypeScript', 'D3', 'WebSocket'],
     year: '2025',
@@ -75,7 +111,7 @@ const projectSources: ProjectSource[] = [
     },
   },
   {
-    index: '02',
+    index: '03',
     slug: 'atlas-store',
     stack: ['Astro', 'Stripe', 'Tailwind', 'Sanity'],
     year: '2025',
@@ -100,7 +136,7 @@ const projectSources: ProjectSource[] = [
     },
   },
   {
-    index: '03',
+    index: '04',
     slug: 'kinetic',
     stack: ['GSAP', 'Three.js', 'Vite', 'TypeScript'],
     year: '2024',
@@ -125,7 +161,7 @@ const projectSources: ProjectSource[] = [
     },
   },
   {
-    index: '04',
+    index: '05',
     slug: 'cadence',
     stack: ['React', 'Node', 'PostgreSQL', 'Prisma'],
     year: '2024',
@@ -150,7 +186,7 @@ const projectSources: ProjectSource[] = [
     },
   },
   {
-    index: '05',
+    index: '06',
     slug: 'monolith-docs',
     stack: ['Next.js', 'MDX', 'Algolia', 'Tailwind'],
     year: '2023',
@@ -175,7 +211,7 @@ const projectSources: ProjectSource[] = [
     },
   },
   {
-    index: '06',
+    index: '07',
     slug: 'halcyon',
     stack: ['Vue', 'Vite', 'IndexedDB', 'Workbox'],
     year: '2023',

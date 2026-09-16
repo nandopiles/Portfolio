@@ -98,7 +98,7 @@ const backHref = localizePath('/', lang) + '#work';
 
     <figure class="overflow-hidden rounded-2xl border border-ink-line bg-ink-soft lg:col-span-6 lg:sticky lg:top-28">
       <img
-        src={project.image}
+        src={project.cover ?? project.image}
         alt={project.title}
         loading="eager"
         decoding="async"
