@@ -24,3 +24,7 @@ Thumbs.db
 .vscode/*
 !.vscode/extensions.json
 .idea/
+
+# agent tracking artifacts (local only)
+odd/
+.atl/
