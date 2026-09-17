@@ -39,7 +39,14 @@ const t = useTranslations(lang);
     <slot />
 
     <!-- Interactive islands -->
-    <SmoothScroll client:idle />
+    <!--
+      Lenis drives the scroll metrics that every ScrollTrigger depends on, so it
+      must hydrate deterministically (client:load), not lazily. With client:idle
+      it could start after the pinned Work section and scroll reveals had already
+      measured their triggers against native scroll, leaving them dead on the
+      first (cold) load. The Cursor is purely decorative and stays client:idle.
+    -->
+    <SmoothScroll client:load />
     <Cursor client:idle />
 
     <script>

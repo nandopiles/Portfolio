@@ -70,7 +70,14 @@
     color: var(--color-bone);
     font-family: var(--font-sans);
     font-feature-settings: 'ss01', 'cv01';
-    overflow-x: hidden;
+    /* Clip horizontal overflow (rotated posters/stickers) WITHOUT creating a
+       scroll container. `overflow-x: hidden` makes the body a scroll container,
+       which forces overflow-y to `auto` and breaks GSAP ScrollTrigger pinning
+       of the horizontal Work section (the pin measured the wrong scroller and
+       the section refused to pin on first load). `clip` cuts the same overflow
+       but does NOT establish a scroll container, so the document remains the
+       single scroller ScrollTrigger + Lenis expect. */
+    overflow-x: clip;
     /* Long, gentle ease so background shifts feel organic and almost unnoticed. */
     transition: background-color 1.6s cubic-bezier(0.4, 0, 0.2, 1);
   }

@@ -93,99 +93,90 @@ export default function ProjectsHorizontal({ projects, workBase, strings }: Prop
         return;
       }
 
-      // Desktop pinned horizontal scroll.
+      // Desktop pinned horizontal scroll. Because applyMode() is driven by
+      // Astro's `astro:page-load` (which fires on BOTH the first load and every
+      // view-transition navigation, once the page is visible and blocking
+      // scripts have run), the DOM is laid out and Lenis is active by the time
+      // we get here — so we can build the trigger directly, without racing the
+      // React hydration / view-transition lifecycle with rAF/promise hacks.
       const section = sectionRef.current!;
       const track = trackRef.current!;
 
-      // The horizontal distance depends on the track's final laid-out width,
-      // which is only correct once fonts and every poster image have loaded.
-      // We create the trigger after the first paint, then force ScrollTrigger
-      // to re-measure whenever something that affects layout finishes loading
-      // (fonts, window load, each image). Without these refreshes the trigger
-      // can be built against a too-small/zero scroll distance and the pinned
-      // section appears not to work at all.
-      let rafId = 0;
       let ctx: gsap.Context | undefined;
       const cleanups: Array<() => void> = [];
 
-      const build = () => {
-        ctx = gsap.context(() => {
-          const getScrollDistance = () =>
-            Math.max(0, track.scrollWidth - window.innerWidth);
+      const getScrollDistance = () =>
+        Math.max(0, track.scrollWidth - window.innerWidth);
 
-          const tween = gsap.to(track, {
-            x: () => -getScrollDistance(),
-            ease: 'none',
-          });
+      ctx = gsap.context(() => {
+        const tween = gsap.to(track, {
+          x: () => -getScrollDistance(),
+          ease: 'none',
+        });
 
-          ScrollTrigger.create({
-            animation: tween,
-            trigger: section,
-            // Pin a bit before the section reaches the very top so the header
-            // ("Selected work") keeps some breathing room below the navbar.
-            start: 'top top+=60',
-            end: () => `+=${getScrollDistance()}`,
-            pin: pinRef.current,
-            scrub: 1,
-            invalidateOnRefresh: true,
-            onUpdate: (self) => {
-              setCurrent(Math.min(total, Math.floor(self.progress * total) + 1));
-              if (barRef.current) {
-                barRef.current.style.transform = `scaleX(${Math.max(0.02, self.progress)})`;
-              }
-            },
-          });
-        }, section);
+        ScrollTrigger.create({
+          animation: tween,
+          trigger: section,
+          // Pin a bit before the section reaches the very top so the header
+          // ("Selected work") keeps some breathing room below the navbar.
+          start: 'top top+=60',
+          end: () => `+=${getScrollDistance()}`,
+          pin: pinRef.current,
+          scrub: 1,
+          invalidateOnRefresh: true,
+          onUpdate: (self) => {
+            setCurrent(Math.min(total, Math.floor(self.progress * total) + 1));
+            if (barRef.current) {
+              barRef.current.style.transform = `scaleX(${Math.max(0.02, self.progress)})`;
+            }
+          },
+        });
+      }, section);
 
-        // Re-measure once everything that changes the track width has settled.
-        const refresh = () => ScrollTrigger.refresh();
-
-        if (document.fonts?.ready) {
-          document.fonts.ready.then(refresh).catch(() => {});
-        }
-        if (document.readyState !== 'complete') {
-          window.addEventListener('load', refresh, { once: true });
-          cleanups.push(() => window.removeEventListener('load', refresh));
-        }
-        // Any poster image that finishes loading shifts the layout width.
-        const imgs = Array.from(track.querySelectorAll('img'));
-        for (const img of imgs) {
-          if (img.complete) continue;
-          img.addEventListener('load', refresh, { once: true });
-          img.addEventListener('error', refresh, { once: true });
-          cleanups.push(() => {
-            img.removeEventListener('load', refresh);
-            img.removeEventListener('error', refresh);
-          });
-        }
-        // After an Astro view-transition navigation back to this page, layout
-        // metrics can be stale until the new document settles — refresh then.
-        document.addEventListener('astro:page-load', refresh);
-        cleanups.push(() =>
-          document.removeEventListener('astro:page-load', refresh)
-        );
-
-        // One more measurement on the next frame, after layout has painted.
-        requestAnimationFrame(refresh);
-      };
-
-      // Wait two frames so the browser has laid out the freshly-rendered track
-      // before we measure it for the first time.
-      rafId = requestAnimationFrame(() => {
-        rafId = requestAnimationFrame(build);
-      });
+      // Measure once now (layout is ready under astro:page-load) and once more
+      // after fonts settle, since font swaps change the placard/title width.
+      // invalidateOnRefresh recomputes the scroll distance on each refresh.
+      ScrollTrigger.refresh();
+      if (document.fonts?.ready) {
+        let cancelled = false;
+        cleanups.push(() => {
+          cancelled = true;
+        });
+        document.fonts.ready
+          .then(() => {
+            if (!cancelled) ScrollTrigger.refresh();
+          })
+          .catch(() => {});
+      }
 
       cleanupMode = () => {
-        cancelAnimationFrame(rafId);
         for (const fn of cleanups) fn();
         ctx?.revert();
       };
     };
 
-    applyMode();
+    // Build (and rebuild) on Astro's page-load — the only event that fires
+    // reliably on the FIRST load AND on every view-transition navigation, after
+    // the page is visible and scripts have run. This is exactly where GSAP/
+    // ScrollTrigger setup belongs when <ClientRouter /> is enabled; anchoring to
+    // it fixes the pin being dead on the first (cold) load.
+    let ready = false;
+    const onPageLoad = () => {
+      ready = true;
+      applyMode();
+    };
+    document.addEventListener('astro:page-load', onPageLoad);
+
+    // Fallback: if astro:page-load already fired before this island hydrated
+    // (race on very fast loads), run once now so we never miss the first build.
+    if (document.readyState === 'complete' && !ready) {
+      applyMode();
+    }
+
     mql.addEventListener('change', applyMode);
 
     return () => {
+      document.removeEventListener('astro:page-load', onPageLoad);
       mql.removeEventListener('change', applyMode);
       cleanupMode?.();
     };
@@ -397,25 +388,38 @@ function ProjectCard({
             </span>
           </div>
 
-          {/* Image panel — the printed artwork of the poster. A square-artwork
-              project (imageFit: contain) gets a square panel; photographic
-              covers keep the 4:3 crop. Either way the image fills the panel via
-              object-cover, so it never letterboxes or stretches. */}
+          {/* Image panel — the printed artwork of the poster. A logo-style
+              project (imageFit: contain) gets a square panel matching the
+              square artwork and is fitted with object-contain + padding so the
+              whole logo shows, a little smaller, with nothing cropped top or
+              bottom. Photographic covers keep the 4:3 crop with object-cover. */}
           <div
             className={`relative z-10 mt-3 w-full overflow-hidden border-2 border-ink bg-ink-soft ${
-              project.imageFit === 'contain' ? 'aspect-square' : 'aspect-[4/3]'
+              (project.posterAspect ?? (project.imageFit === 'contain' ? 'square' : '4/3')) === 'square'
+                ? 'aspect-square'
+                : 'aspect-[4/3]'
             }`}
           >
             <img
               src={project.image}
               alt={`${project.title} — project preview`}
               // In the pinned horizontal layout every poster contributes to the
-              // track width that ScrollTrigger measures, so images must load
-              // up front (they're lightweight SVGs) to keep that width stable.
+              // track width that ScrollTrigger measures. The panel already has a
+              // fixed aspect-ratio, and intrinsic width/height reserve the box
+              // before the file downloads so layout width is stable from the
+              // first frame (no CLS, no late width shift feeding the pin).
+              width={400}
+              height={
+                (project.posterAspect ?? (project.imageFit === 'contain' ? 'square' : '4/3')) === 'square'
+                  ? 400
+                  : 300
+              }
               loading={pinned ? 'eager' : 'lazy'}
               decoding="async"
               style={{ viewTransitionName: `project-${project.slug}` }}
-              className="h-full w-full object-cover transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]"
+              className={`h-full w-full ${
+                project.imageFit === 'contain' ? 'object-contain p-10' : 'object-cover'
+              } transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]`}
             />
           </div>
 

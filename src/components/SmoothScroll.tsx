@@ -33,12 +33,11 @@ export default function SmoothScroll() {
     gsap.ticker.add(onTick);
     gsap.ticker.lagSmoothing(0);
 
-    // This island and the pinned Work island hydrate independently (idle vs
-    // visible), so their init order isn't deterministic. Starting Lenis also
-    // changes the scroll metrics. Refresh ScrollTrigger now — and again after
-    // the next frame and on view-transition loads — so any trigger that was
-    // created before Lenis was ready (e.g. the pinned horizontal section) is
-    // re-measured against the smooth-scroll setup instead of being left dead.
+    // Starting Lenis changes the scroll metrics, so refresh ScrollTrigger now,
+    // after the next frame, and on every view-transition load so any trigger
+    // is measured against the smooth-scroll setup. The pinned Work island
+    // builds its own trigger on `astro:page-load` (see ProjectsHorizontal), so
+    // this refresh simply keeps existing triggers in sync with Lenis.
     const refresh = () => ScrollTrigger.refresh();
     refresh();
     requestAnimationFrame(refresh);

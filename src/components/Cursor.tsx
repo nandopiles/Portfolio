@@ -42,6 +42,13 @@ export default function Cursor() {
     target.current = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
     current.current = { ...target.current };
 
+    // Reveal immediately on hydration. Previously the cursor stayed at opacity 0
+    // until the first `mousemove`; when this island hydrates late (client:idle),
+    // an early mouse movement can happen before the listener exists and the
+    // cursor appears "missing" until the pointer moves again. Showing it now
+    // (already centred) guarantees it's visible as soon as the island is ready.
+    visible.current = true;
+
     // The label pill only appears on elements that explicitly opt in with
     // `data-cursor` (e.g. project cards). Regular links/buttons keep the plain
     // arrow so the pill never covers small text CTAs.
@@ -84,6 +91,12 @@ export default function Cursor() {
       // Clamp dt so returning to the tab after a pause doesn't cause a jump.
       const dt = Math.min((now - prev) / 1000, 0.05);
       lastTime.current = now;
+
+      // Reveal on the first frame if we're meant to be visible (set at
+      // hydration or on first move) but the element is still transparent.
+      if (visible.current && dotRef.current && dotRef.current.style.opacity !== '1') {
+        dotRef.current.style.opacity = '1';
+      }
 
       // Exponential smoothing: frame-rate independent version of a lerp.
       const ease = reduce ? 1 : 1 - Math.exp(-STIFFNESS * dt);
