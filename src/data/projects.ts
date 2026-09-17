@@ -36,6 +36,12 @@ export interface ProjectSource {
    * `contain` fits the whole image inside — useful for logos with padding.
    */
   imageFit?: 'cover' | 'contain';
+  /**
+   * Aspect ratio of the poster image panel, independent of `imageFit`. Defaults
+   * to `square` for `contain` logos and `4/3` for `cover` artwork, but can be
+   * set explicitly — e.g. a logo shown whole (`contain`) inside a `4/3` panel.
+   */
+  posterAspect?: 'square' | '4/3';
   demo?: string;
   repo?: string;
   i18n: Record<Lang, ProjectContent>;
@@ -50,6 +56,7 @@ export interface Project {
   image: string;
   cover?: string;
   imageFit?: 'cover' | 'contain';
+  posterAspect?: 'square' | '4/3';
   demo?: string;
   repo?: string;
   title: string;
@@ -66,6 +73,8 @@ const projectSources: ProjectSource[] = [
     year: '2026',
     image: '/projects/a11ylens-logo.webp',
     cover: '/projects/a11ylens-cover.webp',
+    imageFit: 'contain',
+    posterAspect: '4/3',
     demo: 'https://a11ylens.nandopiless.workers.dev',
     repo: 'https://github.com/nandopiles/A11yLens',
     i18n: {
