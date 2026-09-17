@@ -96,16 +96,14 @@ const backHref = localizePath('/', lang) + '#work';
       </div>
     </div>
 
-    <figure class="overflow-hidden rounded-2xl border border-ink-line bg-ink-soft lg:col-span-6 lg:sticky lg:top-28">
-      <img
-        src={project.cover ?? project.image}
-        alt={project.title}
-        loading="eager"
-        decoding="async"
-        style={`view-transition-name: project-${project.slug}`}
-        class="aspect-[4/3] w-full object-cover"
-      />
-    </figure>
+    <img
+      src={project.cover ?? project.image}
+      alt={project.title}
+      loading="eager"
+      decoding="async"
+      style={`view-transition-name: project-${project.slug}`}
+      class="block h-auto w-full lg:col-span-6 lg:sticky lg:top-28"
+    />
   </div>
 </main>
 
