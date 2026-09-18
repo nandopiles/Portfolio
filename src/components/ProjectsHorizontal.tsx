@@ -1,6 +1,6 @@
 import type { PointerEvent as ReactPointerEvent } from 'react';
 import { useEffect, useRef, useState } from 'react';
-import { gsap, ScrollTrigger, prefersReducedMotion } from '@/lib/gsap';
+import { prefersReducedMotion } from '@/lib/gsap';
 import type { Project } from '@/data/projects';
 
 /** UI strings passed from the Astro layer so this island stays language-aware. */
@@ -24,13 +24,18 @@ interface Props {
  * The "Work" section.
  *
  * Desktop (pointer: fine, >= 768px, motion allowed):
- *   The section pins to the viewport and vertical scroll is translated into
- *   horizontal movement of the project track via GSAP ScrollTrigger
- *   (pin + scrub). A progress bar and "01 / 06" counter reflect progress.
+ *   The section is tall (its height defines how much horizontal travel there
+ *   is) and its inner wrapper is `position: sticky` — pure CSS pinning, no
+ *   ScrollTrigger. A single rAF-throttled scroll listener maps how far the
+ *   section has scrolled through into a `translateX` on the track, and updates
+ *   the "01 / 06" counter and progress bar. Because the pin height is a static
+ *   CSS value (not measured from late-loading images), the layout is correct
+ *   from the first frame — no refresh races, no "reload to fix it".
  *
  * Mobile / reduced-motion:
- *   Falls back to native horizontal scrolling with CSS scroll-snap — no pin,
- *   which keeps the touch experience intact and honours motion preferences.
+ *   Falls back to native vertical stacking — no pin, no transform — which keeps
+ *   the touch experience intact and honours motion preferences. The counter is
+ *   still derived from the same scroll progress.
  */
 export default function ProjectsHorizontal({ projects, workBase, strings }: Props) {
   const sectionRef = useRef<HTMLElement | null>(null);
@@ -53,132 +58,101 @@ export default function ProjectsHorizontal({ projects, workBase, strings }: Prop
       '(min-width: 768px) and (hover: hover) and (pointer: fine)'
     );
 
-    // Re-evaluate whenever the match state changes (resize, rotate, moving the
-    // window between displays) so we never get stuck in the wrong mode.
-    let cleanupMode: (() => void) | undefined;
+    let cleanup: (() => void) | undefined;
 
     const applyMode = () => {
-      cleanupMode?.();
-      cleanupMode = undefined;
+      cleanup?.();
+      cleanup = undefined;
 
       const usePin = mql.matches && !prefersReducedMotion();
       setPinned(usePin);
 
-      if (!usePin) {
-        // Mobile / reduced-motion fallback: projects are stacked vertically, so
-        // derive the counter from how far the section has scrolled through the
-        // viewport rather than from any horizontal offset.
-        const section = sectionRef.current;
-        if (!section) return;
-        // Read layout inside rAF and coalesce bursts of scroll events into a
-        // single measurement per frame, so we never force a synchronous reflow
-        // on the scroll thread (avoids Lighthouse "forced reflow" warnings).
-        let ticking = false;
-        const measure = () => {
-          ticking = false;
-          const rect = section.getBoundingClientRect();
-          const scrollable = rect.height - window.innerHeight;
-          const p = scrollable > 0 ? Math.min(1, Math.max(0, -rect.top / scrollable)) : 0;
-          setCurrent(Math.min(total, Math.max(1, Math.round(p * (total - 1)) + 1)));
-          if (barRef.current) barRef.current.style.transform = `scaleX(${Math.max(0.02, p)})`;
-        };
-        const onScroll = () => {
-          if (ticking) return;
-          ticking = true;
-          requestAnimationFrame(measure);
-        };
-        window.addEventListener('scroll', onScroll, { passive: true });
-        measure();
-        cleanupMode = () => window.removeEventListener('scroll', onScroll);
+      const section = sectionRef.current;
+      const track = trackRef.current;
+      if (!section) return;
+
+      // Mobile / reduced-motion: the section height is `auto` (vertical stack),
+      // so make sure any desktop leftovers are cleared and stop here.
+      if (!usePin || !track) {
+        section.style.removeProperty('--travel');
         return;
       }
 
-      // Desktop pinned horizontal scroll. Because applyMode() is driven by
-      // Astro's `astro:page-load` (which fires on BOTH the first load and every
-      // view-transition navigation, once the page is visible and blocking
-      // scripts have run), the DOM is laid out and Lenis is active by the time
-      // we get here — so we can build the trigger directly, without racing the
-      // React hydration / view-transition lifecycle with rAF/promise hacks.
-      const section = sectionRef.current!;
-      const track = trackRef.current!;
+      // The single source of truth is one CSS variable, `--travel`: how many
+      // pixels the track must slide left. The SECTION HEIGHT is derived from it
+      // in CSS (`calc(100svh + var(--travel))`), so the browser owns sizing —
+      // we never write a height per frame, which is what previously mis-sized
+      // the section and pushed the sections below it off-screen.
+      let travel = -1;
 
-      let ctx: gsap.Context | undefined;
-      const cleanups: Array<() => void> = [];
+      // Update `--travel` only when it actually changes (idempotent). This is
+      // the only layout write; it runs on load, on resize, and once images and
+      // fonts settle — never on scroll.
+      const setTravel = () => {
+        const next = Math.max(0, track.scrollWidth - window.innerWidth);
+        if (next === travel) return;
+        travel = next;
+        section.style.setProperty('--travel', `${travel}px`);
+        // Changing `--travel` changes this section's height, which shifts the
+        // document position of every section below it. Announce it (decoupled)
+        // so scroll-driven systems like ScrollReveal can re-measure their
+        // triggers. We DON'T touch GSAP here — importing/refreshing it from this
+        // island previously interfered with the pin — we just fire an event.
+        window.dispatchEvent(new CustomEvent('work:travel-changed'));
+      };
 
-      const getScrollDistance = () =>
-        Math.max(0, track.scrollWidth - window.innerWidth);
+      // On scroll we only READ how far we are through the section and apply the
+      // horizontal transform — no layout writes, so it stays cheap.
+      let ticking = false;
+      const render = () => {
+        ticking = false;
+        const rect = section.getBoundingClientRect();
+        const scrollable = rect.height - window.innerHeight;
+        const p = scrollable > 0 ? Math.min(1, Math.max(0, -rect.top / scrollable)) : 0;
+        track.style.transform = `translate3d(${-p * travel}px,0,0)`;
+        setCurrent(Math.min(total, Math.max(1, Math.floor(p * total) + 1)));
+        if (barRef.current) {
+          barRef.current.style.transform = `scaleX(${Math.max(0.02, p)})`;
+        }
+      };
+      const onScroll = () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(render);
+      };
 
-      ctx = gsap.context(() => {
-        const tween = gsap.to(track, {
-          x: () => -getScrollDistance(),
-          ease: 'none',
-        });
+      const onResize = () => {
+        setTravel();
+        onScroll();
+      };
 
-        ScrollTrigger.create({
-          animation: tween,
-          trigger: section,
-          // Pin a bit before the section reaches the very top so the header
-          // ("Selected work") keeps some breathing room below the navbar.
-          start: 'top top+=60',
-          end: () => `+=${getScrollDistance()}`,
-          pin: pinRef.current,
-          scrub: 1,
-          invalidateOnRefresh: true,
-          onUpdate: (self) => {
-            setCurrent(Math.min(total, Math.floor(self.progress * total) + 1));
-            if (barRef.current) {
-              barRef.current.style.transform = `scaleX(${Math.max(0.02, self.progress)})`;
-            }
-          },
-        });
-      }, section);
-
-      // Measure once now (layout is ready under astro:page-load) and once more
-      // after fonts settle, since font swaps change the placard/title width.
-      // invalidateOnRefresh recomputes the scroll distance on each refresh.
-      ScrollTrigger.refresh();
-      if (document.fonts?.ready) {
-        let cancelled = false;
-        cleanups.push(() => {
-          cancelled = true;
-        });
-        document.fonts.ready
-          .then(() => {
-            if (!cancelled) ScrollTrigger.refresh();
-          })
-          .catch(() => {});
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onResize, { passive: true });
+      // Poster images and web fonts change the track width after this runs;
+      // re-derive `--travel` once each has settled. `img.decode()` resolves per
+      // image; fonts.ready resolves once.
+      for (const img of Array.from(track.querySelectorAll('img'))) {
+        if (!img.complete) img.decode().then(setTravel).catch(() => {});
       }
+      document.fonts?.ready.then(setTravel).catch(() => {});
 
-      cleanupMode = () => {
-        for (const fn of cleanups) fn();
-        ctx?.revert();
+      setTravel();
+      render();
+
+      cleanup = () => {
+        window.removeEventListener('scroll', onScroll);
+        window.removeEventListener('resize', onResize);
+        section.style.removeProperty('--travel');
+        track.style.transform = '';
       };
     };
 
-    // Build (and rebuild) on Astro's page-load — the only event that fires
-    // reliably on the FIRST load AND on every view-transition navigation, after
-    // the page is visible and scripts have run. This is exactly where GSAP/
-    // ScrollTrigger setup belongs when <ClientRouter /> is enabled; anchoring to
-    // it fixes the pin being dead on the first (cold) load.
-    let ready = false;
-    const onPageLoad = () => {
-      ready = true;
-      applyMode();
-    };
-    document.addEventListener('astro:page-load', onPageLoad);
-
-    // Fallback: if astro:page-load already fired before this island hydrated
-    // (race on very fast loads), run once now so we never miss the first build.
-    if (document.readyState === 'complete' && !ready) {
-      applyMode();
-    }
-
+    applyMode();
     mql.addEventListener('change', applyMode);
 
     return () => {
-      document.removeEventListener('astro:page-load', onPageLoad);
       mql.removeEventListener('change', applyMode);
-      cleanupMode?.();
+      cleanup?.();
     };
   }, [total]);
 
@@ -187,13 +161,13 @@ export default function ProjectsHorizontal({ projects, workBase, strings }: Prop
       id="work"
       ref={sectionRef}
       aria-label={strings.label}
-      className="relative bg-transparent"
+      className={pinned ? 'work-pinned relative bg-transparent' : 'relative bg-transparent'}
     >
       <div
         ref={pinRef}
         className={
           pinned
-            ? 'relative flex min-h-svh flex-col justify-center overflow-hidden'
+            ? 'sticky top-0 flex h-svh flex-col justify-center overflow-hidden'
             : 'relative py-24'
         }
       >
@@ -327,7 +301,7 @@ function ProjectCard({
     <article
       className={
         pinned
-          ? 'group relative flex w-[80vw] max-w-[440px] shrink-0 snap-center flex-col items-center sm:w-[52vw] lg:w-[34vw]'
+          ? 'group relative flex w-[80vw] max-w-[440px] shrink-0 flex-col items-center sm:w-[52vw] lg:w-[34vw]'
           : 'group relative flex w-full flex-col items-center'
       }
     >
