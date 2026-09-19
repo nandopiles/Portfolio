@@ -15,7 +15,7 @@ export const site = {
   ogImage: '/og.svg',
   socials: [
     { label: 'GitHub', href: 'https://github.com/nandopiles' },
-    { label: 'LinkedIn', href: 'https://www.linkedin.com/in/ferranpiles' },
+    { label: 'LinkedIn', href: 'https://www.linkedin.com/in/ferranpileslablanca/' },
     { label: 'Email', href: 'mailto:nandopiless@gmail.com' },
   ],
   i18n: {
