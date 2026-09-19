@@ -179,7 +179,7 @@ export default function ProjectsHorizontal({ projects, workBase, strings }: Prop
           ref={trackRef}
           className={
             pinned
-              ? 'flex w-max items-center gap-16 px-[var(--spacing-gutter)] will-change-transform lg:gap-24'
+              ? 'flex w-max items-center gap-24 px-[var(--spacing-gutter)] will-change-transform lg:gap-40'
               : 'flex flex-col items-stretch gap-20 px-[var(--spacing-gutter)]'
           }
         >
