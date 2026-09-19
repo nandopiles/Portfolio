@@ -171,25 +171,6 @@ export default function ProjectsHorizontal({ projects, workBase, strings }: Prop
             : 'relative py-24'
         }
       >
-        {/* Progress counter — floats top-right while the section is pinned. */}
-        <div
-          className="container-gutter absolute inset-x-0 top-10 hidden items-center justify-end gap-4 sm:flex"
-          aria-hidden="true"
-        >
-          <span className="font-[family-name:var(--font-display)] text-2xl font-bold text-bone">
-            {pad(current)}
-          </span>
-          <span className="h-px w-24 overflow-hidden bg-ink-line">
-            <span
-              ref={barRef}
-              className="block h-full origin-left bg-bone"
-              style={{ transform: 'scaleX(0.02)' }}
-            />
-          </span>
-          <span className="font-[family-name:var(--font-display)] text-2xl font-bold text-bone-faint">
-            {pad(total)}
-          </span>
-        </div>
 
         {/* Track: an intro placard sits first (left), followed by the project
             posters. On desktop the first poster ends up centred beside the
@@ -411,9 +392,6 @@ function ProjectCard({
           <div className="relative z-10 mt-auto flex items-end justify-between gap-3 border-t-2 border-ink pt-3">
             <span className="max-w-[70%] text-[0.7rem] font-semibold uppercase tracking-wide text-ink/70">
               {project.stack.join(' · ')}
-            </span>
-            <span className="font-[family-name:var(--font-display)] text-lg font-black leading-none text-ink">
-              {project.year}
             </span>
           </div>
         </div>
