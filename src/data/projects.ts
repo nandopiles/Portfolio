@@ -83,14 +83,12 @@ const projectSources: ProjectSource[] = [
         summary: 'A web accessibility simulator that lets you feel how others browse the web.',
         description:
           'An interactive accessibility simulator built around WCAG 2.2. A11yLens recreates how people with different visual, motor, and cognitive abilities experience digital products, running real checks with axe-core and offering preconfigured test environments so teams can catch friction before it reaches production.',
-        cursorLabel: 'Try',
       },
       es: {
         title: 'A11yLens',
         summary: 'Un simulador de accesibilidad web que te hace sentir cómo navegan otras personas.',
         description:
           'Un simulador de accesibilidad interactivo construido en torno a WCAG 2.2. A11yLens recrea cómo experimentan los productos digitales las personas con distintas capacidades visuales, motoras y cognitivas, ejecuta comprobaciones reales con axe-core y ofrece entornos de prueba preconfigurados para detectar la fricción antes de que llegue a producción.',
-        cursorLabel: 'Probar',
       },
     },
   },
@@ -108,14 +106,14 @@ const projectSources: ProjectSource[] = [
         summary: 'Real-time analytics dashboard with live charts and a command palette.',
         description:
           'A real-time analytics product for teams. Built around a streaming data layer with WebSockets, virtualised tables for large datasets, and a keyboard-first command palette. Focused on sub-second interactions and a dense, legible dark UI.',
-        cursorLabel: 'View',
+
       },
       es: {
         title: 'Nebula Analytics',
         summary: 'Panel de analítica en tiempo real con gráficos en vivo y paleta de comandos.',
         description:
           'Un producto de analítica en tiempo real para equipos. Construido sobre una capa de datos en streaming con WebSockets, tablas virtualizadas para grandes volúmenes y una paleta de comandos pensada para el teclado. Enfocado en interacciones de menos de un segundo y una interfaz oscura densa y legible.',
-        cursorLabel: 'Ver',
+
       },
     },
   },
@@ -133,14 +131,14 @@ const projectSources: ProjectSource[] = [
         summary: 'Headless e-commerce storefront built for speed and conversion.',
         description:
           'A headless storefront pairing Astro for static speed with a Sanity content model and Stripe checkout. Ships with edge-cached product pages, optimistic cart updates, and a Lighthouse score in the high 90s.',
-        cursorLabel: 'View',
+
       },
       es: {
         title: 'Atlas Store',
         summary: 'Tienda e-commerce headless creada para la velocidad y la conversión.',
         description:
           'Un escaparate headless que combina Astro para la velocidad estática con un modelo de contenido en Sanity y checkout con Stripe. Incluye páginas de producto cacheadas en el edge, actualizaciones optimistas del carrito y una puntuación Lighthouse en los 90 altos.',
-        cursorLabel: 'Ver',
+
       },
     },
   },
@@ -158,14 +156,12 @@ const projectSources: ProjectSource[] = [
         summary: 'An award-style landing with GSAP scroll storytelling and WebGL accents.',
         description:
           'A promotional landing page built as a scroll-driven narrative. GSAP ScrollTrigger orchestrates pinned scenes and text reveals, with subtle Three.js accents. Motion respects reduced-motion and never blocks reading.',
-        cursorLabel: 'Play',
       },
       es: {
         title: 'Kinetic',
         summary: 'Una landing de estilo award con narrativa por scroll en GSAP y toques WebGL.',
         description:
           'Una landing promocional construida como una narrativa guiada por el scroll. GSAP ScrollTrigger orquesta escenas fijadas y revelados de texto, con sutiles toques de Three.js. El movimiento respeta reduced-motion y nunca bloquea la lectura.',
-        cursorLabel: 'Play',
       },
     },
   },
@@ -183,14 +179,12 @@ const projectSources: ProjectSource[] = [
         summary: 'A collaborative music-planning app with drag-and-drop timelines.',
         description:
           'A collaborative planning tool for musicians. Features a drag-and-drop timeline, real-time presence, and a Prisma/PostgreSQL backend. Interaction design centred on fluid, forgiving drag mechanics.',
-        cursorLabel: 'Drag',
       },
       es: {
         title: 'Cadence',
         summary: 'Una app colaborativa de planificación musical con líneas de tiempo drag-and-drop.',
         description:
           'Una herramienta colaborativa de planificación para músicos. Incluye una línea de tiempo con arrastrar y soltar, presencia en tiempo real y un backend en Prisma/PostgreSQL. El diseño de interacción se centra en un arrastre fluido y tolerante.',
-        cursorLabel: 'Arrastra',
       },
     },
   },
@@ -208,14 +202,14 @@ const projectSources: ProjectSource[] = [
         summary: 'A documentation platform with instant search and MDX authoring.',
         description:
           'A documentation platform with MDX authoring, versioned content, and Algolia-powered instant search. Designed for fast reading with a focus on typography, code readability, and accessible navigation.',
-        cursorLabel: 'View',
+
       },
       es: {
         title: 'Monolith Docs',
         summary: 'Una plataforma de documentación con búsqueda instantánea y edición en MDX.',
         description:
           'Una plataforma de documentación con edición en MDX, contenido versionado y búsqueda instantánea con Algolia. Diseñada para una lectura rápida, con foco en la tipografía, la legibilidad del código y una navegación accesible.',
-        cursorLabel: 'Ver',
+
       },
     },
   },
@@ -233,14 +227,14 @@ const projectSources: ProjectSource[] = [
         summary: 'A meditation companion PWA with offline support and soundscapes.',
         description:
           'An offline-first meditation PWA. Layered soundscapes, background timers, and full offline support via Workbox and IndexedDB. Built to feel calm: minimal UI, gentle transitions, and no dark patterns.',
-        cursorLabel: 'View',
+
       },
       es: {
         title: 'Halcyon',
         summary: 'Una PWA de meditación con soporte offline y paisajes sonoros.',
         description:
           'Una PWA de meditación con enfoque offline-first. Paisajes sonoros por capas, temporizadores en segundo plano y soporte offline completo con Workbox e IndexedDB. Pensada para transmitir calma: interfaz mínima, transiciones suaves y sin patrones oscuros.',
-        cursorLabel: 'Ver',
+
       },
     },
   },
