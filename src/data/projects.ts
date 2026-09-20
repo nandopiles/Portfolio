@@ -117,7 +117,7 @@ const projectSources: ProjectSource[] = [
   },
   {
     slug: 'cosmos',
-    stack: ['TypeScript', 'React', 'Tailwind'],
+    stack: ['Vite', 'React 19', 'TypeScript', 'Tailwind', 'Web Audio API', 'Canvas 2D'],
     year: '2026',
     image: '/projects/cosmos-logo.webp',
     cover: '/projects/cosmos-cover.webp',
@@ -128,13 +128,15 @@ const projectSources: ProjectSource[] = [
     i18n: {
       en: {
         title: 'Cosmos',
-        summary: 'Project summary coming soon.',
-        description: 'Full project description coming soon.',
+        summary: "An interactive Solar System you don't scroll through — you explore it.",
+        description:
+          'A playable landing page where the Solar System is something you handle, not something you read. Every planet is a physical object with mass, inertia, and gravity: drag it, throw it, and watch the map rearrange itself around it. It all lives on an infinite canvas fed with real data from NASA and ESA, so learning astronomy feels less like studying and more like playing with the universe in your hands.',
       },
       es: {
         title: 'Cosmos',
-        summary: 'Resumen del proyecto próximamente.',
-        description: 'Descripción completa del proyecto próximamente.',
+        summary: 'Un Sistema Solar interactivo que no se recorre con scroll: se explora.',
+        description:
+          'Una landing page jugable donde el Sistema Solar es algo que manejas, no algo que lees. Cada planeta es un objeto físico con masa, inercia y gravedad: lo arrastras, lo lanzas y ves cómo el mapa se reorganiza solo a su alrededor. Todo ocurre sobre un lienzo infinito alimentado con datos reales de la NASA y la ESA, para que aprender astronomía se sienta menos como estudiar y más como jugar con el universo entre las manos.',
       },
     },
   },
