@@ -80,13 +80,13 @@ const projectSources: ProjectSource[] = [
         title: 'SpotFinder',
         summary: 'Plan day-by-day trip itineraries on an interactive map.',
         description:
-          'A trip planner that turns a city into a day-by-day itinerary on an interactive map. Add stops by category — food, culture, nature, leisure, or shopping — searching by name or dropping them straight on the map. SpotFinder draws the real street route between stops, suggests the best transport mode and travel time for each leg, and lets you drag stops to reorder the trip while it recalculates schedules on the fly. When the plan is ready, export it to a clean, printable PDF. Spanish UI with an animated dark mode.',
+          'A trip planner that turns a city into a day-by-day itinerary on an interactive map. Add stops by category — food, culture, nature, leisure, or shopping — searching by name or dropping them straight on the map. SpotFinder draws the real street route between stops, suggests the best transport mode and travel time for each leg, and lets you drag stops to reorder the trip while it recalculates schedules on the fly. When the plan is ready, export it to a clean, printable PDF.',
       },
       es: {
         title: 'SpotFinder',
         summary: 'Planifica itinerarios de viaje día a día sobre un mapa interactivo.',
         description:
-          'Un planificador de viajes que convierte una ciudad en un itinerario día a día sobre un mapa interactivo. Añade paradas por categoría —gastronomía, cultura, naturaleza, ocio o compras— buscándolas por nombre o marcándolas directamente en el mapa. SpotFinder dibuja la ruta real por calles entre paradas, recomienda el mejor medio de transporte y el tiempo de cada tramo, y te deja reordenar el recorrido arrastrando las paradas mientras recalcula los horarios al momento. Cuando el plan está listo, lo exportas a un PDF limpio y listo para imprimir. Interfaz en español con modo oscuro animado.',
+          'Un planificador de viajes que convierte una ciudad en un itinerario día a día sobre un mapa interactivo. Añade paradas por categoría —gastronomía, cultura, naturaleza, ocio o compras— buscándolas por nombre o marcándolas directamente en el mapa. SpotFinder dibuja la ruta real por calles entre paradas, recomienda el mejor medio de transporte y el tiempo de cada tramo, y te deja reordenar el recorrido arrastrando las paradas mientras recalcula los horarios al momento. Cuando el plan está listo, lo exportas a un PDF limpio y listo para imprimir.',
       },
     },
   },
