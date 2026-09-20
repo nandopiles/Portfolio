@@ -28,13 +28,13 @@ const experienceSources: ExperienceSource[] = [
         period: 'Oct 2025 — Now',
         role: 'Frontend Developer',
         description:
-          'Modernize legacy apps into scalable, from-scratch products with a modern architecture. Lead the frontend on the main project, owning technical direction and best practices.',
+          'Rebuild legacy apps into scalable products from scratch with Angular and Next.js. Frontend lead on a logistics project, having also worked on projects in the travel and public-sector fields.',
       },
       es: {
         period: 'Oct 2025 — Actualidad',
         role: 'Frontend Developer',
         description:
-          'Modernizo aplicaciones legacy en productos escalables construidos desde cero con arquitectura moderna. Lidero el frontend del proyecto principal, definiendo dirección técnica y buenas prácticas.',
+          'Reconstruyo aplicaciones legacy en productos escalables desde cero con Angular y Next.js. Frontend lead en un proyecto de logística, habiendo trabajado también en proyectos de los sectores de viajes y administración pública.',
       },
     },
   },
@@ -62,13 +62,13 @@ const experienceSources: ExperienceSource[] = [
         period: 'Jan 2024 — Jul 2024',
         role: 'Frontend Developer',
         description:
-          'Built internal apps with Angular and REST APIs for bookings and promotions. Designed reusable components for better usability and shipped an automated notifications module that boosted engagement.',
+          'Built an internal Angular tool that centralized the issues surfaced by another in-house service, which monitored websites to detect bugs and unexpected behavior. Also maintained and improved the Astro sites of several online fashion brands.',
       },
       es: {
         period: 'Ene 2024 — Jul 2024',
         role: 'Frontend Developer',
         description:
-          'Creé apps internas con Angular y APIs REST para reservas y promociones. Diseñé componentes reutilizables que mejoraron la usabilidad e implementé un módulo de notificaciones automáticas que aumentó la participación.',
+          'Desarrollé una herramienta interna en Angular que centralizaba los fallos detectados por otro servicio de la empresa, encargado de monitorizar webs para detectar errores y comportamientos inesperados. También mantuve y mejoré las webs en Astro de varias marcas de moda online.',
       },
     },
   },
