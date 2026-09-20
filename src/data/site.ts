@@ -10,9 +10,9 @@ export const site = {
   initials: 'FPL',
   location: 'València, Spain',
   email: 'nandopiless@gmail.com',
-  url: 'https://ferranpiles.dev',
+  url: 'https://portfolio.nandopiless.workers.dev',
   /** Used for Open Graph / Twitter cards. Place the image in /public. */
-  ogImage: '/og.svg',
+  ogImage: '/og.jpg',
   socials: [
     { label: 'GitHub', href: 'https://github.com/nandopiles' },
     { label: 'LinkedIn', href: 'https://www.linkedin.com/in/ferranpileslablanca/' },

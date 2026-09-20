@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="Ferran Piles Lablanca — Frontend Developer">
-  <rect width="1200" height="630" fill="#141412"/>
-  <text x="80" y="270" fill="#f5f5f0" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="104" letter-spacing="-3">Ferran Piles</text>
-  <text x="80" y="380" fill="#f5f5f0" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="104" letter-spacing="-3">Lablanca</text>
-  <text x="86" y="450" fill="#a8a69e" font-family="'Inter', sans-serif" font-size="38">Frontend Developer</text>
-  <line x1="80" y1="510" x2="1120" y2="510" stroke="#26251f" stroke-width="2"/>
-  <text x="80" y="565" fill="#6a6862" font-family="'Inter', sans-serif" font-size="26">Fast, expressive interfaces — motion &amp; detail.</text>
-</svg>

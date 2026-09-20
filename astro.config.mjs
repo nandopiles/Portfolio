@@ -6,7 +6,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://ferranpiles.dev',
+  site: 'https://portfolio.nandopiless.workers.dev',
   // Spanish is the default (served at `/`); English is served under `/en/`.
   i18n: {
     locales: ['es', 'en'],
