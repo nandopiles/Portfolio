@@ -393,18 +393,6 @@
   will-change: transform, opacity;
 }
 
-/* Pinned "Work" section height.
-   The inner wrapper is `position: sticky; height: 100svh`, so the section must
-   be exactly one viewport taller than the horizontal distance the track slides
-   (`--travel`, set once by JS). CSS owns the height via calc() — the browser
-   recomputes it whenever `--travel` changes, so JS never writes a pixel height
-   per frame (that previously mis-sized the section and hid later sections).
-   `--travel` defaults to 0, so before JS runs (or if it never does) the section
-   is just one viewport tall and the page still reads top-to-bottom. */
-.work-pinned {
-  height: calc(100svh + var(--travel, 0px));
-}
-
 /* ==========================================================================
    Reduced motion
    ========================================================================== */

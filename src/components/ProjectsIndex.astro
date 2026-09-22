@@ -1,0 +1,287 @@
+---
+import type { Project } from '@/data/projects';
+import BrowserFrame from '@/components/BrowserFrame.astro';
+
+/** UI strings passed from the page layer so this section stays language-aware. */
+export interface WorkStrings {
+  label: string;
+  heading: string;
+}
+
+interface Props {
+  projects: Project[];
+  /** Base path for project detail links, e.g. '/work' or '/en/work'. */
+  workBase: string;
+  strings: WorkStrings;
+}
+
+const { projects, workBase, strings } = Astro.props as Props;
+
+/** Clean host for the browser-frame address bar (e.g. "example.com"). */
+function hostOf(url?: string): string {
+  if (!url) return '';
+  try {
+    return new URL(url).host;
+  } catch {
+    return '';
+  }
+}
+
+/**
+ * Preview artwork = the SAME wide image shown on the detail page
+ * (`cover`, falling back to `image`), so the index communicates how the real
+ * app looks — not the logo. Each also carries its live domain for the frame.
+ */
+const withPreview = projects.map((project) => ({
+  ...project,
+  preview: project.cover ?? project.image,
+  host: hostOf(project.demo),
+}));
+---
+
+{/*
+  The "Work" section as a typographic index.
+
+  Each project is a large row: edition number, poster-type title, and stack.
+  It reads like the index of a design studio's work — deliberate and calm,
+  which suits a small, curated set of projects far better than a pinned
+  horizontal scroll (which was fragile and only shines with many items).
+
+  Desktop (hover-capable pointers): hovering a row shows that project's cover
+  as a floating preview that FOLLOWS the cursor. This needs pointer position,
+  so it's driven by a tiny scoped script (rAF + a lerp), NOT CSS. It's safe:
+  the preview is `position: fixed` + `pointer-events: none`, so it never enters
+  the document flow and can't mis-size anything — unlike the old pinned track.
+
+  Touch / no-hover: there is no cursor to follow, so each row keeps an inline
+  thumbnail. The follow script never runs there (guarded by matchMedia).
+
+  Reduced motion: the preview still appears (it's information, not decoration),
+  but it snaps to the cursor with no easing/lerp instead of gliding.
+*/}
+<section
+  id="work"
+  class="container-gutter py-28 sm:py-40"
+  aria-label={strings.label}
+>
+  <div class="grid gap-12 md:grid-cols-12 md:gap-8">
+    <div class="md:col-span-3">
+      <h2
+        class="reveal text-sm uppercase tracking-[0.25em] text-bone-faint"
+        data-reveal
+      >
+        {strings.label}
+      </h2>
+      <span
+        class="sticker reveal mt-5 block max-w-full px-5 py-3 text-[length:var(--text-section)] leading-[0.95] [text-wrap:balance]"
+        data-reveal
+      >
+        {strings.heading}
+      </span>
+    </div>
+
+    <div class="md:col-span-9">
+      <ol data-work-index>
+        {
+          withPreview.map((project) => (
+            <li class="border-t border-ink-line last:border-b">
+              <a
+                href={`${workBase}/${project.slug}`}
+                data-work-row
+                data-preview={project.preview}
+                data-url={project.host}
+                aria-label={project.title}
+                class="reveal group/row grid grid-cols-[auto_1fr] items-center gap-4 py-7 sm:gap-8 sm:py-9"
+                data-reveal
+              >
+                <span class="font-[family-name:var(--font-display)] text-lg font-black tabular-nums text-bone-faint transition-colors duration-300 group-hover/row:text-bone">
+                  {project.index}
+                </span>
+
+                <div class="grid gap-4 sm:grid-cols-[1fr_auto] sm:items-baseline sm:gap-8">
+                  <h3 class="poster-title text-[clamp(1.8rem,5vw,3.5rem)] text-bone transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] sm:group-hover/row:translate-x-2">
+                    {project.title}
+                  </h3>
+
+                  <span class="text-[0.72rem] font-semibold uppercase tracking-wide text-bone-faint sm:text-right">
+                    {project.stack.join(' · ')}
+                  </span>
+                </div>
+              </a>
+
+              {/*
+                Mobile / no-hover: the cover is shown inline (there's no cursor
+                to follow). Hidden on md+, where the floating follow preview
+                takes over. Wrapped in the same macOS browser frame as the hover
+                and detail views for a consistent "real app" presentation.
+              */}
+              <div class="mb-9 md:hidden">
+                <BrowserFrame
+                  url={project.host}
+                  class="shadow-[6px_8px_0_rgba(0,0,0,0.55)]"
+                >
+                  <img
+                    src={project.preview}
+                    alt={`${project.title} — app preview`}
+                    width={640}
+                    height={314}
+                    loading="lazy"
+                    decoding="async"
+                    class="block aspect-[1919/943] h-full w-full object-cover"
+                  />
+                </BrowserFrame>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </div>
+</section>
+
+{/*
+  Floating cursor-following preview (desktop only). A single shared element
+  whose image src + address bar are swapped to the hovered row's project. Lives
+  at the end of the section, `position: fixed`, so it's out of document flow.
+  Its chrome mirrors BrowserFrame.astro (kept in sync by hand because this one
+  element is reused across rows rather than rendered per project).
+*/}
+<div
+  data-work-preview
+  aria-hidden="true"
+  class="pointer-events-none fixed left-0 top-0 z-40 hidden w-[26rem] max-w-[38vw] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-xl border border-ink bg-ink-soft opacity-0 shadow-[10px_12px_0_rgba(0,0,0,0.6)] transition-opacity duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform"
+>
+  {/* Title bar: traffic lights + faux address bar (URL set by the script). */}
+  <div class="relative flex items-center border-b border-ink bg-ink px-3 py-1.5">
+    <div class="flex shrink-0 items-center gap-1">
+      <span class="block h-2.5 w-2.5 rounded-full bg-[#ff5f57]"></span>
+      <span class="block h-2.5 w-2.5 rounded-full bg-[#febc2e]"></span>
+      <span class="block h-2.5 w-2.5 rounded-full bg-[#28c840]"></span>
+    </div>
+    <div class="absolute left-1/2 top-1/2 flex w-1/2 max-w-[16rem] min-w-0 -translate-x-1/2 -translate-y-1/2 items-center justify-center gap-2 rounded-md border border-ink-line bg-ink-soft px-2.5 py-0.5">
+      <svg class="h-2.5 w-2.5 shrink-0 text-bone-faint" viewBox="0 0 24 24" fill="none">
+        <rect x="5" y="11" width="14" height="9" rx="2" stroke="currentColor" stroke-width="2"></rect>
+        <path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2"></path>
+      </svg>
+      <span data-work-preview-url class="truncate text-[0.65rem] text-bone-dim"></span>
+    </div>
+  </div>
+
+  <img
+    data-work-preview-img
+    alt=""
+    width={520}
+    height={255}
+    decoding="async"
+    class="block aspect-[1919/943] h-full w-full object-cover"
+  />
+</div>
+
+<script>
+  // Cursor-following hover preview for the Work index.
+  //
+  // KISS + safe: the preview element is `position: fixed` and
+  // `pointer-events: none`, so it never participates in layout — it cannot
+  // mis-size or shift any section (the failure mode of the old pinned track).
+  // Only runs on hover-capable, precise pointers; touch devices keep the inline
+  // thumbnails and this script does nothing.
+  function initWorkPreview() {
+    const preview = document.querySelector<HTMLElement>('[data-work-preview]');
+    const previewImg = document.querySelector<HTMLImageElement>(
+      '[data-work-preview-img]'
+    );
+    const previewUrl = document.querySelector<HTMLElement>(
+      '[data-work-preview-url]'
+    );
+    const rows = Array.from(
+      document.querySelectorAll<HTMLAnchorElement>('[data-work-row]')
+    );
+    if (!preview || !previewImg || rows.length === 0) return;
+
+    const finePointer = window.matchMedia(
+      '(hover: hover) and (pointer: fine)'
+    ).matches;
+    if (!finePointer) return;
+
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Target = where the cursor is; current = where the preview is drawn.
+    // With motion, `current` eases toward `target` (glide). With reduced
+    // motion, they're kept equal so the preview snaps directly to the cursor.
+    const targetPos = { x: 0, y: 0 };
+    const currentPos = { x: 0, y: 0 };
+    // Scale eases 0.9 -> 1 on show (a subtle "pop"), back to 0.9 on hide.
+    let targetScale = 0.9;
+    let currentScale = 0.9;
+    let visible = false;
+    let raf = 0;
+
+    const render = () => {
+      const ease = reduce ? 1 : 0.18;
+      currentPos.x += (targetPos.x - currentPos.x) * ease;
+      currentPos.y += (targetPos.y - currentPos.y) * ease;
+      currentScale += (targetScale - currentScale) * ease;
+      // `-50%,-50%` centres the preview on the pointer; then scale. No tilt —
+      // a browser window reads best upright.
+      preview.style.transform = `translate(${currentPos.x}px, ${currentPos.y}px) translate(-50%, -50%) scale(${currentScale.toFixed(3)})`;
+      raf = requestAnimationFrame(render);
+    };
+
+    const show = (src: string, url: string) => {
+      if (previewImg.getAttribute('src') !== src) {
+        previewImg.setAttribute('src', src);
+      }
+      if (previewUrl) previewUrl.textContent = url;
+      preview.style.display = 'block';
+      targetScale = 1;
+      // Next frame so the display change applies before the opacity transition.
+      requestAnimationFrame(() => {
+        preview.style.opacity = '1';
+      });
+      if (!visible) {
+        visible = true;
+        raf = requestAnimationFrame(render);
+      }
+    };
+
+    const hide = () => {
+      preview.style.opacity = '0';
+      targetScale = 0.9;
+      visible = false;
+      cancelAnimationFrame(raf);
+      // Hide after the fade so it doesn't linger or catch clicks.
+      window.setTimeout(() => {
+        if (!visible) preview.style.display = 'none';
+      }, 300);
+    };
+
+    const onMove = (e: MouseEvent) => {
+      targetPos.x = e.clientX;
+      targetPos.y = e.clientY;
+      // On the very first move for a row, snap current to the cursor so the
+      // preview doesn't fly in from a stale corner.
+      if (!visible) {
+        currentPos.x = e.clientX;
+        currentPos.y = e.clientY;
+      }
+    };
+
+    for (const row of rows) {
+      const src = row.getAttribute('data-preview');
+      if (!src) continue;
+      const url = row.getAttribute('data-url') ?? '';
+      row.addEventListener('mouseenter', (e) => {
+        onMove(e as MouseEvent);
+        currentPos.x = targetPos.x;
+        currentPos.y = targetPos.y;
+        show(src, url);
+      });
+      row.addEventListener('mousemove', onMove);
+      row.addEventListener('mouseleave', hide);
+    }
+  }
+
+  initWorkPreview();
+  // Re-init after Astro view transitions (the DOM is swapped).
+  document.addEventListener('astro:page-load', initWorkPreview);
+</script>

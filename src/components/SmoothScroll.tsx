@@ -35,9 +35,7 @@ export default function SmoothScroll() {
 
     // Starting Lenis changes the scroll metrics, so refresh ScrollTrigger now,
     // after the next frame, and on every view-transition load so any trigger
-    // is measured against the smooth-scroll setup. The pinned Work island
-    // builds its own trigger on `astro:page-load` (see ProjectsHorizontal), so
-    // this refresh simply keeps existing triggers in sync with Lenis.
+    // is measured against the smooth-scroll setup.
     const refresh = () => ScrollTrigger.refresh();
     refresh();
     requestAnimationFrame(refresh);
@@ -48,16 +46,13 @@ export default function SmoothScroll() {
     const NAV_OFFSET = 96;
 
     /**
-     * Resolve an element's absolute document Y, accounting for the pinned
-     * "Work" section. That section is a ScrollTrigger pin whose scroll length
-     * is measured asynchronously (after fonts/images), so on the very first
-     * interaction the document may not yet be inflated and any target *after*
-     * the pin would resolve to a stale (too-small) offset — Lenis then clamps
-     * it and lands at the bottom of the page.
+     * Resolve an element's absolute document Y and scroll to it.
      *
+     * Lazy-loaded images and web fonts can change section offsets slightly
+     * after the first interaction, so a target resolved too early could be off.
      * We force a refresh, then wait until the target's measured position is
-     * stable across two consecutive frames before scrolling. This guarantees
-     * the pin has expanded the document and the offset is final.
+     * stable across two consecutive frames before scrolling, so the offset is
+     * final regardless of late layout shifts.
      */
     // Smooth "settle" easing: quick, confident departure that eases gently
     // into the destination (expo-out). Gives the glide a polished feel rather

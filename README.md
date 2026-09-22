@@ -5,9 +5,9 @@ A dark, minimal, editorial portfolio built as a high-end "creative developer" ex
 ## Stack
 
 - **Astro 7** — static site generation with client islands
-- **React 19** — only for interactive islands (custom cursor, horizontal work section, smooth scroll)
+- **React 19** — only for interactive islands (custom cursor, smooth scroll)
 - **Tailwind CSS v4** — design tokens defined in `src/styles/global.css` via `@theme`
-- **GSAP + ScrollTrigger** — scroll reveals, hero intro, and the pinned horizontal Work section
+- **GSAP + ScrollTrigger** — scroll reveals and the hero intro
 - **Lenis** — smooth scrolling, synced with GSAP's ticker
 - **TypeScript** — throughout
 
@@ -40,9 +40,11 @@ own images (any web format) and update the `image` path in `projects.ts`.
   grows and shows a label over interactive elements. Add `data-cursor="Label"` to any
   element to customise the hover label. Disabled on touch devices and when the user
   prefers reduced motion.
-- **Horizontal Work section** (`src/components/ProjectsHorizontal.tsx`): pins and
-  converts vertical scroll into horizontal movement on desktop via GSAP ScrollTrigger.
-  Falls back to native scroll-snap on mobile and with reduced motion.
+- **Work index** (`src/components/ProjectsIndex.astro`): a typographic index of
+  projects (edition number, poster-type title, stack). It's server-rendered with
+  no client JS — on hover-capable pointers each row reveals its poster as a
+  floating preview via pure CSS (`group-hover`); touch devices get an inline
+  thumbnail per row. No pinning, no scroll math, so it can't mis-size or break.
 - **Accessibility**: semantic HTML, visible focus states, a skip link, image alt text,
   and full `prefers-reduced-motion` support (animations are disabled, native scroll used).
 - **SEO**: per-page titles/descriptions, Open Graph + Twitter cards, canonical URLs,

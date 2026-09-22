@@ -44,12 +44,4 @@
     ScrollTrigger.getAll().forEach((t) => t.kill());
     initReveals();
   });
-
-  // The Work section sets its own height late (its `--travel` var is derived
-  // from poster widths once images/fonts settle). That shifts every section
-  // below it, so reveal triggers measured before then would be positioned
-  // against the old layout — making Experience/Contact appear with no fade.
-  // When Work announces its height changed, recompute all trigger positions.
-  window.addEventListener('work:travel-changed', () => ScrollTrigger.refresh());
-
 </script>
