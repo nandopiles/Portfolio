@@ -44,9 +44,6 @@ export const ui = {
     // Work
     'work.label': '(Proyectos seleccionados)',
     'work.heading': 'Cosas que he construido.',
-    'work.item': 'Proyecto',
-    'work.demo': 'Ver',
-    'work.code': 'Código',
 
     // Experience
     'exp.label': '(Experiencia)',
@@ -100,9 +97,6 @@ export const ui = {
     // Work
     'work.label': '(Selected Work)',
     'work.heading': "Things I've built.",
-    'work.item': 'Project',
-    'work.demo': 'View',
-    'work.code': 'Code',
 
     // Experience
     'exp.label': '(Experience)',

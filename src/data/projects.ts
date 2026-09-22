@@ -5,7 +5,7 @@ import type { Lang } from '@/i18n/ui';
  * Replace these placeholder projects with your real work.
  *
  * Non-translatable fields (slug, stack, year, image, urls) live once; the
- * translatable copy (title, summary, description, cursorLabel) is provided per
+ * translatable copy (title, summary, description) is provided per
  * language under `i18n`.
  *
  * `image` points to a file in /public (an SVG placeholder is generated for each).
@@ -15,8 +15,6 @@ export interface ProjectContent {
   summary: string;
   /** Longer paragraph shown on the detail page. */
   description?: string;
-  /** Cursor label shown on hover. */
-  cursorLabel?: string;
 }
 
 export interface ProjectSource {
@@ -61,7 +59,6 @@ export interface Project {
   title: string;
   summary: string;
   description?: string;
-  cursorLabel?: string;
 }
 
 const projectSources: ProjectSource[] = [

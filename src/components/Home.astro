@@ -2,7 +2,7 @@
 import Navbar from '@/components/Navbar.astro';
 import Hero from '@/components/Hero.astro';
 import About from '@/components/About.astro';
-import ProjectsHorizontal from '@/components/ProjectsHorizontal.tsx';
+import ProjectsIndex from '@/components/ProjectsIndex.astro';
 import Experience from '@/components/Experience.astro';
 import Contact from '@/components/Contact.astro';
 import ScrollReveal from '@/components/ScrollReveal.astro';
@@ -20,9 +20,6 @@ const projects = getProjects(lang);
 const workStrings = {
   label: t('work.label'),
   heading: t('work.heading'),
-  item: t('work.item'),
-  demo: t('work.demo'),
-  code: t('work.code'),
 };
 const workBase = localizePath('/work', lang);
 ---
@@ -31,11 +28,10 @@ const workBase = localizePath('/work', lang);
 <main id="main">
   <Hero />
   <About />
-  <ProjectsHorizontal
+  <ProjectsIndex
     projects={projects}
     workBase={workBase}
     strings={workStrings}
-    client:load
   />
   <Experience />
   <Contact />
