@@ -64,7 +64,7 @@ export interface Project {
 const projectSources: ProjectSource[] = [
   {
     slug: 'spotfinder',
-    stack: ['Angular 19', 'TypeScript', 'Leaflet', 'RxJS', 'Tailwind', 'jsPDF'],
+    stack: ['Angular 19', 'Leaflet', 'RxJS', 'Tailwind', 'jsPDF'],
     year: '2026',
     image: '/projects/spotfinder-logo.webp',
     cover: '/projects/spotfinder-cover.webp',
@@ -89,7 +89,7 @@ const projectSources: ProjectSource[] = [
   },
   {
     slug: 'a11ylens',
-    stack: ['Astro', 'React', 'TypeScript', 'axe-core', 'Vitest', 'WCAG 2.2'],
+    stack: ['Astro', 'React', 'axe-core', 'Vitest', 'WCAG 2.2'],
     year: '2026',
     image: '/projects/a11ylens-logo.webp',
     cover: '/projects/a11ylens-cover.webp',
@@ -114,7 +114,7 @@ const projectSources: ProjectSource[] = [
   },
   {
     slug: 'cosmos',
-    stack: ['Vite', 'React 19', 'TypeScript', 'Tailwind', 'Web Audio API', 'Canvas 2D'],
+    stack: ['Vite', 'React 19', 'Tailwind', 'Web Audio API', 'Canvas 2D'],
     year: '2026',
     image: '/projects/cosmos-logo.webp',
     cover: '/projects/cosmos-cover.webp',

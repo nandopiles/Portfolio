@@ -5,7 +5,7 @@
 export const skills: string[] = [
   'Angular',
   'Astro',
-  'TypeScript',
+  'React',
   'Next.js',
   'Tailwind CSS',
   'Vite',
