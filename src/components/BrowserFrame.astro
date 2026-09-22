@@ -1,0 +1,61 @@
+---
+/**
+ * A macOS-style browser chrome frame around a screenshot.
+ *
+ * Renders the title bar (three "traffic light" dots + a faux URL bar) and a
+ * content area, both wrapped in the site's hard-border + offset-shadow
+ * language. The screenshot goes in the default slot.
+ *
+ * Used in three places so the Work presentation stays consistent: the index
+ * hover preview, the mobile inline thumbnail, and the project detail page.
+ */
+interface Props {
+  /** Text shown in the faux address bar (usually the project's live domain). */
+  url?: string;
+  /** Extra classes for the outer frame (sizing, shadow overrides, etc.). */
+  class?: string;
+}
+
+const { url, class: className = '' } = Astro.props as Props;
+---
+
+<div class={`overflow-hidden rounded-xl border border-ink bg-ink-soft ${className}`}>
+  {/* Title bar: traffic lights on the left, address bar centered (macOS style). */}
+  <div
+    class="relative flex items-center border-b border-ink bg-ink px-3.5 py-4"
+  >
+    <div
+      class="flex shrink-0 items-center gap-1"
+      aria-hidden="true"
+    >
+      <span class="block h-2.5 w-2.5 rounded-full bg-[#ff5f57]"></span>
+      <span class="block h-2.5 w-2.5 rounded-full bg-[#febc2e]"></span>
+      <span class="block h-2.5 w-2.5 rounded-full bg-[#28c840]"></span>
+    </div>
+
+    {/* Faux address bar, absolutely centered like a real macOS browser. */}
+    <div
+      class="absolute left-1/2 top-1/2 flex w-1/2 max-w-[16rem] min-w-0 -translate-x-1/2 -translate-y-1/2 items-center justify-center gap-2 rounded-md border border-ink-line bg-ink-soft px-2.5 py-0.5"
+    >
+      <svg
+        class="h-2.5 w-2.5 shrink-0 text-bone-faint"
+        viewBox="0 0 24 24"
+        fill="none"
+        aria-hidden="true"
+      >
+        <rect x="5" y="11" width="14" height="9" rx="2" stroke="currentColor" stroke-width="2"></rect>
+        <path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2"></path>
+      </svg>
+      {
+        url && (
+          <span class="truncate text-[0.65rem] text-bone-dim">{url}</span>
+        )
+      }
+    </div>
+  </div>
+
+  {/* Screenshot / content. */}
+  <div class="bg-ink-soft">
+    <slot />
+  </div>
+</div>

@@ -1,6 +1,7 @@
 ---
 import type { Project } from '@/data/projects';
 import { site } from '@/data/site';
+import BrowserFrame from '@/components/BrowserFrame.astro';
 import { getLangFromUrl, useTranslations, localizePath } from '@/i18n/utils';
 
 interface Props {
@@ -12,6 +13,14 @@ const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const year = new Date().getFullYear();
 const backHref = localizePath('/', lang) + '#work';
+
+/** Clean host for the browser-frame address bar (e.g. "example.com"). */
+let host = '';
+try {
+  if (project.demo) host = new URL(project.demo).host;
+} catch {
+  host = '';
+}
 ---
 
 <main id="main" class="container-gutter pt-32 pb-24">
@@ -96,14 +105,19 @@ const backHref = localizePath('/', lang) + '#work';
       </div>
     </div>
 
-    <img
-      src={project.cover ?? project.image}
-      alt={project.title}
-      loading="eager"
-      decoding="async"
-      style={`view-transition-name: project-${project.slug}`}
-      class="block h-auto w-full lg:col-span-6 lg:sticky lg:top-28"
-    />
+    <BrowserFrame
+      url={host}
+      class="shadow-[10px_12px_0_rgba(0,0,0,0.55)] lg:col-span-6 lg:sticky lg:top-28"
+    >
+      <img
+        src={project.cover ?? project.image}
+        alt={project.title}
+        loading="eager"
+        decoding="async"
+        style={`view-transition-name: project-${project.slug}`}
+        class="block h-auto w-full"
+      />
+    </BrowserFrame>
   </div>
 </main>
 
