@@ -43,7 +43,7 @@ export const ui = {
 
     // Work
     'work.label': '(Proyectos seleccionados)',
-    'work.heading': 'Cosas que he construido.',
+    'work.heading': 'Lo que he construido.',
 
     // Experience
     'exp.label': '(Experiencia)',
@@ -52,6 +52,7 @@ export const ui = {
     'contact.label': '(Hablemos)',
     'contact.headline.1': 'Construyamos',
     'contact.headline.2': 'algo juntos.',
+    'contact.cta': 'Escríbeme',
     'contact.rights': 'Todos los derechos reservados',
 
     // Project detail
@@ -105,6 +106,7 @@ export const ui = {
     'contact.label': "(Let's talk)",
     'contact.headline.1': "Let's build",
     'contact.headline.2': 'something.',
+    'contact.cta': 'Email me',
     'contact.rights': 'All rights reserved',
 
     // Project detail
