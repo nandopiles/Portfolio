@@ -1,0 +1,169 @@
+---
+/**
+ * Custom cursor — vanilla, no framework.
+ *
+ * A single chunky comic/sticker arrow that tracks the pointer 1:1 (zero lag,
+ * like a native cursor). Positioned straight from the mousemove event — no
+ * interpolation loop — so it's as fast as the pointer itself.
+ *
+ * Behaviour:
+ *   - Only activates on precise pointers (mouse). Touch devices keep the
+ *     native cursor and this renders/does nothing.
+ *   - Under prefers-reduced-motion the press-scale micro-animation is disabled.
+ *   - Press feedback on mousedown/up (the arrow scales down slightly).
+ *   - Survives Astro view transitions (astro:page-load) without duplicating
+ *     listeners.
+ *
+ * Markup is server-rendered but stays hidden (display:none) until the script
+ * confirms a fine pointer, so there's no flash on touch.
+ */
+---
+
+<div id="cursor-root" aria-hidden="true">
+  <!-- The chunky comic/sticker arrow. Bold black outline + hard offset shadow.
+       Its hotspot is the tip (top-left), like a native arrow cursor. -->
+  <div id="cursor-arrow" class="cursor-arrow">
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+      <path
+        d="M3 2 L3 20 L8 15 L11.5 22.5 L14.5 21 L11 13.5 L18 13.5 Z"
+        fill="#f5f5f0"
+        stroke="#0a0a0a"
+        stroke-width="2.2"
+        stroke-linejoin="round"
+      ></path>
+    </svg>
+  </div>
+</div>
+
+<style>
+  #cursor-root {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    pointer-events: none;
+    /* Hidden by default; JS reveals it only on fine pointers. This prevents
+       any flash on touch devices where the element is never activated. */
+    display: none;
+  }
+
+  #cursor-root[data-cursor-active] {
+    display: block;
+  }
+
+  /* JS writes translate3d to this wrapper to track the pointer. The wrapper
+     starts transparent and fades in once the first position is known. */
+  .cursor-arrow {
+    --press: 1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 32px;
+    height: 32px;
+    opacity: 0;
+    will-change: transform;
+    transition: opacity 0.25s ease;
+  }
+
+  #cursor-root[data-cursor-visible] .cursor-arrow {
+    opacity: 1;
+  }
+
+  /* Visuals (hotspot offset, press scale, shadow) live on the inner SVG so
+     they never fight the wrapper's tracking transform. */
+  .cursor-arrow svg {
+    display: block;
+    /* Hotspot at the tip (top-left), matching a native arrow cursor. */
+    transform-origin: 3px 2px;
+    transform: scale(var(--press, 1));
+    transition: transform var(--press-transition, 0.12s) ease;
+    /* Hard offset shadow — the comic/sticker look. */
+    filter: drop-shadow(2px 3px 0 rgba(0, 0, 0, 0.9));
+  }
+
+  /* Hide the cursor when the pointer leaves the window. */
+  #cursor-root[data-cursor-out] .cursor-arrow {
+    opacity: 0;
+  }
+
+  /* Hide the native cursor only on precise pointers, and only once active. */
+  @media (pointer: fine) {
+    :global(html.has-custom-cursor),
+    :global(html.has-custom-cursor *) {
+      cursor: none !important;
+    }
+  }
+</style>
+
+<script>
+  // Module-level singletons so view transitions don't spin up duplicates.
+  let started = false;
+  let cleanup: (() => void) | null = null;
+
+  function initCursor() {
+    // Astro view transitions re-run page scripts; guard against double init.
+    if (started) return;
+
+    const finePointer = window.matchMedia('(pointer: fine)').matches;
+    if (!finePointer) return;
+
+    const root = document.getElementById('cursor-root');
+    const arrow = document.getElementById('cursor-arrow');
+    if (!root || !arrow) return;
+
+    started = true;
+
+    // With 1:1 tracking there is no motion to reduce, but the press-scale is a
+    // micro-animation; disable it under reduced-motion for correctness.
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) arrow.style.setProperty('--press-transition', 'none');
+
+    document.documentElement.classList.add('has-custom-cursor');
+    root.setAttribute('data-cursor-active', '');
+
+    // Position the arrow directly on the pointer — 1:1, zero lag, like a
+    // native cursor. No interpolation loop: the transform is written straight
+    // from the mousemove event, which is the fastest possible follow.
+    let visible = false;
+
+    const onMove = (e: MouseEvent) => {
+      arrow.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+      if (!visible) {
+        visible = true;
+        root.setAttribute('data-cursor-visible', '');
+        root.removeAttribute('data-cursor-out');
+      }
+    };
+
+    const onLeave = () => root.setAttribute('data-cursor-out', '');
+    const onEnter = () => root.removeAttribute('data-cursor-out');
+
+    // Press scale goes through --press so it composes with the wrapper's
+    // tracking translate3d instead of overwriting it.
+    const onDown = () => arrow.style.setProperty('--press', '0.82');
+    const onUp = () => arrow.style.setProperty('--press', '1');
+
+    window.addEventListener('mousemove', onMove, { passive: true });
+    document.addEventListener('mouseleave', onLeave);
+    document.addEventListener('mouseenter', onEnter);
+    window.addEventListener('mousedown', onDown);
+    window.addEventListener('mouseup', onUp);
+
+    cleanup = () => {
+      window.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseleave', onLeave);
+      document.removeEventListener('mouseenter', onEnter);
+      window.removeEventListener('mousedown', onDown);
+      window.removeEventListener('mouseup', onUp);
+      document.documentElement.classList.remove('has-custom-cursor');
+      started = false;
+      cleanup = null;
+    };
+  }
+
+  // Initial load and every client-side navigation.
+  initCursor();
+  document.addEventListener('astro:page-load', initCursor);
+  // Tear down before swapping documents so listeners don't leak.
+  document.addEventListener('astro:before-swap', () => cleanup?.());
+</script>

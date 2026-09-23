@@ -219,16 +219,6 @@
 }
 
 /* ==========================================================================
-   Custom cursor — hide native cursor only on precise pointers
-   ========================================================================== */
-@media (pointer: fine) {
-  html.has-custom-cursor,
-  html.has-custom-cursor * {
-    cursor: none !important;
-  }
-}
-
-/* ==========================================================================
    Utilities
    ========================================================================== */
 @utility container-gutter {

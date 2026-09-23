@@ -36,10 +36,12 @@ own images (any web format) and update the `image` path in `projects.ts`.
 
 ## Key implementation notes
 
-- **Custom cursor** (`src/components/Cursor.tsx`): trails the pointer with easing,
-  grows and shows a label over interactive elements. Add `data-cursor="Label"` to any
-  element to customise the hover label. Disabled on touch devices and when the user
-  prefers reduced motion.
+- **Custom cursor** (`src/components/Cursor.astro`): a framework-free cursor built
+  with a small vanilla TypeScript script (no React island). A single chunky
+  comic/sticker arrow (bone fill, bold black outline, hard offset shadow) that
+  trails the pointer with frame-rate-independent easing for a fluid feel, plus a
+  subtle press-scale on click. Disabled on touch devices and when the user prefers
+  reduced motion, and it re-initialises correctly across Astro view transitions.
 - **Work index** (`src/components/ProjectsIndex.astro`): a typographic index of
   projects (edition number, poster-type title, stack). It's server-rendered with
   no client JS — on hover-capable pointers each row reveals its poster as a

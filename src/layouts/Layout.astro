@@ -1,7 +1,7 @@
 ---
 import { ClientRouter } from 'astro:transitions';
 import BaseHead from '@/components/BaseHead.astro';
-import Cursor from '@/components/Cursor.tsx';
+import Cursor from '@/components/Cursor.astro';
 import SmoothScroll from '@/components/SmoothScroll.tsx';
 import { getLangFromUrl, useTranslations } from '@/i18n/utils';
 import '@/styles/global.css';
@@ -44,10 +44,11 @@ const t = useTranslations(lang);
       must hydrate deterministically (client:load), not lazily. With client:idle
       it could start after the pinned Work section and scroll reveals had already
       measured their triggers against native scroll, leaving them dead on the
-      first (cold) load. The Cursor is purely decorative and stays client:idle.
+      first (cold) load. The Cursor is a static island: its own vanilla script
+      self-initialises on load and on every view transition.
     -->
     <SmoothScroll client:load />
-    <Cursor client:idle />
+    <Cursor />
 
     <script>
       // Shift the page background per section: lifted (lighter) from About
